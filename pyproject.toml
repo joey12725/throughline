@@ -24,13 +24,13 @@ classifiers = [
 ]
 # Lower bounds are the release lines the test suite runs against (uv.lock).
 dependencies = [
-    "fastapi>=0.163",
+    "fastapi>=0.165.0",
     "uvicorn>=0.54",
     "psycopg[binary,pool]>=3.3",
-    "typer>=0.29",
+    "typer>=0.29.2",
     "httpx>=0.28",
-    "pydantic>=2.14",
-    "pglast>=8.8",
+    "pydantic>=2.14.4",
+    "pglast>=8.9",
 ]
 [project.optional-dependencies]
 images = ["pillow>=13", "pillow-heif>=1.8"]
