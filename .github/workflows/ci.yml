@@ -39,7 +39,7 @@ jobs:
           --health-cmd "pg_isready -U postgres"
           --health-interval 5s --health-retries 20
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.12"
@@ -59,7 +59,7 @@ jobs:
             -c "ALTER SYSTEM SET full_page_writes = off;" \
             -c "SELECT pg_reload_conf();"
       # Node runs the template-node plugin's contract tests.
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: "24"
       - run: uv sync --frozen --all-packages
@@ -105,8 +105,8 @@ jobs:
       run:
         working-directory: web
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: "24"
       - run: npm install -g pnpm@${{ env.PNPM_VERSION }}
@@ -120,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: No owner names, hosts or private stores
         run: scripts/leak-check.sh
       - name: Every relative link in README and docs resolves
@@ -131,7 +131,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - run: docker build -t throughline:ci .
       - name: Smoke
         run: |
