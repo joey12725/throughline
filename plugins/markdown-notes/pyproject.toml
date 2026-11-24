@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Throughline plugin: Markdown folders, Obsidian vaults and Logseq graphs as versioned pages"
 requires-python = ">=3.12"
 license = "GPL-3.0-or-later"
-dependencies = ["throughline-sdk", "pyyaml>=6"]
+dependencies = ["throughline-sdk", "pyyaml>=6.0.4"]
 [project.scripts]
 throughline-markdown-notes = "throughline_markdown_notes:main"
 [build-system]
