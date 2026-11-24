@@ -45,8 +45,8 @@ importers:
         specifier: ^0.6.19
         version: 0.6.19
       '@tanstack/react-query':
-        specifier: ^5.108.1
-        version: 5.108.1(@types/react@19.3.0)(react@19.3.1)
+        specifier: ^5.108.2
+        version: 5.108.2(@types/react@19.3.0)(react@19.3.1)
       '@tanstack/react-virtual':
         specifier: ^3.14.26
         version: 3.14.26(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -69,8 +69,8 @@ importers:
         specifier: ^6.3.0
         version: 6.3.0
       lucide-react:
-        specifier: ^1.76.0
-        version: 1.76.0(@types/react@19.3.0)(react@19.3.1)
+        specifier: ^1.77.0
+        version: 1.77.0(@types/react@19.3.0)(react@19.3.1)
       papaparse:
         specifier: ^5.7.1
         version: 5.7.1
@@ -499,11 +499,11 @@ packages:
   '@rolldown/pluginutils@1.1.1':
     resolution: {integrity: sha512-glFIJDvLNDtJhT9qrMFWLPbvS+skxgt4L0K8Ei2YtnhPysAJnsI7nyxSJxKj4ADeKX0OLjC4ntRkwpLOoS3rwA==}
 
-  '@tanstack/query-core@5.108.1':
-    resolution: {integrity: sha512-GBX6Xsc9E+9eVLLxuM7orQNbssQjpruOCbocBYwT78MjxOWT5I+CWdvEo0N+UM6+oCZEKxuSud1oFLvE3OEmIg==}
+  '@tanstack/query-core@5.108.2':
+    resolution: {integrity: sha512-0l+0xDKqn71hfJBKaAvFP/X7WYM0TbscEk6nK1pHaWQUWUEA+WJD0VlT8wF+HIJANMV9B/DouPWwDnX3w/l9BA==}
 
-  '@tanstack/react-query@5.108.1':
-    resolution: {integrity: sha512-8/p7fpIdmUiKIukQ5ddAMUUSKC7Z8CcgUOBR2r3WqRvMg9Lzc4CXeoFchjfATKvqi23SyYFvesDdOULrvyunNg==}
+  '@tanstack/react-query@5.108.2':
+    resolution: {integrity: sha512-wV6hEjVGTfh9rvu3uREYW0hgBfS9klDejGelhPY575jD5jg6qbAb1nzT7hR1Q+wemR66ZjtE5p9pAGUwqK8zbg==}
     peerDependencies:
       '@types/react': ^18 || ^19
       react: ^18 || ^19
@@ -1253,8 +1253,8 @@ packages:
     resolution: {integrity: sha512-U4N8FgzmWxc8k1VH8Kr6lQg18U7Fjvby6wXHVRX/ZZ7IwWbRMgrRbP0Wrb5q5NVinryp4SQampHKdvtecItxUg==}
     engines: {node: 20 || >=22}
 
-  lucide-react@1.76.0:
-    resolution: {integrity: sha512-wRVHt2Xf64GXndB4rQOY9+3Wy9oJ59HDMYv6vwhT0hpSwUxQhG/RM9YijnOmvmIQ+VI/n+1V/FKd6gP4XL2aBQ==}
+  lucide-react@1.77.0:
+    resolution: {integrity: sha512-VS6sOi8ZUH1qm6swBL/tpI4xAhB6pFTdHvw3pfCJD+DaTJwpyynVzfOS6mdyMZ+OCdY/GMSQbqinOMOPbNSrQA==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -2124,11 +2124,11 @@ snapshots:
 
   '@rolldown/pluginutils@1.1.1': {}
 
-  '@tanstack/query-core@5.108.1': {}
+  '@tanstack/query-core@5.108.2': {}
 
-  '@tanstack/react-query@5.108.1(@types/react@19.3.0)(react@19.3.1)':
+  '@tanstack/react-query@5.108.2(@types/react@19.3.0)(react@19.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.108.1
+      '@tanstack/query-core': 5.108.2
       react: 19.3.1
     optionalDependencies:
       '@types/react': 19.3.0
@@ -2826,7 +2826,7 @@ snapshots:
 
   lru-cache@11.5.3: {}
 
-  lucide-react@1.76.0(@types/react@19.3.0)(react@19.3.1):
+  lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
