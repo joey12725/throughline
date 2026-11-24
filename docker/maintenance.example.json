@@ -1,0 +1,8 @@
+{
+  "jobs": [
+    {"name": "embed", "command": ["throughline", "embed", "run", "--until-idle", "--max-seconds", "270"], "interval_s": 300},
+    {"name": "lenses", "command": ["throughline", "lib", "lens", "tick", "--json"], "interval_s": 900},
+    {"name": "sources-check", "command": ["throughline", "lib", "sources", "check"], "interval_s": 900},
+    {"name": "backup", "command": ["throughline", "lib", "backup", "tick"], "interval_s": 3600, "timeout_s": 21600}
+  ]
+}

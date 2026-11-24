@@ -1,0 +1,29 @@
+# Living person profiles. Template and epistemic discipline adapted from
+# GBrain's enrich and resolve-before-asking skills (MIT).
+name = "people_pages"
+description = "Living profiles of the people who matter: who they are, the relationship, tastes, opinions, worldview, important details."
+output = "pages"
+grain = "day"
+schedule = "15 */2 * * *"
+# Channels to read. Onboarding adds every channel whose declared role is
+# in channel_roles; when defining this file by hand, list your own.
+channels = []
+channel_roles = ["chat", "transcript", "email"]
+max_items_per_run = 3
+max_cost_per_run = 0.50
+
+prompt = """Maintain people/<name> pages for the people who featured substantively in this window (a real exchange, plans, news about their life; not passing mentions, businesses, bots or automated senders).
+If their page exists (people_directory.page or candidate_pages): read it; add each new dated event with the timeline op; rewrite only the top sections the new evidence changes (edit, replace).
+If they have no page and they matter (a real relationship, or several exchanges), write one with person_id set. Its first paragraph says who they are and how they relate to the owner, specifically ("Ada's sister; climbing partner since 2024 [m:..]"), never "a contact".
+Sections (omit empty ones): Who they are, Relationship (how they met, how close, how often in touch, current temperature), Life now (where they live, work, partner, kids, health or big events they shared), Tastes & preferences, Opinions & worldview, Important details (birthday, allergies, names of kids or pets, gift ideas), Open threads (plans, promises either way, things to follow up).
+Label soft claims (said / self-described / observed / inferred). A trait or pattern needs several observations; one is a timeline line. A plan, a trip or a visit is not a change of residence or job. Note when something stopped being true instead of deleting it.
+Link them to people they are related to or close to with typed links (family_of, partner_of, friend_of, works_at, lives_in; with evidence), and to the events and places of this window."""
+
+[worker_config]
+kinds = ["people"]
+allow = ["write", "edit", "timeline", "link"]
+max_turns = 6
+max_new_pages = 3
+lookback_days = 7
+max_chars_per_record = 1200
+exclude_annotations = ["media_noise"]

@@ -1,0 +1,48 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+}
+.raised { background: var(--bg-2); }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  min-height: 44px;
+}
+.heading { min-width: 0; }
+.title {
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.subtitle { margin: 2px 0 0; font-size: var(--t-xs); color: var(--ink-3); }
+.actions { display: flex; align-items: center; gap: var(--s-2); flex: none; }
+
+/* Phone: stack the title above its actions so a wide actions slot never squeezes
+   the title to an ellipsis or wraps the subtitle one word per line. */
+@media (max-width: 720px) {
+  .header { flex-wrap: wrap; }
+  .heading { flex: 1 1 100%; }
+  .actions { flex: 1 1 100%; justify-content: flex-start; flex-wrap: wrap; }
+}
+.body { padding: var(--s-4); min-width: 0; }
+.body.flush { padding: 0; }
+.footer {
+  padding: var(--s-2) var(--s-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+}

@@ -1,0 +1,36 @@
+{
+  "plugins": {
+    "github": {
+      "enabled": true,
+      "entry": "throughline_github:main",
+      "interval_s": 3600,
+      "env": {
+        "GITHUB_TOKEN": "env:GITHUB_TOKEN",
+        "GITHUB_USER": "your-github-login"
+      }
+    },
+    "caldav": {
+      "enabled": true,
+      "entry": "throughline_caldav:main",
+      "interval_s": 1800,
+      "env": {
+        "CALDAV_URL": "https://caldav.example.com/dav/",
+        "CALDAV_USERNAME": "you",
+        "CALDAV_PASSWORD": "infisical:/connectors/caldav/CALDAV_PASSWORD"
+      }
+    },
+    "youtube": {
+      "enabled": true,
+      "entry": "throughline_youtube:main",
+      "interval_s": 900,
+      "env": {
+        "YOUTUBE_COOKIE_HEADER": {
+          "desktop": "cookies",
+          "args": {"domain": "youtube.com"},
+          "as": "header"
+        }
+      }
+    }
+  },
+  "jobs": []
+}

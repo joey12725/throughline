@@ -1,0 +1,13 @@
+.veil {
+  filter: blur(5px);
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--ink) 8%, transparent);
+  cursor: pointer;
+  transition: filter var(--m-fast) var(--ease);
+  user-select: none;
+}
+.veil.block { display: block; }
+.revealed { filter: none; background: transparent; user-select: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .veil { transition: none; }
+}

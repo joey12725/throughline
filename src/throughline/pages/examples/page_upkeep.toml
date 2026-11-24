@@ -1,0 +1,28 @@
+# Maintenance over health flags. Adapted from GBrain's maintain skill (stale
+# pages, orphans, thin pages, citation audit) and enrich_thin ("output SKIP
+# when the context is thin") (MIT). Its work items are the flagged pages, not
+# new records (worker_config.input = "flagged"); each page is revisited only
+# when its flags change.
+name = "page_upkeep"
+description = "Refreshes stale compiled truth, expands thin pages, connects orphans, fixes uncited claims."
+output = "pages"
+grain = "message"
+schedule = "0 3 * * *"
+channels = ["pages"]
+max_items_per_run = 15
+
+prompt = """The evidence is one page and page_flags says why it needs care:
+- stale_truth: timeline lines were added after the top was last rewritten. Read the page and rewrite the top sections so they reflect the whole timeline (edit, replace); do not touch the timeline.
+- stale_evidence: conversations the page cites have newer records. read_context / search_messages for them; add timeline lines and update the top if the picture changed.
+- thin: expand the page only from evidence you can cite (search_messages by its names and aliases); if there is not enough, leave it.
+- orphan: find the pages that should link to it and add typed links with evidence; if it is not worth a page, archive it with a reason.
+- uncited: find a supporting record and cite it, or mark the claim (unsourced); never invent a citation, never delete a claim silently.
+- unresolved: a [[link]] points at a page that does not exist; fix the slug if the page exists under another name, or leave it.
+Open threads older than 30 days: check whether a record closed them; move closed ones to the timeline with the outcome."""
+
+[worker_config]
+input = "flagged"
+# Pages of these kinds only (flagged documents, reports and indexes moved in from GBrain are left alone).
+kinds = ["people", "events", "places", "organizations", "projects", "topics", "ideas", "concepts", "trips", "loops", "commitments", "pets", "days"]
+allow = ["edit", "timeline", "link", "archive"]
+max_turns = 6

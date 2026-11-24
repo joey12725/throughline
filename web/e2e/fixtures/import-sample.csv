@@ -1,0 +1,9 @@
+msg_id,sent_at,sender,body,rating,topic
+m-001,2026-11-01T08:15:00Z,alice,Good morning everyone hope you slept well,5,greetings
+m-002,2026-11-01T09:30:00Z,bob,Did you see the orchard report it looks promising,4,work
+m-003,2026-11-02T10:00:00Z,alice,Lets meet at noon by the old mill,3,plans
+m-004,2026-11-02T14:45:00Z,carol,I brought the glass seeds you asked about,5,work
+m-005,2026-11-03T07:05:00Z,bob,Running a little late this morning sorry,2,greetings
+m-006,2026-11-03T18:20:00Z,alice,The moon jam experiment finally worked tonight,5,work
+m-007,2026-11-04T12:00:00Z,carol,Lunch was lovely thank you for organising,4,plans
+m-008,2026-11-05T21:10:00Z,bob,Signing off for the week see you monday,3,greetings

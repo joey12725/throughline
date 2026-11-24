@@ -1,0 +1,22 @@
+# Recurring themes across reflections. Adapted from GBrain's dream-cycle
+# patterns phase (min 3 instances) (MIT).
+name = "patterns"
+description = "Themes that recur across the owner's reflections and ideas."
+output = "pages"
+grain = "day"
+schedule = "0 5 * * 1"            # weekly
+channels = ["pages"]
+max_items_per_run = 7
+context_query = """SELECT external_id AS slug, happened_at, left(content, 600) AS excerpt FROM api.messages
+WHERE channel = 'pages' AND fields->>'page_kind' IN ('reflections','ideas') AND happened_at >= now() - interval '30 days'
+ORDER BY happened_at DESC LIMIT 60"""
+
+prompt = """Look for recurring themes across the owner's recent reflections and ideas (context_query_results, and search_pages kind=reflections / ideas). Name a pattern only if it appears in at least 3 distinct reflections or days. A pattern is a recurring theme, worry, decision habit, relationship dynamic or piece of self-knowledge; not a single insight and not a list of topics.
+Search patterns/ first; if a matching page exists, read it and edit it with the new instances; else write patterns/<topic>. Cite the records behind each instance and link each reflection page. Say how many instances and over what span. Do not write a weekly digest."""
+
+[worker_config]
+input_kinds = ["reflections", "ideas"]   # only these pages are evidence
+lookback_days = 7
+kinds = ["patterns"]
+allow = ["write", "edit", "timeline", "link"]
+max_turns = 5

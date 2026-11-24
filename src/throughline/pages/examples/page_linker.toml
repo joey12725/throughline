@@ -1,0 +1,19 @@
+# Reads the pages channel itself: every new page revision is a work item, so
+# links between pages are kept up on a schedule. The Librarian never sees its
+# own revisions from this lens (no feedback loop).
+name = "page_linker"
+description = "Connects new and changed pages to the rest of the graph."
+output = "pages"
+grain = "message"
+schedule = "45 * * * *"
+channels = ["pages"]
+max_items_per_run = 20
+max_cost_per_run = 0.50
+
+prompt = """The evidence is one page that was just written or changed. Find the pages it should be connected to and is not yet (search_pages by its people, places, events, projects and topics; read the candidates), and add typed links with evidence (message ids cited by both pages, or records you found that show the connection): part_of for an event within a trip or project, attended for a person at an event, about for a page about a person, family_of / friend_of / partner_of / works_at / lives_in between people and places, related_to otherwise.
+If two pages are the same thing, merge them (read both; merge the weaker into the stronger). Do not rewrite pages otherwise."""
+
+[worker_config]
+max_turns = 5
+allow = ["link", "unlink", "merge"]
+max_actions = 30

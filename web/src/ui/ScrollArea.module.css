@@ -1,0 +1,5 @@
+.area { min-height: 0; min-width: 0; }
+.y { overflow-y: auto; overflow-x: hidden; }
+.x { overflow-x: auto; overflow-y: hidden; }
+.both { overflow: auto; }
+.area { overscroll-behavior: contain; }

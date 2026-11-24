@@ -1,0 +1,45 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1040;
+  background: color-mix(in oklab, var(--bg-0) 55%, transparent);
+  animation: fade var(--m-base) var(--ease);
+}
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  max-width: 100vw;
+  background: var(--bg-1);
+  border-left: 1px solid var(--line-strong);
+  box-shadow: 0 0 0 1px var(--bg-0);
+  animation: slideIn var(--m-base) var(--ease);
+}
+.behind { filter: brightness(0.9); }
+
+.header {
+  flex: none;
+  padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+.titleRow { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+.title { margin: 0; font-size: var(--t-md); font-weight: var(--fw-semibold); }
+.toolbar { display: flex; align-items: center; gap: var(--s-1); }
+.body { flex: 1; overflow: auto; padding: var(--s-4); }
+.missing { color: var(--ink-3); font-size: var(--t-sm); }
+
+@keyframes slideIn {
+  from { transform: translateX(16px); opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .drawer { animation: fade var(--m-base) var(--ease); }
+}
+
+@media (max-width: 560px) {
+  .drawer { width: 100vw !important; }
+}

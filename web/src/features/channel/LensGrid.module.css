@@ -1,0 +1,114 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.cell {
+  position: relative;
+}
+/* Make room for the options kebab so it never sits on the panel title. */
+.cell :global(article) > :global(header) {
+  padding-right: 34px;
+}
+.panel {
+  height: 100%;
+}
+
+.kebab {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cell:hover .kebab,
+.kebab:focus-visible {
+  opacity: 1;
+}
+.kebab:hover {
+  background: var(--bg-3);
+  color: var(--ink);
+}
+.pinned {
+  color: var(--brass);
+  opacity: 1;
+}
+.cell:has(.pinned) .kebab {
+  opacity: 1;
+}
+
+.predicted {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  background: color-mix(in oklch, var(--bg-2) 80%, transparent);
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px dashed var(--line-strong);
+  pointer-events: none;
+}
+
+.hiddenBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 4px;
+}
+.hiddenLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+.unhide {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 12px;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.unhide:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kebab {
+    transition: none;
+  }
+}

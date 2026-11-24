@@ -1,0 +1,48 @@
+.dialog {
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-panel);
+  background: var(--bg-2);
+  color: var(--ink);
+  max-width: 92vw;
+  max-height: 86vh;
+  box-shadow: 0 0 0 1px var(--bg-0);
+}
+.dialog::backdrop {
+  background: color-mix(in oklab, var(--bg-0) 70%, transparent);
+  backdrop-filter: blur(2px);
+}
+.dialog[open] { animation: dialogIn var(--m-base) var(--ease); }
+
+.sm { width: 400px; }
+.md { width: 560px; }
+.lg { width: 760px; }
+
+.inner { display: flex; flex-direction: column; max-height: 86vh; }
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-4) var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+.title { margin: 0; font-size: var(--t-md); font-weight: var(--fw-semibold); }
+.desc { margin: var(--s-1) 0 0; font-size: var(--t-sm); color: var(--ink-2); }
+.body { padding: var(--s-4); overflow: auto; font-size: var(--t-sm); }
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] { animation: fadeIn var(--m-base) var(--ease); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+}

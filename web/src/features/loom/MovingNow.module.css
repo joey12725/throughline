@@ -1,0 +1,15 @@
+.allLink {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.allLink:hover { color: var(--brass); }
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 520px;
+  overflow-y: auto;
+}

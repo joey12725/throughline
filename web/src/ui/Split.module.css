@@ -1,0 +1,20 @@
+.split { display: flex; min-height: 0; min-width: 0; width: 100%; height: 100%; }
+.h { flex-direction: row; }
+.v { flex-direction: column; }
+.pane { min-width: 0; min-height: 0; overflow: hidden; }
+.grow { flex: 1; }
+
+.divider {
+  position: relative;
+  flex: none;
+  background: var(--line);
+  transition: background var(--m-fast) var(--ease);
+}
+.h .divider { width: 1px; cursor: col-resize; }
+.v .divider { height: 1px; cursor: row-resize; }
+.divider:hover, .divider:focus-visible { background: var(--brass); }
+
+/* a wider invisible hit area */
+.grip { position: absolute; }
+.h .grip { inset: 0 -4px; }
+.v .grip { inset: -4px 0; }

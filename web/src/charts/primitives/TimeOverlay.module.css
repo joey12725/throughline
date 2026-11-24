@@ -1,0 +1,11 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.clear {
+  cursor: pointer;
+  pointer-events: all;
+}

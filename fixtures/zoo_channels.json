@@ -1,0 +1,3949 @@
+[
+ {
+  "name": "calendar.changes",
+  "plugin": "calendar",
+  "description": "Event lifecycle: created, changed, cancelled, removed, restored. The record time is the API's created/updated time, or the fetch time for changes found by snapshot diff",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "account",
+    "type": "text",
+    "description": "Composio connected account id (or MCP account name)"
+   },
+   {
+    "name": "calendar_id",
+    "type": "text",
+    "description": "Google calendar id"
+   },
+   {
+    "name": "calendar_name",
+    "type": "text",
+    "description": "Calendar name (summaryOverride, else summary)"
+   },
+   {
+    "name": "event_id",
+    "type": "text",
+    "description": "Google event id; an occurrence id for recurring instances"
+   },
+   {
+    "name": "series_id",
+    "type": "text",
+    "description": "recurringEventId of the series, if recurring"
+   },
+   {
+    "name": "ical_uid",
+    "type": "text",
+    "description": "iCalUID shared by every copy of the event"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Event title"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "confirmed, tentative, cancelled, or removed (vanished from a complete window)"
+   },
+   {
+    "name": "all_day",
+    "type": "boolean",
+    "description": "All-day event; times are UTC midnight with day precision"
+   },
+   {
+    "name": "place",
+    "type": "text",
+    "description": "Location text as entered"
+   },
+   {
+    "name": "observed_at",
+    "type": "timestamp",
+    "description": "Fetch time that observed a change the API does not timestamp"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   },
+   {
+    "name": "change",
+    "type": "text",
+    "description": "created, changed, cancelled, removed or restored"
+   },
+   {
+    "name": "changed_fields",
+    "type": "json",
+    "description": "Fields that differ from the previous snapshot; null when unknown"
+   },
+   {
+    "name": "event_start",
+    "type": "timestamp",
+    "description": "Event start after the change"
+   },
+   {
+    "name": "event_end",
+    "type": "timestamp",
+    "description": "Event end after the change"
+   },
+   {
+    "name": "recurrence",
+    "type": "json",
+    "description": "RRULE/EXDATE lines of a recurring series"
+   },
+   {
+    "name": "creator_email",
+    "type": "text",
+    "description": "Event creator email"
+   },
+   {
+    "name": "organizer_email",
+    "type": "text",
+    "description": "Organizer email"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "source (API timestamp) or observed (fetch time of a snapshot diff)"
+   },
+   {
+    "name": "occurrence_count",
+    "type": "integer",
+    "description": "Occurrences of a series that vanished together"
+   }
+  ]
+ },
+ {
+  "name": "calendar.events",
+  "plugin": "calendar",
+  "description": "Event occurrences on Google calendars (recurring events expanded within the fetch window); the record time and subject are when the event happens",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "account",
+    "type": "text",
+    "description": "Composio connected account id (or MCP account name)"
+   },
+   {
+    "name": "calendar_id",
+    "type": "text",
+    "description": "Google calendar id"
+   },
+   {
+    "name": "calendar_name",
+    "type": "text",
+    "description": "Calendar name (summaryOverride, else summary)"
+   },
+   {
+    "name": "event_id",
+    "type": "text",
+    "description": "Google event id; an occurrence id for recurring instances"
+   },
+   {
+    "name": "series_id",
+    "type": "text",
+    "description": "recurringEventId of the series, if recurring"
+   },
+   {
+    "name": "ical_uid",
+    "type": "text",
+    "description": "iCalUID shared by every copy of the event"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Event title"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "confirmed, tentative, cancelled, or removed (vanished from a complete window)"
+   },
+   {
+    "name": "all_day",
+    "type": "boolean",
+    "description": "All-day event; times are UTC midnight with day precision"
+   },
+   {
+    "name": "place",
+    "type": "text",
+    "description": "Location text as entered"
+   },
+   {
+    "name": "observed_at",
+    "type": "timestamp",
+    "description": "Fetch time that observed a change the API does not timestamp"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   },
+   {
+    "name": "start_time_zone",
+    "type": "text",
+    "description": "Time zone named on the event start"
+   },
+   {
+    "name": "original_start",
+    "type": "timestamp",
+    "description": "Original start of a moved or cancelled recurring instance"
+   },
+   {
+    "name": "description",
+    "type": "text",
+    "description": "Event description as plain text"
+   },
+   {
+    "name": "organizer_email",
+    "type": "text",
+    "description": "Organizer email (also the author identifier)"
+   },
+   {
+    "name": "organizer_name",
+    "type": "text",
+    "description": "Organizer display name"
+   },
+   {
+    "name": "attendees",
+    "type": "json",
+    "description": "Attendees: email, name, response, organizer, self, optional, resource"
+   },
+   {
+    "name": "attendee_count",
+    "type": "integer",
+    "description": "Number of attendees listed"
+   },
+   {
+    "name": "my_response",
+    "type": "text",
+    "description": "The calendar owner's response status"
+   },
+   {
+    "name": "conference_url",
+    "type": "text",
+    "description": "Video meeting link"
+   },
+   {
+    "name": "html_link",
+    "type": "text",
+    "description": "Google Calendar link"
+   },
+   {
+    "name": "event_type",
+    "type": "text",
+    "description": "default, outOfOffice, focusTime, workingLocation, birthday, ..."
+   },
+   {
+    "name": "visibility",
+    "type": "text",
+    "description": "Event visibility"
+   },
+   {
+    "name": "transparency",
+    "type": "text",
+    "description": "opaque (busy) or transparent (free)"
+   },
+   {
+    "name": "event_created",
+    "type": "timestamp",
+    "description": "When the event was created (API)"
+   },
+   {
+    "name": "event_updated",
+    "type": "timestamp",
+    "description": "When the event was last modified (API)"
+   }
+  ]
+ },
+ {
+  "name": "chat.discord",
+  "plugin": "beeper",
+  "description": "Chat messages on discord",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "direction",
+    "type": "text",
+    "description": "incoming, outgoing, or unknown relative to the owner"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "Source time precision; inferred when taken from a neighbouring message, unknown when import time substitutes for sent time"
+   },
+   {
+    "name": "time_inferred_from",
+    "type": "json",
+    "description": "Absent when the source supplied the time; otherwise the method, and the message and time it was inferred from"
+   },
+   {
+    "name": "reply_to",
+    "type": "text",
+    "description": "External ID of the replied-to message when supplied"
+   },
+   {
+    "name": "edited_at",
+    "type": "timestamp",
+    "description": "Source edit time with its original UTC offset"
+   },
+   {
+    "name": "attachments",
+    "type": "json",
+    "description": "Original attachment metadata; media is never downloaded"
+   },
+   {
+    "name": "reactions",
+    "type": "json",
+    "description": "Original source reaction metadata"
+   },
+   {
+    "name": "identity_quality",
+    "type": "text",
+    "description": "Source confidence or provenance of sender identification"
+   },
+   {
+    "name": "conversation_kind",
+    "type": "text",
+    "description": "dm, group_dm, channel, or unknown"
+   },
+   {
+    "name": "guild_id",
+    "type": "text",
+    "description": "Native guild/server ID when known"
+   }
+  ]
+ },
+ {
+  "name": "chat.instagram",
+  "plugin": "beeper",
+  "description": "Chat messages on instagram",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "direction",
+    "type": "text",
+    "description": "incoming, outgoing, or unknown relative to the owner"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "Source time precision; inferred when taken from a neighbouring message, unknown when import time substitutes for sent time"
+   },
+   {
+    "name": "time_inferred_from",
+    "type": "json",
+    "description": "Absent when the source supplied the time; otherwise the method, and the message and time it was inferred from"
+   },
+   {
+    "name": "reply_to",
+    "type": "text",
+    "description": "External ID of the replied-to message when supplied"
+   },
+   {
+    "name": "edited_at",
+    "type": "timestamp",
+    "description": "Source edit time with its original UTC offset"
+   },
+   {
+    "name": "attachments",
+    "type": "json",
+    "description": "Original attachment metadata; media is never downloaded"
+   },
+   {
+    "name": "reactions",
+    "type": "json",
+    "description": "Original source reaction metadata"
+   },
+   {
+    "name": "identity_quality",
+    "type": "text",
+    "description": "Source confidence or provenance of sender identification"
+   },
+   {
+    "name": "conversation_kind",
+    "type": "text",
+    "description": "dm, group_dm, channel, or unknown"
+   },
+   {
+    "name": "guild_id",
+    "type": "text",
+    "description": "Native guild/server ID when known"
+   }
+  ]
+ },
+ {
+  "name": "chat.reddit",
+  "plugin": "beeper",
+  "description": "Chat messages on reddit",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "direction",
+    "type": "text",
+    "description": "incoming, outgoing, or unknown relative to the owner"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "Source time precision; inferred when taken from a neighbouring message, unknown when import time substitutes for sent time"
+   },
+   {
+    "name": "time_inferred_from",
+    "type": "json",
+    "description": "Absent when the source supplied the time; otherwise the method, and the message and time it was inferred from"
+   },
+   {
+    "name": "reply_to",
+    "type": "text",
+    "description": "External ID of the replied-to message when supplied"
+   },
+   {
+    "name": "edited_at",
+    "type": "timestamp",
+    "description": "Source edit time with its original UTC offset"
+   },
+   {
+    "name": "attachments",
+    "type": "json",
+    "description": "Original attachment metadata; media is never downloaded"
+   },
+   {
+    "name": "reactions",
+    "type": "json",
+    "description": "Original source reaction metadata"
+   },
+   {
+    "name": "identity_quality",
+    "type": "text",
+    "description": "Source confidence or provenance of sender identification"
+   },
+   {
+    "name": "conversation_kind",
+    "type": "text",
+    "description": "dm, group_dm, channel, or unknown"
+   },
+   {
+    "name": "guild_id",
+    "type": "text",
+    "description": "Native guild/server ID when known"
+   }
+  ]
+ },
+ {
+  "name": "chat.sms",
+  "plugin": "beeper",
+  "description": "Chat messages on sms",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "direction",
+    "type": "text",
+    "description": "incoming, outgoing, or unknown relative to the owner"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "Source time precision; inferred when taken from a neighbouring message, unknown when import time substitutes for sent time"
+   },
+   {
+    "name": "time_inferred_from",
+    "type": "json",
+    "description": "Absent when the source supplied the time; otherwise the method, and the message and time it was inferred from"
+   },
+   {
+    "name": "reply_to",
+    "type": "text",
+    "description": "External ID of the replied-to message when supplied"
+   },
+   {
+    "name": "edited_at",
+    "type": "timestamp",
+    "description": "Source edit time with its original UTC offset"
+   },
+   {
+    "name": "attachments",
+    "type": "json",
+    "description": "Original attachment metadata; media is never downloaded"
+   },
+   {
+    "name": "reactions",
+    "type": "json",
+    "description": "Original source reaction metadata"
+   },
+   {
+    "name": "identity_quality",
+    "type": "text",
+    "description": "Source confidence or provenance of sender identification"
+   },
+   {
+    "name": "conversation_kind",
+    "type": "text",
+    "description": "dm, group_dm, channel, or unknown"
+   },
+   {
+    "name": "guild_id",
+    "type": "text",
+    "description": "Native guild/server ID when known"
+   }
+  ]
+ },
+ {
+  "name": "chat.snapchat",
+  "plugin": "beeper",
+  "description": "Chat messages on snapchat",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "direction",
+    "type": "text",
+    "description": "incoming, outgoing, or unknown relative to the owner"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "Source time precision; inferred when taken from a neighbouring message, unknown when import time substitutes for sent time"
+   },
+   {
+    "name": "time_inferred_from",
+    "type": "json",
+    "description": "Absent when the source supplied the time; otherwise the method, and the message and time it was inferred from"
+   },
+   {
+    "name": "reply_to",
+    "type": "text",
+    "description": "External ID of the replied-to message when supplied"
+   },
+   {
+    "name": "edited_at",
+    "type": "timestamp",
+    "description": "Source edit time with its original UTC offset"
+   },
+   {
+    "name": "attachments",
+    "type": "json",
+    "description": "Original attachment metadata; media is never downloaded"
+   },
+   {
+    "name": "reactions",
+    "type": "json",
+    "description": "Original source reaction metadata"
+   },
+   {
+    "name": "identity_quality",
+    "type": "text",
+    "description": "Source confidence or provenance of sender identification"
+   },
+   {
+    "name": "conversation_kind",
+    "type": "text",
+    "description": "dm, group_dm, channel, or unknown"
+   },
+   {
+    "name": "guild_id",
+    "type": "text",
+    "description": "Native guild/server ID when known"
+   }
+  ]
+ },
+ {
+  "name": "email.message",
+  "plugin": "email",
+  "description": "Email messages (Gmail through Composio), one version per fetched state; threads are Gmail threads; happened_at is Gmail's internal date",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": true,
+  "fields": [
+   {
+    "name": "account",
+    "type": "text",
+    "description": "Mailbox address the message was read from"
+   },
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Mail provider (gmail)"
+   },
+   {
+    "name": "gmail_message_id",
+    "type": "text",
+    "description": "Gmail message id, unique within the mailbox"
+   },
+   {
+    "name": "gmail_thread_id",
+    "type": "text",
+    "description": "Gmail thread id, unique within the mailbox"
+   },
+   {
+    "name": "gmail_history_id",
+    "type": "text",
+    "description": "Gmail history id of the fetched message state"
+   },
+   {
+    "name": "rfc822_message_id",
+    "type": "text",
+    "description": "Message-ID header"
+   },
+   {
+    "name": "in_reply_to",
+    "type": "text",
+    "description": "In-Reply-To header"
+   },
+   {
+    "name": "references",
+    "type": "text",
+    "description": "References header"
+   },
+   {
+    "name": "list_id",
+    "type": "text",
+    "description": "List-Id header (mailing lists)"
+   },
+   {
+    "name": "subject",
+    "type": "text",
+    "description": "Decoded subject"
+   },
+   {
+    "name": "from_address",
+    "type": "text",
+    "description": "Sender address, lower case"
+   },
+   {
+    "name": "from_name",
+    "type": "text",
+    "description": "Sender display name"
+   },
+   {
+    "name": "to",
+    "type": "json",
+    "description": "To recipients: [{address, name}]"
+   },
+   {
+    "name": "cc",
+    "type": "json",
+    "description": "Cc recipients: [{address, name}]"
+   },
+   {
+    "name": "bcc",
+    "type": "json",
+    "description": "Bcc recipients (sent mail only): [{address, name}]"
+   },
+   {
+    "name": "reply_to",
+    "type": "json",
+    "description": "Reply-To addresses: [{address, name}]"
+   },
+   {
+    "name": "participants",
+    "type": "json",
+    "description": "Every distinct address on the message, sorted"
+   },
+   {
+    "name": "labels",
+    "type": "json",
+    "description": "Label names (system labels keep their ids)"
+   },
+   {
+    "name": "label_ids",
+    "type": "json",
+    "description": "Gmail label ids"
+   },
+   {
+    "name": "snippet",
+    "type": "text",
+    "description": "Gmail snippet"
+   },
+   {
+    "name": "direction",
+    "type": "text",
+    "description": "received, sent or draft"
+   },
+   {
+    "name": "is_unread",
+    "type": "boolean",
+    "description": "UNREAD label present when fetched"
+   },
+   {
+    "name": "is_starred",
+    "type": "boolean",
+    "description": "STARRED label present when fetched"
+   },
+   {
+    "name": "is_important",
+    "type": "boolean",
+    "description": "IMPORTANT label present when fetched"
+   },
+   {
+    "name": "date_header",
+    "type": "text",
+    "description": "Date header as sent; happened_at is Gmail's internal date"
+   },
+   {
+    "name": "body_format",
+    "type": "text",
+    "description": "plain, html (converted to text), snippet or none"
+   },
+   {
+    "name": "body_chars",
+    "type": "integer",
+    "description": "Characters in the full body text"
+   },
+   {
+    "name": "body_truncated",
+    "type": "boolean",
+    "description": "Content holds only the first EMAIL_BODY_LIMIT characters"
+   },
+   {
+    "name": "attachment_count",
+    "type": "integer",
+    "description": "Attachments (metadata only, never content)"
+   },
+   {
+    "name": "attachments",
+    "type": "json",
+    "description": "[{filename, mime_type, size, attachment_id, content_id, inline}]"
+   },
+   {
+    "name": "size_estimate",
+    "type": "integer",
+    "description": "Gmail size estimate of the raw message in bytes"
+   },
+   {
+    "name": "partial",
+    "type": "boolean",
+    "description": "Source lists were truncated by the MCP transport"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this version"
+   }
+  ]
+ },
+ {
+  "name": "gbrain.pages",
+  "plugin": "gbrain",
+  "description": "Imported synthesised GBrain knowledge, including prior versions; never a location observation.",
+  "record_kind": "reference",
+  "is_reference": true,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "source_hash",
+    "type": "text",
+    "description": "SHA256 of the complete imported raw payload"
+   },
+   {
+    "name": "slug",
+    "type": "text",
+    "description": "Canonical source page slug"
+   },
+   {
+    "name": "source_id",
+    "type": "text",
+    "description": "Upstream source namespace"
+   },
+   {
+    "name": "page_type",
+    "type": "text",
+    "description": "Upstream page type"
+   },
+   {
+    "name": "page_kind",
+    "type": "text",
+    "description": "Upstream page kind"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Page title"
+   },
+   {
+    "name": "tags",
+    "type": "json",
+    "description": "Array of source tags"
+   },
+   {
+    "name": "aliases",
+    "type": "json",
+    "description": "Array of page alias and prior slug values, retaining multiplicity"
+   },
+   {
+    "name": "frontmatter",
+    "type": "json",
+    "description": "Original structured page frontmatter"
+   },
+   {
+    "name": "updated_at",
+    "type": "timestamp",
+    "description": "Source update or snapshot time"
+   },
+   {
+    "name": "deleted_at",
+    "type": "timestamp",
+    "description": "Source soft deletion time"
+   },
+   {
+    "name": "source_uri",
+    "type": "text",
+    "description": "Original source URI when provided"
+   }
+  ]
+ },
+ {
+  "name": "gbrain.timeline",
+  "plugin": "gbrain",
+  "description": "Dated events from GBrain page timelines.",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "source_hash",
+    "type": "text",
+    "description": "SHA256 of the complete imported raw entry"
+   },
+   {
+    "name": "source",
+    "type": "text",
+    "description": "Timeline entry source"
+   },
+   {
+    "name": "page_external_id",
+    "type": "text",
+    "description": "Parent page source namespace and slug"
+   }
+  ]
+ },
+ {
+  "name": "health.oura.daily",
+  "plugin": "health",
+  "description": "One Oura summary per day: sleep, readiness, activity, stress, SpO2, resilience and fitness scores and metrics; subject time is the day",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Source service: oura or weightgurus"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of the plugin mapping that produced this record"
+   },
+   {
+    "name": "day",
+    "type": "text",
+    "description": "Calendar day (YYYY-MM-DD) the record describes, as the source reports it"
+   },
+   {
+    "name": "sleep_score",
+    "type": "integer",
+    "description": "Oura sleep score (0-100)"
+   },
+   {
+    "name": "sleep_contrib_deep_sleep",
+    "type": "integer",
+    "description": "Sleep score contributor: deep sleep (0-100)"
+   },
+   {
+    "name": "sleep_contrib_efficiency",
+    "type": "integer",
+    "description": "Sleep score contributor: efficiency (0-100)"
+   },
+   {
+    "name": "sleep_contrib_latency",
+    "type": "integer",
+    "description": "Sleep score contributor: latency (0-100)"
+   },
+   {
+    "name": "sleep_contrib_rem_sleep",
+    "type": "integer",
+    "description": "Sleep score contributor: rem sleep (0-100)"
+   },
+   {
+    "name": "sleep_contrib_restfulness",
+    "type": "integer",
+    "description": "Sleep score contributor: restfulness (0-100)"
+   },
+   {
+    "name": "sleep_contrib_timing",
+    "type": "integer",
+    "description": "Sleep score contributor: timing (0-100)"
+   },
+   {
+    "name": "sleep_contrib_total_sleep",
+    "type": "integer",
+    "description": "Sleep score contributor: total sleep (0-100)"
+   },
+   {
+    "name": "readiness_score",
+    "type": "integer",
+    "description": "Oura readiness score (0-100)"
+   },
+   {
+    "name": "temperature_deviation",
+    "type": "number",
+    "description": "Body temperature deviation from baseline, degrees C"
+   },
+   {
+    "name": "temperature_trend_deviation",
+    "type": "number",
+    "description": "Temperature trend deviation, degrees C"
+   },
+   {
+    "name": "readiness_contrib_activity_balance",
+    "type": "integer",
+    "description": "Readiness score contributor: activity balance (0-100)"
+   },
+   {
+    "name": "readiness_contrib_body_temperature",
+    "type": "integer",
+    "description": "Readiness score contributor: body temperature (0-100)"
+   },
+   {
+    "name": "readiness_contrib_hrv_balance",
+    "type": "integer",
+    "description": "Readiness score contributor: hrv balance (0-100)"
+   },
+   {
+    "name": "readiness_contrib_previous_day_activity",
+    "type": "integer",
+    "description": "Readiness score contributor: previous day activity (0-100)"
+   },
+   {
+    "name": "readiness_contrib_previous_night",
+    "type": "integer",
+    "description": "Readiness score contributor: previous night (0-100)"
+   },
+   {
+    "name": "readiness_contrib_recovery_index",
+    "type": "integer",
+    "description": "Readiness score contributor: recovery index (0-100)"
+   },
+   {
+    "name": "readiness_contrib_resting_heart_rate",
+    "type": "integer",
+    "description": "Readiness score contributor: resting heart rate (0-100)"
+   },
+   {
+    "name": "readiness_contrib_sleep_balance",
+    "type": "integer",
+    "description": "Readiness score contributor: sleep balance (0-100)"
+   },
+   {
+    "name": "readiness_contrib_sleep_regularity",
+    "type": "integer",
+    "description": "Readiness score contributor: sleep regularity (0-100)"
+   },
+   {
+    "name": "activity_score",
+    "type": "integer",
+    "description": "Oura activity score (0-100)"
+   },
+   {
+    "name": "steps",
+    "type": "integer",
+    "description": "Steps"
+   },
+   {
+    "name": "active_calories",
+    "type": "integer",
+    "description": "Active calories (kcal)"
+   },
+   {
+    "name": "total_calories",
+    "type": "integer",
+    "description": "Total calories (kcal)"
+   },
+   {
+    "name": "target_calories",
+    "type": "integer",
+    "description": "Activity target calories (kcal)"
+   },
+   {
+    "name": "equivalent_walking_distance_m",
+    "type": "integer",
+    "description": "Equivalent walking distance, metres"
+   },
+   {
+    "name": "high_activity_s",
+    "type": "integer",
+    "description": "High activity time, seconds"
+   },
+   {
+    "name": "medium_activity_s",
+    "type": "integer",
+    "description": "Medium activity time, seconds"
+   },
+   {
+    "name": "low_activity_s",
+    "type": "integer",
+    "description": "Low activity time, seconds"
+   },
+   {
+    "name": "sedentary_s",
+    "type": "integer",
+    "description": "Sedentary time, seconds"
+   },
+   {
+    "name": "resting_s",
+    "type": "integer",
+    "description": "Resting time, seconds"
+   },
+   {
+    "name": "non_wear_s",
+    "type": "integer",
+    "description": "Ring not worn, seconds"
+   },
+   {
+    "name": "high_activity_met_minutes",
+    "type": "integer",
+    "description": "High activity MET minutes"
+   },
+   {
+    "name": "medium_activity_met_minutes",
+    "type": "integer",
+    "description": "Medium activity MET minutes"
+   },
+   {
+    "name": "low_activity_met_minutes",
+    "type": "integer",
+    "description": "Low activity MET minutes"
+   },
+   {
+    "name": "sedentary_met_minutes",
+    "type": "integer",
+    "description": "Sedentary MET minutes"
+   },
+   {
+    "name": "average_met_minutes",
+    "type": "number",
+    "description": "Average MET"
+   },
+   {
+    "name": "inactivity_alerts",
+    "type": "integer",
+    "description": "Inactivity alerts"
+   },
+   {
+    "name": "meters_to_target",
+    "type": "integer",
+    "description": "Metres left to the activity target"
+   },
+   {
+    "name": "target_meters",
+    "type": "integer",
+    "description": "Activity target, metres"
+   },
+   {
+    "name": "activity_contrib_meet_daily_targets",
+    "type": "integer",
+    "description": "Activity score contributor: meet daily targets (0-100)"
+   },
+   {
+    "name": "activity_contrib_move_every_hour",
+    "type": "integer",
+    "description": "Activity score contributor: move every hour (0-100)"
+   },
+   {
+    "name": "activity_contrib_recovery_time",
+    "type": "integer",
+    "description": "Activity score contributor: recovery time (0-100)"
+   },
+   {
+    "name": "activity_contrib_stay_active",
+    "type": "integer",
+    "description": "Activity score contributor: stay active (0-100)"
+   },
+   {
+    "name": "activity_contrib_training_frequency",
+    "type": "integer",
+    "description": "Activity score contributor: training frequency (0-100)"
+   },
+   {
+    "name": "activity_contrib_training_volume",
+    "type": "integer",
+    "description": "Activity score contributor: training volume (0-100)"
+   },
+   {
+    "name": "stress_high_s",
+    "type": "integer",
+    "description": "Time in high stress, seconds"
+   },
+   {
+    "name": "recovery_high_s",
+    "type": "integer",
+    "description": "Time in high recovery, seconds"
+   },
+   {
+    "name": "stress_day_summary",
+    "type": "text",
+    "description": "Oura stress day summary (restored, normal, stressful)"
+   },
+   {
+    "name": "spo2_average",
+    "type": "number",
+    "description": "Average blood oxygen during sleep, percent"
+   },
+   {
+    "name": "breathing_disturbance_index",
+    "type": "integer",
+    "description": "Breathing disturbance index"
+   },
+   {
+    "name": "resilience_level",
+    "type": "text",
+    "description": "Oura resilience level"
+   },
+   {
+    "name": "resilience_sleep_recovery",
+    "type": "number",
+    "description": "Resilience contributor: sleep recovery"
+   },
+   {
+    "name": "resilience_daytime_recovery",
+    "type": "number",
+    "description": "Resilience contributor: daytime recovery"
+   },
+   {
+    "name": "resilience_stress",
+    "type": "number",
+    "description": "Resilience contributor: stress"
+   },
+   {
+    "name": "vascular_age",
+    "type": "integer",
+    "description": "Oura cardiovascular age, years"
+   },
+   {
+    "name": "vo2_max",
+    "type": "number",
+    "description": "Estimated VO2 max, ml/kg/min"
+   },
+   {
+    "name": "main_sleep_total_s",
+    "type": "integer",
+    "description": "Total sleep of the day's main sleep period, seconds"
+   },
+   {
+    "name": "main_sleep_time_in_bed_s",
+    "type": "integer",
+    "description": "Time in bed of the main sleep period, seconds"
+   },
+   {
+    "name": "main_sleep_efficiency",
+    "type": "integer",
+    "description": "Sleep efficiency of the main sleep period, percent"
+   },
+   {
+    "name": "main_sleep_lowest_heart_rate",
+    "type": "integer",
+    "description": "Lowest heart rate in the main sleep period, bpm"
+   },
+   {
+    "name": "main_sleep_average_hrv",
+    "type": "number",
+    "description": "Average HRV in the main sleep period, ms"
+   },
+   {
+    "name": "main_sleep_start",
+    "type": "timestamp",
+    "description": "Bedtime start of the main sleep period"
+   },
+   {
+    "name": "main_sleep_end",
+    "type": "timestamp",
+    "description": "Bedtime end of the main sleep period"
+   },
+   {
+    "name": "sleep_periods",
+    "type": "integer",
+    "description": "Sleep periods recorded for the day (naps included)"
+   },
+   {
+    "name": "daily_sources",
+    "type": "json",
+    "description": "Oura daily collections present for this day"
+   }
+  ]
+ },
+ {
+  "name": "health.oura.heartrate",
+  "plugin": "health",
+  "description": "Oura heart rate samples summarised per UTC day; the samples are kept in the payload",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Source service: oura or weightgurus"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of the plugin mapping that produced this record"
+   },
+   {
+    "name": "day",
+    "type": "text",
+    "description": "Calendar day (YYYY-MM-DD) the record describes, as the source reports it"
+   },
+   {
+    "name": "sample_count",
+    "type": "integer",
+    "description": "Heart rate samples this day"
+   },
+   {
+    "name": "bpm_min",
+    "type": "integer",
+    "description": "Lowest sample, bpm"
+   },
+   {
+    "name": "bpm_max",
+    "type": "integer",
+    "description": "Highest sample, bpm"
+   },
+   {
+    "name": "bpm_mean",
+    "type": "number",
+    "description": "Mean of all samples, bpm"
+   },
+   {
+    "name": "bpm_mean_awake",
+    "type": "number",
+    "description": "Mean of awake samples, bpm"
+   },
+   {
+    "name": "bpm_mean_rest",
+    "type": "number",
+    "description": "Mean of rest samples, bpm"
+   },
+   {
+    "name": "bpm_mean_sleep",
+    "type": "number",
+    "description": "Mean of sleep samples, bpm"
+   },
+   {
+    "name": "bpm_mean_workout",
+    "type": "number",
+    "description": "Mean of workout samples, bpm"
+   },
+   {
+    "name": "first_sample_at",
+    "type": "timestamp",
+    "description": "First sample time"
+   },
+   {
+    "name": "last_sample_at",
+    "type": "timestamp",
+    "description": "Last sample time"
+   }
+  ]
+ },
+ {
+  "name": "health.oura.session",
+  "plugin": "health",
+  "description": "Oura sessions (breathing, meditation, rest, naps started in the app)",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Source service: oura or weightgurus"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of the plugin mapping that produced this record"
+   },
+   {
+    "name": "day",
+    "type": "text",
+    "description": "Calendar day (YYYY-MM-DD) the record describes, as the source reports it"
+   },
+   {
+    "name": "session_type",
+    "type": "text",
+    "description": "Oura session type (breathing, meditation, nap, relaxation, rest, body_status)"
+   },
+   {
+    "name": "mood",
+    "type": "text",
+    "description": "Mood reported for the session"
+   },
+   {
+    "name": "duration_s",
+    "type": "integer",
+    "description": "Session length, seconds"
+   },
+   {
+    "name": "heart_rate_mean",
+    "type": "number",
+    "description": "Mean of the session heart rate samples, bpm"
+   },
+   {
+    "name": "hrv_mean",
+    "type": "number",
+    "description": "Mean of the session HRV samples, ms"
+   }
+  ]
+ },
+ {
+  "name": "health.oura.sleep",
+  "plugin": "health",
+  "description": "Oura sleep periods (nights and naps) from bedtime start to end, with stages, heart rate and HRV",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Source service: oura or weightgurus"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of the plugin mapping that produced this record"
+   },
+   {
+    "name": "day",
+    "type": "text",
+    "description": "Calendar day (YYYY-MM-DD) the record describes, as the source reports it"
+   },
+   {
+    "name": "sleep_type",
+    "type": "text",
+    "description": "Oura sleep type: long_sleep, sleep, late_nap, rest or deleted"
+   },
+   {
+    "name": "main_sleep",
+    "type": "boolean",
+    "description": "This is the day's main sleep period"
+   },
+   {
+    "name": "total_sleep_s",
+    "type": "integer",
+    "description": "Total sleep, seconds"
+   },
+   {
+    "name": "time_in_bed_s",
+    "type": "integer",
+    "description": "Time in bed, seconds"
+   },
+   {
+    "name": "deep_sleep_s",
+    "type": "integer",
+    "description": "Deep sleep, seconds"
+   },
+   {
+    "name": "light_sleep_s",
+    "type": "integer",
+    "description": "Light sleep, seconds"
+   },
+   {
+    "name": "rem_sleep_s",
+    "type": "integer",
+    "description": "REM sleep, seconds"
+   },
+   {
+    "name": "awake_s",
+    "type": "integer",
+    "description": "Awake time in bed, seconds"
+   },
+   {
+    "name": "latency_s",
+    "type": "integer",
+    "description": "Sleep latency, seconds"
+   },
+   {
+    "name": "efficiency",
+    "type": "integer",
+    "description": "Sleep efficiency, percent"
+   },
+   {
+    "name": "average_heart_rate",
+    "type": "number",
+    "description": "Average heart rate, bpm"
+   },
+   {
+    "name": "lowest_heart_rate",
+    "type": "integer",
+    "description": "Lowest heart rate, bpm"
+   },
+   {
+    "name": "average_hrv",
+    "type": "number",
+    "description": "Average heart rate variability, ms"
+   },
+   {
+    "name": "average_breath",
+    "type": "number",
+    "description": "Average breaths per minute"
+   },
+   {
+    "name": "restless_periods",
+    "type": "integer",
+    "description": "Restless periods"
+   },
+   {
+    "name": "readiness_score",
+    "type": "integer",
+    "description": "Readiness score computed for this period"
+   },
+   {
+    "name": "temperature_deviation",
+    "type": "number",
+    "description": "Temperature deviation for this period, degrees C"
+   },
+   {
+    "name": "sleep_period",
+    "type": "integer",
+    "description": "Oura period index within the day"
+   }
+  ]
+ },
+ {
+  "name": "health.oura.workout",
+  "plugin": "health",
+  "description": "Oura workouts, detected or logged",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Source service: oura or weightgurus"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of the plugin mapping that produced this record"
+   },
+   {
+    "name": "day",
+    "type": "text",
+    "description": "Calendar day (YYYY-MM-DD) the record describes, as the source reports it"
+   },
+   {
+    "name": "activity",
+    "type": "text",
+    "description": "Workout activity"
+   },
+   {
+    "name": "intensity",
+    "type": "text",
+    "description": "Workout intensity (easy, moderate, hard)"
+   },
+   {
+    "name": "calories",
+    "type": "number",
+    "description": "Energy burned, kcal"
+   },
+   {
+    "name": "distance_m",
+    "type": "number",
+    "description": "Distance, metres"
+   },
+   {
+    "name": "duration_s",
+    "type": "integer",
+    "description": "Workout length, seconds"
+   },
+   {
+    "name": "label",
+    "type": "text",
+    "description": "User label"
+   },
+   {
+    "name": "workout_source",
+    "type": "text",
+    "description": "How the workout was recorded (manual, autodetected, confirmed, workout_heart_rate)"
+   }
+  ]
+ },
+ {
+  "name": "health.weight",
+  "plugin": "health",
+  "description": "Weight Gurus smart scale weigh-ins with body composition; deletions are new versions",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Source service: oura or weightgurus"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of the plugin mapping that produced this record"
+   },
+   {
+    "name": "weight",
+    "type": "number",
+    "description": "Body weight in weight_unit"
+   },
+   {
+    "name": "weight_unit",
+    "type": "text",
+    "description": "Unit of weight (lb or kg)"
+   },
+   {
+    "name": "weight_kg",
+    "type": "number",
+    "description": "Body weight in kilograms"
+   },
+   {
+    "name": "bmi",
+    "type": "number",
+    "description": "Body mass index"
+   },
+   {
+    "name": "body_fat_pct",
+    "type": "number",
+    "description": "Body fat, percent"
+   },
+   {
+    "name": "muscle_mass_pct",
+    "type": "number",
+    "description": "Muscle mass, percent"
+   },
+   {
+    "name": "water_pct",
+    "type": "number",
+    "description": "Body water, percent"
+   },
+   {
+    "name": "deleted",
+    "type": "boolean",
+    "description": "The weigh-in was deleted in Weight Gurus (kept as a new version)"
+   },
+   {
+    "name": "scale_source",
+    "type": "text",
+    "description": "How the reading arrived (for example a Wi-Fi or Bluetooth scale, or manual)"
+   },
+   {
+    "name": "server_timestamp",
+    "type": "timestamp",
+    "description": "When Weight Gurus stored the latest operation for this weigh-in"
+   },
+   {
+    "name": "operation_count",
+    "type": "integer",
+    "description": "Weight Gurus operations seen for this weigh-in"
+   }
+  ]
+ },
+ {
+  "name": "location.places",
+  "plugin": "morning_context",
+  "description": "Place lookups (geocoding and place search results) cached by the location capture service",
+  "record_kind": "reference",
+  "is_reference": true,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "record_type",
+    "type": "text",
+    "description": "position, capture, stay, or the table name for other rows"
+   },
+   {
+    "name": "source_table",
+    "type": "text",
+    "description": "Timeline database table the row came from"
+   },
+   {
+    "name": "row_id",
+    "type": "text",
+    "description": "Native row id (id column, else SQLite rowid)"
+   },
+   {
+    "name": "latitude",
+    "type": "number",
+    "description": "Latitude in degrees"
+   },
+   {
+    "name": "longitude",
+    "type": "number",
+    "description": "Longitude in degrees"
+   },
+   {
+    "name": "place_name",
+    "type": "text",
+    "description": "Place or label name when the row has one"
+   },
+   {
+    "name": "address",
+    "type": "text",
+    "description": "Address when the row has one"
+   },
+   {
+    "name": "time_basis",
+    "type": "text",
+    "description": "How happened_at was read: offset, naive_utc, naive_local or epoch"
+   },
+   {
+    "name": "columns",
+    "type": "json",
+    "description": "The complete source row"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   },
+   {
+    "name": "query",
+    "type": "text",
+    "description": "The lookup query text when the row has one"
+   }
+  ]
+ },
+ {
+  "name": "location.timeline",
+  "plugin": "morning_context",
+  "description": "Location timeline rows (positions, captures, stays) imported from the private location capture database",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "record_type",
+    "type": "text",
+    "description": "position, capture, stay, or the table name for other rows"
+   },
+   {
+    "name": "source_table",
+    "type": "text",
+    "description": "Timeline database table the row came from"
+   },
+   {
+    "name": "row_id",
+    "type": "text",
+    "description": "Native row id (id column, else SQLite rowid)"
+   },
+   {
+    "name": "latitude",
+    "type": "number",
+    "description": "Latitude in degrees"
+   },
+   {
+    "name": "longitude",
+    "type": "number",
+    "description": "Longitude in degrees"
+   },
+   {
+    "name": "accuracy_meters",
+    "type": "number",
+    "description": "Reported accuracy or stay radius in meters"
+   },
+   {
+    "name": "place_name",
+    "type": "text",
+    "description": "Place or label name when the row has one"
+   },
+   {
+    "name": "address",
+    "type": "text",
+    "description": "Address when the row has one"
+   },
+   {
+    "name": "device",
+    "type": "text",
+    "description": "Tracker, entity or device the row names"
+   },
+   {
+    "name": "duration_s",
+    "type": "number",
+    "description": "Stay duration in seconds when the row has an end"
+   },
+   {
+    "name": "time_basis",
+    "type": "text",
+    "description": "How happened_at was read: offset, naive_utc, naive_local or epoch"
+   },
+   {
+    "name": "columns",
+    "type": "json",
+    "description": "The complete source row"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.activity",
+  "plugin": "morning_context",
+  "description": "Daily recent activity context (messages, voice sessions, coding threads, background jobs) from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.calendar",
+  "plugin": "morning_context",
+  "description": "Daily calendar window snapshots from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.email",
+  "plugin": "morning_context",
+  "description": "Daily unread email snapshots from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.events",
+  "plugin": "morning_context",
+  "description": "Daily event discovery results (searched, scraped and listed local events) from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.finance",
+  "plugin": "morning_context",
+  "description": "Daily finance context (account transactions, balances, net worth) from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.health",
+  "plugin": "morning_context",
+  "description": "Daily health context (sleep, readiness, activity, weight) from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.location",
+  "plugin": "morning_context",
+  "description": "Daily location and time zone context (presence, travel, place lookups) from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.media",
+  "plugin": "morning_context",
+  "description": "Daily media taste context (liked artists, video watchlist) from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.news",
+  "plugin": "morning_context",
+  "description": "Daily news and newsletter context from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.other",
+  "plugin": "morning_context",
+  "description": "Morning context sources of an unrecognised kind, and bundles of an unrecognised shape; raw JSON kept in raw_json; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   },
+   {
+    "name": "raw_json",
+    "type": "json",
+    "description": "The complete source record (or bundle document) as found"
+   }
+  ]
+ },
+ {
+  "name": "morning.pipeline",
+  "plugin": "morning_context",
+  "description": "The morning context pipeline's own inputs and audits (report spec, feedback, previous reports, source health); one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.tasks",
+  "plugin": "morning_context",
+  "description": "Daily work tracker snapshots from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "morning.weather",
+  "plugin": "morning_context",
+  "description": "Daily weather snapshots (current, hourly and daily forecast) from the morning context pipeline; one record per source per day, subject time = the day described",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "report_date",
+    "type": "text",
+    "description": "Day the bundle describes (YYYY-MM-DD, the pipeline's local day)"
+   },
+   {
+    "name": "source_name",
+    "type": "text",
+    "description": "Pipeline source name, e.g. weather or event_discovery"
+   },
+   {
+    "name": "source_kind",
+    "type": "text",
+    "description": "Source kind that chose this channel"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Source status: ok, zero_results, empty, unavailable, unauthorized, partial or error"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Number of items in the normalized data when it is a list"
+   },
+   {
+    "name": "collected_at",
+    "type": "timestamp",
+    "description": "When the pipeline gathered this source, when the bundle says"
+   },
+   {
+    "name": "normalized",
+    "type": "json",
+    "description": "The source's normalized data as the pipeline stored it"
+   },
+   {
+    "name": "source_provenance",
+    "type": "json",
+    "description": "The pipeline's provenance block for this source"
+   },
+   {
+    "name": "error",
+    "type": "text",
+    "description": "Error or reason text the pipeline recorded for a failed source"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Revision of this plugin's mapping that produced the record"
+   }
+  ]
+ },
+ {
+  "name": "recordings.wave",
+  "plugin": "wave",
+  "description": "Wave recording titles and summaries with full recording intervals",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "exact or first_turn when start was absent"
+   },
+   {
+    "name": "duration_s",
+    "type": "number",
+    "description": "Recording duration in seconds"
+   },
+   {
+    "name": "device",
+    "type": "text",
+    "description": "Source recording device"
+   },
+   {
+    "name": "source_platform",
+    "type": "text",
+    "description": "Source platform"
+   },
+   {
+    "name": "recording_type",
+    "type": "text",
+    "description": "Wave recording type"
+   },
+   {
+    "name": "turn_count",
+    "type": "integer",
+    "description": "Number of source transcript turns"
+   },
+   {
+    "name": "ignore_reason",
+    "type": "text",
+    "description": "Source ignore flag; recording is still retained"
+   }
+  ]
+ },
+ {
+  "name": "research.items",
+  "plugin": "research",
+  "description": "Structured items (such as events) found inside research results. Record time is when the result was produced; subject time is when the item happens.",
+  "record_kind": "derived",
+  "is_reference": false,
+  "is_outside": true,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "stream",
+    "type": "text",
+    "description": "Stream id"
+   },
+   {
+    "name": "search_id",
+    "type": "text",
+    "description": "Search that found the item"
+   },
+   {
+    "name": "result_id",
+    "type": "text",
+    "description": "External id of the research.results message"
+   },
+   {
+    "name": "run_date",
+    "type": "text",
+    "description": "Run date of the result"
+   },
+   {
+    "name": "item_type",
+    "type": "text",
+    "description": "Item type from the stream, for example event"
+   },
+   {
+    "name": "item_key",
+    "type": "text",
+    "description": "Stable key: canonical URL or title, start and venue"
+   },
+   {
+    "name": "position",
+    "type": "integer",
+    "description": "1-based position within the result"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Item title"
+   },
+   {
+    "name": "description",
+    "type": "text",
+    "description": "What the item is"
+   },
+   {
+    "name": "venue",
+    "type": "text",
+    "description": "Venue name"
+   },
+   {
+    "name": "address",
+    "type": "text",
+    "description": "Venue address or details"
+   },
+   {
+    "name": "city",
+    "type": "text",
+    "description": "City"
+   },
+   {
+    "name": "organizer",
+    "type": "text",
+    "description": "Hosting organization"
+   },
+   {
+    "name": "door_time",
+    "type": "text",
+    "description": "Door or set time as written"
+   },
+   {
+    "name": "price",
+    "type": "text",
+    "description": "Price as written"
+   },
+   {
+    "name": "audience",
+    "type": "text",
+    "description": "Audience or participation details"
+   },
+   {
+    "name": "source_tier",
+    "type": "text",
+    "description": "primary, ticketing or credible-secondary"
+   },
+   {
+    "name": "date_certainty",
+    "type": "text",
+    "description": "explicit or inferred"
+   },
+   {
+    "name": "notes",
+    "type": "text",
+    "description": "Notes"
+   },
+   {
+    "name": "canonical_url",
+    "type": "text",
+    "description": "Canonical item URL"
+   },
+   {
+    "name": "evidence_url",
+    "type": "text",
+    "description": "Evidence URL"
+   },
+   {
+    "name": "ticket_url",
+    "type": "text",
+    "description": "Ticket, RSVP or signup URL"
+   },
+   {
+    "name": "primary_confirmed",
+    "type": "boolean",
+    "description": "Confirmed by a primary source"
+   },
+   {
+    "name": "occurrence_start",
+    "type": "timestamp",
+    "description": "When the item happens (also its subject start)"
+   },
+   {
+    "name": "occurrence_end",
+    "type": "timestamp",
+    "description": "When the item ends"
+   },
+   {
+    "name": "date_precision",
+    "type": "text",
+    "description": "exact, or day when only a date was given"
+   },
+   {
+    "name": "details",
+    "type": "json",
+    "description": "Other labeled values, and unparsed date text"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this message"
+   }
+  ]
+ },
+ {
+  "name": "research.results",
+  "plugin": "research",
+  "description": "Research stream results: one message per stream, search and run date, with the findings as text and cited URLs as fields and links. Model output: generated, never evidence on its own.",
+  "record_kind": "derived",
+  "is_reference": false,
+  "is_outside": true,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "stream",
+    "type": "text",
+    "description": "Stream id"
+   },
+   {
+    "name": "stream_title",
+    "type": "text",
+    "description": "Stream title"
+   },
+   {
+    "name": "search_id",
+    "type": "text",
+    "description": "Search id within the stream"
+   },
+   {
+    "name": "search_label",
+    "type": "text",
+    "description": "Readable search label"
+   },
+   {
+    "name": "cluster",
+    "type": "text",
+    "description": "Interest group or cluster the search belongs to"
+   },
+   {
+    "name": "variant",
+    "type": "text",
+    "description": "Search variant (for example A anchored, B open)"
+   },
+   {
+    "name": "search_kind",
+    "type": "text",
+    "description": "Search kind from the stream (local-event, current-check, ...)"
+   },
+   {
+    "name": "run_date",
+    "type": "text",
+    "description": "Run date YYYY-MM-DD in the stream's timezone"
+   },
+   {
+    "name": "window_start",
+    "type": "text",
+    "description": "First day the search asked about"
+   },
+   {
+    "name": "window_end",
+    "type": "text",
+    "description": "Last day the search asked about"
+   },
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "openai (model call) or import (produced elsewhere)"
+   },
+   {
+    "name": "model",
+    "type": "text",
+    "description": "Model name when known"
+   },
+   {
+    "name": "import_path",
+    "type": "text",
+    "description": "Imported file path relative to the import directory"
+   },
+   {
+    "name": "prompt",
+    "type": "text",
+    "description": "Rendered prompt, when known"
+   },
+   {
+    "name": "prompt_hash",
+    "type": "text",
+    "description": "SHA-256 prefix of the rendered prompt"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "ok, or empty when the provider found nothing"
+   },
+   {
+    "name": "cited_urls",
+    "type": "json",
+    "description": "Cited URLs: provider annotations first, then URLs in the text"
+   },
+   {
+    "name": "citations",
+    "type": "json",
+    "description": "Cited URLs with titles"
+   },
+   {
+    "name": "citation_count",
+    "type": "integer",
+    "description": "Number of cited URLs"
+   },
+   {
+    "name": "item_count",
+    "type": "integer",
+    "description": "Structured items extracted into research.items"
+   },
+   {
+    "name": "prompt_tokens",
+    "type": "integer",
+    "description": "Provider-reported input tokens"
+   },
+   {
+    "name": "completion_tokens",
+    "type": "integer",
+    "description": "Provider-reported output tokens"
+   },
+   {
+    "name": "stream_revision",
+    "type": "text",
+    "description": "Hash of the stream config used for the run"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this message"
+   }
+  ]
+ },
+ {
+  "name": "t3code.messages",
+  "plugin": "t3code",
+  "description": "Every user and assistant message of every T3 Code thread, in every environment: your prompts (author_kind owner), agent replies (agent) and agent-written prompts (agent_prompt); one thread per T3 thread, with project, root thread and model fields",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "role",
+    "type": "text",
+    "description": "user or assistant"
+   },
+   {
+    "name": "author_kind",
+    "type": "text",
+    "description": "owner (you typed it), agent (an assistant reply) or agent_prompt (a user-role turn an agent wrote: subagent briefs, delegated tasks)"
+   },
+   {
+    "name": "project_id",
+    "type": "text",
+    "description": "T3 project id"
+   },
+   {
+    "name": "project",
+    "type": "text",
+    "description": "Project title"
+   },
+   {
+    "name": "t3_thread_id",
+    "type": "text",
+    "description": "T3 thread id"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Thread title"
+   },
+   {
+    "name": "root_thread",
+    "type": "text",
+    "description": "Top-level thread this message belongs to (the thread itself unless it is a subagent thread); group by it to count threads of work"
+   },
+   {
+    "name": "is_subagent",
+    "type": "boolean",
+    "description": "The message is in a subagent (child) thread"
+   },
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Provider instance that answered: claudeAgent, codex, ..."
+   },
+   {
+    "name": "model",
+    "type": "text",
+    "description": "Model of the run (or the thread's model)"
+   },
+   {
+    "name": "run",
+    "type": "text",
+    "description": "T3 run id: one user turn and everything it caused"
+   },
+   {
+    "name": "creation_source",
+    "type": "text",
+    "description": "web, mobile, provider, server or mcp"
+   },
+   {
+    "name": "text_length",
+    "type": "integer",
+    "description": "Characters of the message text"
+   },
+   {
+    "name": "text_truncated",
+    "type": "boolean",
+    "description": "The text was cut to 100,000 characters"
+   },
+   {
+    "name": "attachment_count",
+    "type": "integer",
+    "description": "Attachments on the message"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   },
+   {
+    "name": "environment_id",
+    "type": "text",
+    "description": "T3 environment (machine) id"
+   },
+   {
+    "name": "environment",
+    "type": "text",
+    "description": "Label of the T3 home the record was read from (T3CODE_HOMES)"
+   }
+  ]
+ },
+ {
+  "name": "t3code.projects",
+  "plugin": "t3code",
+  "description": "One reference record per T3 Code project: title, folder, thread counts",
+  "record_kind": "reference",
+  "is_reference": true,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "project_id",
+    "type": "text",
+    "description": "T3 project id"
+   },
+   {
+    "name": "project",
+    "type": "text",
+    "description": "Project title"
+   },
+   {
+    "name": "workspace_root",
+    "type": "text",
+    "description": "Workspace folder"
+   },
+   {
+    "name": "deleted",
+    "type": "boolean",
+    "description": "Deleted"
+   },
+   {
+    "name": "top_level_threads",
+    "type": "integer",
+    "description": "Top-level threads at fetch time"
+   },
+   {
+    "name": "all_threads",
+    "type": "integer",
+    "description": "Threads including subagent threads at fetch time"
+   },
+   {
+    "name": "last_updated",
+    "type": "timestamp",
+    "description": "Last project update"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   },
+   {
+    "name": "environment_id",
+    "type": "text",
+    "description": "T3 environment (machine) id"
+   },
+   {
+    "name": "environment",
+    "type": "text",
+    "description": "Label of the T3 home the record was read from (T3CODE_HOMES)"
+   }
+  ]
+ },
+ {
+  "name": "t3code.resets",
+  "plugin": "t3code",
+  "description": "Usage window resets (scheduled and early) and reset credit changes (added, used, expired) of every AI subscription",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "event",
+    "type": "text",
+    "description": "reset, early_reset, credit_balance (first seen), credit_added, credit_used, credit_expired"
+   },
+   {
+    "name": "account",
+    "type": "text",
+    "description": "Account key: a short hash, never the e-mail address"
+   },
+   {
+    "name": "subscription",
+    "type": "text",
+    "description": "Subscription name: Claude Ultra, ChatGPT Pro 100, ..."
+   },
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "claudeAgent, codex, ..."
+   },
+   {
+    "name": "window_id",
+    "type": "text",
+    "description": "Window that reset"
+   },
+   {
+    "name": "window_label",
+    "type": "text",
+    "description": "Window label"
+   },
+   {
+    "name": "used_before_percent",
+    "type": "number",
+    "description": "Percent used just before the reset"
+   },
+   {
+    "name": "left_before_percent",
+    "type": "number",
+    "description": "Percent left just before the reset"
+   },
+   {
+    "name": "next_reset_at",
+    "type": "timestamp",
+    "description": "Next scheduled reset"
+   },
+   {
+    "name": "hours_since_previous_reset",
+    "type": "number",
+    "description": "Hours since this window's previous reset"
+   },
+   {
+    "name": "scheduled_reset_at",
+    "type": "timestamp",
+    "description": "The scheduled reset time (reset events)"
+   },
+   {
+    "name": "available_credits",
+    "type": "integer",
+    "description": "Reset credits available after the change"
+   },
+   {
+    "name": "credit_change",
+    "type": "integer",
+    "description": "Change in available reset credits"
+   },
+   {
+    "name": "next_credit_expires_at",
+    "type": "timestamp",
+    "description": "When the next reset credit expires"
+   },
+   {
+    "name": "credit_options",
+    "type": "json",
+    "description": "Reset credit kinds: id, label, description, count, expiry"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   }
+  ]
+ },
+ {
+  "name": "t3code.subscriptions",
+  "plugin": "t3code",
+  "description": "One reference record per AI subscription connected to T3 Code: plan, latest status of each usage window, reset credits",
+  "record_kind": "reference",
+  "is_reference": true,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "account",
+    "type": "text",
+    "description": "Account key: a short hash, never the e-mail address"
+   },
+   {
+    "name": "subscription",
+    "type": "text",
+    "description": "Subscription name: Claude Ultra, ChatGPT Pro 100, ..."
+   },
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "claudeAgent, codex, ..."
+   },
+   {
+    "name": "instance",
+    "type": "text",
+    "description": "T3 provider instance"
+   },
+   {
+    "name": "plan",
+    "type": "text",
+    "description": "Plan label T3 reports"
+   },
+   {
+    "name": "auth_type",
+    "type": "text",
+    "description": "Authentication type"
+   },
+   {
+    "name": "enabled",
+    "type": "boolean",
+    "description": "Enabled in T3"
+   },
+   {
+    "name": "usage_unavailable",
+    "type": "text",
+    "description": "Why the provider reports no usage, if it does not"
+   },
+   {
+    "name": "windows",
+    "type": "json",
+    "description": "Latest status per window: used, left, resets_at, observed_at"
+   },
+   {
+    "name": "available_credits",
+    "type": "integer",
+    "description": "Reset credits available"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   }
+  ]
+ },
+ {
+  "name": "t3code.threads",
+  "plugin": "t3code",
+  "description": "One reference record per T3 Code thread (top-level and subagent): title, project, model, branch, parent and root thread",
+  "record_kind": "reference",
+  "is_reference": true,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "t3_thread_id",
+    "type": "text",
+    "description": "T3 thread id"
+   },
+   {
+    "name": "project_id",
+    "type": "text",
+    "description": "T3 project id"
+   },
+   {
+    "name": "project",
+    "type": "text",
+    "description": "Project title"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Thread title"
+   },
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "Provider instance of the thread"
+   },
+   {
+    "name": "model",
+    "type": "text",
+    "description": "Model selected for the thread"
+   },
+   {
+    "name": "created_by",
+    "type": "text",
+    "description": "user or agent"
+   },
+   {
+    "name": "creation_source",
+    "type": "text",
+    "description": "Where the thread was started"
+   },
+   {
+    "name": "branch",
+    "type": "text",
+    "description": "Git branch"
+   },
+   {
+    "name": "worktree_path",
+    "type": "text",
+    "description": "Worktree path"
+   },
+   {
+    "name": "is_subagent",
+    "type": "boolean",
+    "description": "A subagent (child) thread"
+   },
+   {
+    "name": "parent_thread",
+    "type": "text",
+    "description": "Parent thread id of a subagent thread"
+   },
+   {
+    "name": "root_thread",
+    "type": "text",
+    "description": "Top-level thread id"
+   },
+   {
+    "name": "relationship_to_parent",
+    "type": "text",
+    "description": "How a child thread relates to its parent"
+   },
+   {
+    "name": "forked_from",
+    "type": "text",
+    "description": "Thread this one was forked from"
+   },
+   {
+    "name": "archived",
+    "type": "boolean",
+    "description": "Archived"
+   },
+   {
+    "name": "deleted",
+    "type": "boolean",
+    "description": "Deleted"
+   },
+   {
+    "name": "last_updated",
+    "type": "timestamp",
+    "description": "Last thread update"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   },
+   {
+    "name": "environment_id",
+    "type": "text",
+    "description": "T3 environment (machine) id"
+   },
+   {
+    "name": "environment",
+    "type": "text",
+    "description": "Label of the T3 home the record was read from (T3CODE_HOMES)"
+   }
+  ]
+ },
+ {
+  "name": "t3code.usage",
+  "plugin": "t3code",
+  "description": "AI subscription usage status (Claude, Codex, ...): one record per change of a usage window with percent used and left, time left in the week, pace and burn since the previous status, and a 100% record at every reset",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "event",
+    "type": "text",
+    "description": "first, observed (a new value), reset (window rolled over: 100% left) or early_reset (use dropped before the reset time: a reset credit or provider reset)"
+   },
+   {
+    "name": "account",
+    "type": "text",
+    "description": "Account key: a short hash, never the e-mail address"
+   },
+   {
+    "name": "subscription",
+    "type": "text",
+    "description": "Subscription name: Claude Ultra, ChatGPT Pro 100, ..."
+   },
+   {
+    "name": "provider",
+    "type": "text",
+    "description": "claudeAgent, codex, ..."
+   },
+   {
+    "name": "window_id",
+    "type": "text",
+    "description": "Provider window id: seven_day, seven_day_fable, primary, ..."
+   },
+   {
+    "name": "window_label",
+    "type": "text",
+    "description": "Weekly, Weekly · Fable, 5-hour, ..."
+   },
+   {
+    "name": "window_minutes",
+    "type": "integer",
+    "description": "Window length in minutes (10080 = a week)"
+   },
+   {
+    "name": "used_percent",
+    "type": "number",
+    "description": "Percent of the window used"
+   },
+   {
+    "name": "left_percent",
+    "type": "number",
+    "description": "Percent of the window left"
+   },
+   {
+    "name": "resets_at",
+    "type": "timestamp",
+    "description": "When the window resets"
+   },
+   {
+    "name": "window_start",
+    "type": "timestamp",
+    "description": "When the current window began"
+   },
+   {
+    "name": "time_left_hours",
+    "type": "number",
+    "description": "Hours left in the window at this status"
+   },
+   {
+    "name": "time_left",
+    "type": "text",
+    "description": "Time left in the window, e.g. 3d 7h"
+   },
+   {
+    "name": "window_elapsed_percent",
+    "type": "number",
+    "description": "Percent of the window's time already past"
+   },
+   {
+    "name": "pace_points",
+    "type": "number",
+    "description": "used_percent minus window_elapsed_percent: above 0 burns faster than an even pace"
+   },
+   {
+    "name": "projected_used_at_reset",
+    "type": "number",
+    "description": "used_percent extrapolated to the reset at this pace"
+   },
+   {
+    "name": "burn_since_previous",
+    "type": "number",
+    "description": "New percentage points used since the previous status: only a rise above this window cycle's high-water mark counts, so jittering snapshots never double count; sum it per week for the burn-down"
+   },
+   {
+    "name": "hours_since_previous",
+    "type": "number",
+    "description": "Hours since the previous status of this window"
+   },
+   {
+    "name": "cycle_burn_per_day",
+    "type": "number",
+    "description": "Average percentage points used per day since the window began"
+   },
+   {
+    "name": "used_before_reset",
+    "type": "number",
+    "description": "On a reset: percent used just before it"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "Provider status: allowed, allowed_warning, rejected"
+   },
+   {
+    "name": "plan_type",
+    "type": "text",
+    "description": "Provider plan type when the source names it"
+   },
+   {
+    "name": "source",
+    "type": "text",
+    "description": "t3_cache, t3_provider_log, codex_session or reset_time"
+   },
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision that produced this record"
+   }
+  ]
+ },
+ {
+  "name": "transcripts.wave",
+  "plugin": "wave",
+  "description": "Wave speaker turns threaded by whole recording; text only",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": true,
+  "fields": [
+   {
+    "name": "speaker_label",
+    "type": "text",
+    "description": "Speaker label within this recording"
+   },
+   {
+    "name": "start_s",
+    "type": "number",
+    "description": "Start offset in recording seconds"
+   },
+   {
+    "name": "end_s",
+    "type": "number",
+    "description": "End offset in recording seconds"
+   },
+   {
+    "name": "speaker_provenance",
+    "type": "text",
+    "description": "Source evidence for the speaker mapping"
+   },
+   {
+    "name": "ignore_reason",
+    "type": "text",
+    "description": "Source ignore flag; retained so arrival rules can skip it"
+   },
+   {
+    "name": "place",
+    "type": "text",
+    "description": "Turn place, falling back to recording place"
+   }
+  ]
+ },
+ {
+  "name": "youtube.picks",
+  "plugin": "youtube_feed",
+  "description": "Router decisions on feed uploads (scores, verdict, reason, model), at the scoring time with the video's published time as subject",
+  "record_kind": "derived",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision; a change re-versions records"
+   },
+   {
+    "name": "video_id",
+    "type": "text",
+    "description": "YouTube video ID"
+   },
+   {
+    "name": "url",
+    "type": "text",
+    "description": "Watch or Shorts URL"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Video title"
+   },
+   {
+    "name": "youtube_channel_id",
+    "type": "text",
+    "description": "Publishing channel ID"
+   },
+   {
+    "name": "channel_title",
+    "type": "text",
+    "description": "Publishing channel title"
+   },
+   {
+    "name": "duration_s",
+    "type": "integer",
+    "description": "Video length in seconds when known"
+   },
+   {
+    "name": "verdict",
+    "type": "text",
+    "description": "pick or skip"
+   },
+   {
+    "name": "picked",
+    "type": "boolean",
+    "description": "verdict is pick"
+   },
+   {
+    "name": "watch_probability",
+    "type": "number",
+    "description": "Model probability of watching (0-1)"
+   },
+   {
+    "name": "progress_if_watched",
+    "type": "number",
+    "description": "Expected percent watched if started (0-100)"
+   },
+   {
+    "name": "junk_food_probability",
+    "type": "number",
+    "description": "Model probability of low-value content (0-1)"
+   },
+   {
+    "name": "watch_later_probability",
+    "type": "number",
+    "description": "Model probability of saving for later (0-1)"
+   },
+   {
+    "name": "is_junk_food",
+    "type": "boolean",
+    "description": "Scorer's junk-food flag"
+   },
+   {
+    "name": "reason",
+    "type": "text",
+    "description": "Model's short reason when given"
+   },
+   {
+    "name": "scorer",
+    "type": "text",
+    "description": "Model or imported scorer name"
+   },
+   {
+    "name": "origin",
+    "type": "text",
+    "description": "router, predictions or flagged"
+   },
+   {
+    "name": "scored_at",
+    "type": "timestamp",
+    "description": "When the decision was made"
+   },
+   {
+    "name": "thresholds",
+    "type": "json",
+    "description": "Thresholds used for the verdict; null when the import supplied the verdict"
+   },
+   {
+    "name": "playlist_id",
+    "type": "text",
+    "description": "Playlist the video was added to by this plugin"
+   },
+   {
+    "name": "playlist_added_at",
+    "type": "timestamp",
+    "description": "When it was added"
+   }
+  ]
+ },
+ {
+  "name": "youtube.subscriptions",
+  "plugin": "youtube",
+  "description": "Channel subscriptions and observed unsubscriptions",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "source timestamp, day (history day heading), estimated (watcher session) or first_seen; first_seen is not the action time"
+   },
+   {
+    "name": "source",
+    "type": "text",
+    "description": "takeout, ytdlp, watcher, or api"
+   },
+   {
+    "name": "youtube_channel_id",
+    "type": "text",
+    "description": "Subscribed channel ID"
+   },
+   {
+    "name": "channel_title",
+    "type": "text",
+    "description": "Subscribed channel title"
+   },
+   {
+    "name": "url",
+    "type": "text",
+    "description": "Channel URL"
+   },
+   {
+    "name": "removed",
+    "type": "boolean",
+    "description": "Absent from a later complete snapshot"
+   }
+  ]
+ },
+ {
+  "name": "youtube.transcripts",
+  "plugin": "youtube",
+  "description": "Transcripts (and frames) of recorded videos: one record per few minutes, threaded per video; optional, off by default",
+  "record_kind": "reference",
+  "is_reference": true,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "video_id",
+    "type": "text",
+    "description": "YouTube video ID"
+   },
+   {
+    "name": "segment",
+    "type": "integer",
+    "description": "0-based index of this part of the video"
+   },
+   {
+    "name": "start_s",
+    "type": "number",
+    "description": "Offset of the part's start in the video, seconds"
+   },
+   {
+    "name": "end_s",
+    "type": "number",
+    "description": "Offset of the part's end in the video, seconds"
+   },
+   {
+    "name": "url",
+    "type": "text",
+    "description": "The video at the part's start (&t=)"
+   },
+   {
+    "name": "status",
+    "type": "text",
+    "description": "ok, or why nothing was processed: private, removed, members_only, age_restricted, premium_only, unavailable, too_long, failed"
+   },
+   {
+    "name": "transcript_status",
+    "type": "text",
+    "description": "ok, empty, no_captions, no_audio, too_large, unavailable or failed; absent without a transcript"
+   },
+   {
+    "name": "transcript_source",
+    "type": "text",
+    "description": "endpoint or captions"
+   },
+   {
+    "name": "caption_kind",
+    "type": "text",
+    "description": "manual or automatic, for captions"
+   },
+   {
+    "name": "language",
+    "type": "text",
+    "description": "Caption track or endpoint-reported language"
+   },
+   {
+    "name": "transcriber",
+    "type": "text",
+    "description": "Transcriber implementation, for the endpoint"
+   },
+   {
+    "name": "model",
+    "type": "text",
+    "description": "Endpoint model name"
+   },
+   {
+    "name": "timestamps",
+    "type": "boolean",
+    "description": "Segment times come from the source; false when the endpoint returned plain text per chunk"
+   },
+   {
+    "name": "frames",
+    "type": "json",
+    "description": "[{at_s, link}] frames inside this part"
+   },
+   {
+    "name": "duration_s",
+    "type": "number",
+    "description": "Video duration, seconds"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "published (upload time), published_day (upload date) or first_seen; happened_at adds 1 s per segment"
+   }
+  ]
+ },
+ {
+  "name": "youtube.uploads",
+  "plugin": "youtube_feed",
+  "description": "New uploads of followed YouTube channels from their public feeds, at the published time; outside-world events, threaded per channel",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": true,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "mapping_revision",
+    "type": "integer",
+    "description": "Mapping revision; a change re-versions records"
+   },
+   {
+    "name": "video_id",
+    "type": "text",
+    "description": "YouTube video ID"
+   },
+   {
+    "name": "url",
+    "type": "text",
+    "description": "Watch or Shorts URL"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Video title"
+   },
+   {
+    "name": "youtube_channel_id",
+    "type": "text",
+    "description": "Publishing channel ID"
+   },
+   {
+    "name": "channel_title",
+    "type": "text",
+    "description": "Publishing channel title"
+   },
+   {
+    "name": "duration_s",
+    "type": "integer",
+    "description": "Video length in seconds when known"
+   },
+   {
+    "name": "description",
+    "type": "text",
+    "description": "Video description when the source supplied one"
+   },
+   {
+    "name": "is_short",
+    "type": "boolean",
+    "description": "Shorts flag; null when unknown"
+   },
+   {
+    "name": "is_live",
+    "type": "boolean",
+    "description": "Live or upcoming broadcast when known"
+   },
+   {
+    "name": "transport",
+    "type": "text",
+    "description": "rss, page (channel videos page) or prediction (imported score only)"
+   },
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "exact or day (published time), approximate (estimated from relative page text) or scored (no published time; scoring time used)"
+   }
+  ]
+ },
+ {
+  "name": "youtube.watch",
+  "plugin": "youtube",
+  "description": "Individual exported views or approximate first-seen history observations",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "source timestamp, day (history day heading), estimated (watcher session) or first_seen; first_seen is not the action time"
+   },
+   {
+    "name": "source",
+    "type": "text",
+    "description": "takeout, ytdlp, watcher, or api"
+   },
+   {
+    "name": "video_id",
+    "type": "text",
+    "description": "YouTube video ID, absent for unavailable views"
+   },
+   {
+    "name": "url",
+    "type": "text",
+    "description": "Source video URL"
+   },
+   {
+    "name": "video_title",
+    "type": "text",
+    "description": "Source video title"
+   },
+   {
+    "name": "youtube_channel_id",
+    "type": "text",
+    "description": "Publisher channel ID when supplied"
+   },
+   {
+    "name": "channel_title",
+    "type": "text",
+    "description": "Publisher title when supplied"
+   },
+   {
+    "name": "is_short",
+    "type": "boolean",
+    "description": "Source explicitly identifies a Short"
+   },
+   {
+    "name": "is_music",
+    "type": "boolean",
+    "description": "Source explicitly identifies YouTube Music"
+   },
+   {
+    "name": "is_ad",
+    "type": "boolean",
+    "description": "Source identifies an ad view; these are flagged"
+   },
+   {
+    "name": "record_type",
+    "type": "text",
+    "description": "day (watcher: watched on this history day) or session (watcher: one viewing session); null for Takeout and yt-dlp"
+   },
+   {
+    "name": "day",
+    "type": "text",
+    "description": "History day heading as a date (watcher)"
+   },
+   {
+    "name": "length_s",
+    "type": "integer",
+    "description": "Video length in seconds when the feed shows it"
+   },
+   {
+    "name": "progress",
+    "type": "number",
+    "description": "Resume bar percent when the history day item was first seen"
+   },
+   {
+    "name": "session_kind",
+    "type": "text",
+    "description": "new, resume, progress or rewatch"
+   },
+   {
+    "name": "progress_before",
+    "type": "number",
+    "description": "Resume bar percent at the previous poll"
+   },
+   {
+    "name": "progress_after",
+    "type": "number",
+    "description": "Resume bar percent at this poll"
+   },
+   {
+    "name": "watched_fraction",
+    "type": "number",
+    "description": "Fraction of the video watched in this session, estimated"
+   },
+   {
+    "name": "watched_s",
+    "type": "integer",
+    "description": "Seconds watched in this session, estimated from fraction and length"
+   },
+   {
+    "name": "window_start",
+    "type": "text",
+    "description": "Previous poll: the session happened after this"
+   },
+   {
+    "name": "window_end",
+    "type": "text",
+    "description": "This poll: the session happened before this"
+   },
+   {
+    "name": "session_number",
+    "type": "integer",
+    "description": "Ordinal of this session of the video seen by the watcher"
+   }
+  ]
+ },
+ {
+  "name": "youtube.watch_later",
+  "plugin": "youtube",
+  "description": "Saved playlist items; removed=true is a new version, never deletion",
+  "record_kind": "life_event",
+  "is_reference": false,
+  "is_outside": false,
+  "conversation_whole_thread": false,
+  "fields": [
+   {
+    "name": "time_precision",
+    "type": "text",
+    "description": "source timestamp, day (history day heading), estimated (watcher session) or first_seen; first_seen is not the action time"
+   },
+   {
+    "name": "source",
+    "type": "text",
+    "description": "takeout, ytdlp, watcher, or api"
+   },
+   {
+    "name": "video_id",
+    "type": "text",
+    "description": "YouTube video ID, absent for unavailable views"
+   },
+   {
+    "name": "url",
+    "type": "text",
+    "description": "Source video URL"
+   },
+   {
+    "name": "title",
+    "type": "text",
+    "description": "Source video title"
+   },
+   {
+    "name": "channel_title",
+    "type": "text",
+    "description": "Source publisher title"
+   },
+   {
+    "name": "position",
+    "type": "integer",
+    "description": "Null: feed rank is not a change to a save"
+   },
+   {
+    "name": "playlist",
+    "type": "text",
+    "description": "Playlist identity; WL for Watch Later"
+   },
+   {
+    "name": "removed",
+    "type": "boolean",
+    "description": "Absent from a later complete snapshot"
+   }
+  ]
+ }
+]

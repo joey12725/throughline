@@ -1,0 +1,28 @@
+name: Connector problem or request
+description: A plugin that imports from a service misbehaves, or a new one.
+labels: ["connector"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Synthetic data only**: describe the shape of the source data (field
+        names, types, sizes) or attach an invented sample; never a real
+        export, cookie, token or API key.
+  - type: input
+    id: plugin
+    attributes:
+      label: Plugin
+      description: Directory under plugins/, or the service you want imported.
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What happens, or what you need
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Invented sample record
+      render: json

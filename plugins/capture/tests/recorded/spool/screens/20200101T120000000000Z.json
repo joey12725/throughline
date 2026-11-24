@@ -1,0 +1,1 @@
+{"kind": "screen", "device": "synthbox", "captured_at": "2020-01-01T12:00:00+00:00", "file": "20200101T120000000000Z.jpg", "mime": "image/jpeg", "width": 1600, "height": 900, "bytes": 16, "sha256": "0c86a6d326f394f9f4a2720190b82bee27fa46af8c8dea2ba663c0c43d738ffe", "app": "terminal", "title": "~/orchard", "monitor": "1", "idle_backend": "wayland"}

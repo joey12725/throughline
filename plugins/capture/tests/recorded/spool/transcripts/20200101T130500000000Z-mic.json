@@ -1,0 +1,1 @@
+{"kind": "transcript", "device": "synthbox", "source": "mic", "started_at": "2020-01-01T13:05:00+00:00", "ended_at": "2020-01-01T13:05:12+00:00", "duration_s": 12.0, "text": "Synthetic orchard planning note number 3.", "language": "en", "segments": [{"start": 0.0, "end": 12.0, "text": "Synthetic orchard planning note number 3."}], "engine": "local", "model": "tiny"}

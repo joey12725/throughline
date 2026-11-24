@@ -1,0 +1,116 @@
+.strip {
+  display: flex;
+  align-items: stretch;
+  gap: var(--s-4);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+  padding: var(--s-3) var(--s-4);
+  overflow-x: auto;
+}
+
+.lead {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-right: var(--s-4);
+  border-right: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+.total {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.totalNum {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: var(--fw-semibold);
+  color: var(--brass);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.totalUnit { font-size: 11px; color: var(--ink-3); }
+.window {
+  font-size: 10.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  gap: 4px 30px;
+  flex: 1 1 auto;
+  align-content: center;
+}
+.idle {
+  color: var(--ink-3);
+  font-size: 13px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.idleDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  animation: breathe 1.8s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 9px 92px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  position: relative;
+}
+.dot[data-fresh="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid var(--c);
+  animation: ring 1.3s ease-out;
+}
+@keyframes ring {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.3); opacity: 0; }
+}
+.name {
+  font-size: 12px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.spark { display: block; }
+.perMin {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  min-width: 34px;
+}
+.perMinUnit { font-size: 9.5px; color: var(--ink-3); margin-left: 1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dot[data-fresh="true"]::after { animation: none; opacity: 0; }
+  .idleDot { animation: none; opacity: 0.6; }
+}

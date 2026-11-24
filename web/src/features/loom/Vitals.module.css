@@ -1,0 +1,38 @@
+.sentence {
+  font-family: var(--font-read);
+  font-size: clamp(18px, 2.2vw, 26px);
+  line-height: 1.42;
+  letter-spacing: -0.003em;
+  color: var(--ink);
+  margin: 0;
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.num {
+  color: var(--ink);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--fw-medium);
+  background-image: linear-gradient(var(--brass), var(--brass));
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 1.06em;
+  transition: background-size var(--m-fast) var(--ease), color var(--m-fast) var(--ease);
+}
+.num:hover {
+  color: var(--brass);
+  background-size: 100% 2px;
+}
+.num:focus-visible { outline: none; box-shadow: var(--focus-tight); border-radius: 2px; }
+
+.since { color: var(--ink-2); font-style: italic; }
+.pending { color: var(--ink-3); }
+
+.secondary {
+  display: block;
+  margin-top: 6px;
+  font-size: clamp(14px, 1.4vw, 16px);
+  color: var(--ink-2);
+}
+.secondary .num { font-size: inherit; background-position: 0 1.02em; }

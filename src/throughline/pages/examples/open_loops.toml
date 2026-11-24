@@ -1,0 +1,26 @@
+# Promises and pending asks in both directions. Adapted from GBrain's
+# google-loops skill and its extractor prompt (MIT): direction matters,
+# verbatim quotes, a fulfilled promise is not open.
+name = "open_loops"
+description = "What the owner promised people, what people promised the owner, and what is waiting on a reply."
+output = "pages"
+grain = "conversation"
+schedule = "10 */2 * * *"
+# Channels to read. Onboarding adds every channel whose declared role is
+# in channel_roles; when defining this file by hand, list your own.
+channels = []
+channel_roles = ["chat", "email", "transcript"]
+max_items_per_run = 10
+
+prompt = """Track promises and pending asks in this window, in both directions: what the owner promised someone, and what someone promised the owner (or asked and is waiting on).
+Keep loops/<counterparty-slug> pages (one per person, person_id set; link to their people page with about). Sections: Owed by the owner, Owed to the owner, Waiting on a decision, Closed.
+Each open item: '- <what> (made YYYY-MM-DD; due <date> only if stated) > "<verbatim line>" [m:ID]'.
+Read the page before adding: do not duplicate an item already listed. Close an item only when a record shows it was done, declined or dropped (search_messages after the promise date); move it to Closed with that citation and add a timeline line. A joke, a maybe, or a vague "we should hang out" is not a commitment unless someone treated it as one. Never invent priorities or due dates.
+Also add each new or closed loop to the person's people page Open threads (edit)."""
+
+[worker_config]
+kinds = ["loops", "people"]
+allow = ["write", "edit", "timeline", "link"]
+max_turns = 5
+max_new_pages = 3
+lookback_days = 14               # scheduled runs read only the last two weeks

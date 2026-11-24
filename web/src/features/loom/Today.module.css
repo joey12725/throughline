@@ -1,0 +1,86 @@
+.allLink {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.allLink:hover { color: var(--brass); }
+
+.wrap { display: flex; flex-direction: column; gap: 6px; }
+
+.hours {
+  position: relative;
+  height: 12px;
+  margin-left: 86px;
+  margin-right: 34px;
+}
+.hourMark {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--ink-3);
+}
+.hourMark:first-child { transform: none; }
+.hourMark:last-child { transform: translateX(-100%); }
+
+.lanes { display: flex; flex-direction: column; gap: 3px; }
+
+.lane {
+  display: grid;
+  grid-template-columns: 80px 1fr 28px;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--ink-2);
+  border-radius: var(--r-control);
+  padding: 2px 0;
+}
+.lane:hover { background: var(--bg-2); }
+.lane:focus-visible { outline: none; box-shadow: var(--focus-tight); }
+
+.laneName {
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+  padding-right: 2px;
+}
+.track {
+  position: relative;
+  height: 16px;
+  background: var(--bg-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.tick {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  opacity: 0.85;
+}
+.nowLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--brass);
+  opacity: 0.6;
+}
+.laneCount {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.foot {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  margin-top: 2px;
+}

@@ -1,0 +1,13 @@
+# Allowlist for scripts/leak-check.sh. One entry per line, each with a reason
+# after "  #". Kinds:
+#   path:REGEX   skip files whose repository path matches
+#   word:REGEX   ignore matching words before testing a line again
+#   line:REGEX   ignore one hit, matched against "path:line:text"
+# Keep entries narrow: every entry must have a clear reason.
+
+path:^web/pnpm-lock\.yaml$  # integrity hashes (base64)
+path:^scripts/leak-check\.sh$  # the patterns themselves
+path:^scripts/leak-allowlist\.txt$  # this file
+path:^plugins/claude-code/tests/test_claude_code\.py$  # synthetic redaction test fixtures
+path:^plugins/codex/tests/  # synthetic redaction canary fixtures
+path:^plugins/github/tests/test_github\.py$  # synthetic token canary fixture

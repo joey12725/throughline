@@ -1,0 +1,1787 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:">
+<title>Throughline Companion</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --panel:#ffffff; --panel-2:#fbfbfc; --ink:#1b1f24; --ink-2:#5b636d;
+    --ink-3:#848d98; --line:#e2e5ea; --line-2:#d4d8df; --accent:#2f6fed; --accent-ink:#ffffff;
+    --ok:#1a8a4f; --ok-bg:#e4f4ea; --warn:#9a6a00; --warn-bg:#fbefd6; --bad:#c0392b; --bad-bg:#fbe6e3;
+    --idle:#6b737e; --idle-bg:#eceef1; --focus:#2f6fed; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --chip:#eef1f6; --chip-ink:#374151; --shadow:0 1px 2px rgba(20,24,30,.06),0 1px 1px rgba(20,24,30,.04);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#121418; --panel:#1b1e23; --panel-2:#191c21; --ink:#e7eaef; --ink-2:#a3abb6; --ink-3:#79818c;
+      --line:#2a2e35; --line-2:#363b43; --accent:#5a8cf5; --accent-ink:#0b0e12;
+      --ok:#51c07f; --ok-bg:#15311f; --warn:#e0b85a; --warn-bg:#352a12; --bad:#ef7a6f; --bad-bg:#371c19;
+      --idle:#8b939e; --idle-bg:#262a31; --chip:#262a31; --chip-ink:#c4ccd6; --shadow:0 1px 2px rgba(0,0,0,.3);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:14px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent)}
+  code,kbd{font-family:var(--mono); font-size:.92em; background:var(--panel-2); padding:1px 4px; border-radius:4px; border:1px solid var(--line)}
+  button{font:inherit; cursor:pointer}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px; border-radius:4px}
+  .wrap{max-width:980px; margin:0 auto; padding:0 16px 48px}
+
+  /* Header */
+  header.topbar{
+    position:sticky; top:0; z-index:20; background:var(--panel); border-bottom:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .topbar-in{max-width:980px; margin:0 auto; padding:10px 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .brand{display:flex; flex-direction:column; min-width:0}
+  .brand b{font-size:15px; letter-spacing:.2px}
+  .brand small{color:var(--ink-2); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60vw}
+  .topbar-right{margin-left:auto; display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+  .topbar-toggle{display:flex; gap:7px; align-items:center; font-size:12px; color:var(--ink-2)}
+
+  /* Status pill */
+  .pill{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:3px 9px; border-radius:999px; border:1px solid transparent; white-space:nowrap}
+  .pill .dot{width:8px; height:8px; border-radius:999px; background:currentColor; flex:none}
+  .pill.ok{color:var(--ok); background:var(--ok-bg)}
+  .pill.warn{color:var(--warn); background:var(--warn-bg)}
+  .pill.bad{color:var(--bad); background:var(--bad-bg)}
+  .pill.idle{color:var(--idle); background:var(--idle-bg)}
+
+  /* Sections */
+  section{margin-top:22px; scroll-margin-top:76px}
+  .plugin{scroll-margin-top:76px}
+  .sec-head{display:flex; align-items:baseline; gap:10px; margin:0 0 10px}
+  .sec-head h2{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-2); margin:0; font-weight:700}
+  .sec-head .hint{font-size:12px; color:var(--ink-3)}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow)}
+  .card + .card{margin-top:10px}
+  .card-pad{padding:14px 16px}
+  .muted{color:var(--ink-2)}
+  .tiny{font-size:12px}
+  .mono{font-family:var(--mono)}
+
+  /* Forms */
+  label{font-weight:600; font-size:12.5px}
+  .field{display:flex; flex-direction:column; gap:4px; margin-bottom:12px}
+  .field .desc{font-weight:400; color:var(--ink-2); font-size:12px}
+  input[type=text],input[type=password],input[type=number],input[type=url],textarea,select{
+    width:100%; font:inherit; color:var(--ink); background:var(--panel-2); border:1px solid var(--line-2);
+    border-radius:7px; padding:8px 9px;
+  }
+  input::placeholder,textarea::placeholder{color:var(--ink-3)}
+  textarea{resize:vertical; min-height:90px; font-family:var(--mono); font-size:13px}
+  input[type=number]{max-width:140px}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .grow{flex:1 1 auto; min-width:0}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:6px; background:var(--panel-2); color:var(--ink);
+    border:1px solid var(--line-2); border-radius:7px; padding:7px 12px; font-size:13px; font-weight:600;
+  }
+  .btn:hover{border-color:var(--accent)}
+  .btn.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+  .btn.primary:hover{filter:brightness(1.05)}
+  .btn.danger{color:var(--bad); border-color:var(--line-2)}
+  .btn.danger:hover{border-color:var(--bad)}
+  .btn.small{padding:4px 9px; font-size:12px}
+  .btn:disabled{opacity:.5; cursor:not-allowed}
+
+  /* Switch */
+  .switch{position:relative; display:inline-flex; align-items:center; flex:none}
+  .switch input{position:absolute; opacity:0; width:38px; height:22px; margin:0; cursor:pointer}
+  .switch .track{width:38px; height:22px; border-radius:999px; background:var(--line-2); transition:background .12s; flex:none; display:inline-block; position:relative}
+  .switch .track::after{content:""; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:999px; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.3); transition:transform .12s}
+  .switch input:checked + .track{background:var(--accent)}
+  .switch input:checked + .track::after{transform:translateX(16px)}
+  .switch input:focus-visible + .track{outline:2px solid var(--focus); outline-offset:2px}
+  .switch input:disabled + .track{opacity:.5}
+
+  /* Segmented */
+  .seg{display:inline-flex; align-self:flex-start; max-width:100%; border:1px solid var(--line-2); border-radius:8px; overflow:hidden; background:var(--panel-2)}
+  .seg button{background:transparent; border:0; padding:7px 12px; font-size:13px; font-weight:600; color:var(--ink-2); border-right:1px solid var(--line-2)}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink)}
+
+  /* Badges */
+  .badges{display:flex; gap:6px; flex-wrap:wrap}
+  .badge{font-size:11px; font-weight:600; padding:2px 7px; border-radius:6px; border:1px solid var(--line-2); color:var(--ink-2); background:var(--panel-2); white-space:nowrap}
+  .badge.ok{color:var(--ok); border-color:transparent; background:var(--ok-bg)}
+  .badge.warn{color:var(--warn); border-color:transparent; background:var(--warn-bg)}
+  .badge.bad{color:var(--bad); border-color:transparent; background:var(--bad-bg)}
+
+  /* Chips */
+  .chips{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+  .chip{display:inline-flex; align-items:center; gap:5px; background:var(--chip); color:var(--chip-ink); font-size:12px; font-weight:600; padding:3px 4px 3px 9px; border-radius:999px}
+  .chip button{background:transparent; border:0; color:inherit; font-size:14px; line-height:1; padding:0 3px; border-radius:999px; opacity:.7}
+  .chip button:hover{opacity:1}
+  .chips input.chip-input{border:0; background:transparent; min-width:90px; flex:1 1 90px; width:auto; padding:4px 2px; border-radius:0}
+  .chips input.chip-input:focus-visible{outline:none}
+  .chips:focus-within{border-color:var(--focus) !important}
+
+  /* Plugin rows */
+  .plugin{border-bottom:1px solid var(--line)}
+  .plugin:last-child{border-bottom:0}
+  .plugin-main{display:flex; gap:12px; align-items:flex-start; padding:12px 16px}
+  .plugin-info{min-width:0; flex:1 1 auto}
+  .plugin-info .title{font-weight:700; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .plugin-info .summary{color:var(--ink-2); font-size:12.5px; margin-top:2px}
+  .plugin-meta{margin-top:7px; display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:var(--ink-2)}
+  .plugin-actions{display:flex; gap:8px; align-items:center; flex:none}
+  .err{font-family:var(--mono); font-size:12px; color:var(--bad); background:var(--bad-bg); border-radius:6px; padding:6px 8px; margin-top:7px; white-space:pre-wrap; word-break:break-word}
+  .err.clip{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  details.err-d{margin-top:7px}
+  details.err-d > summary{cursor:pointer; color:var(--bad); font-size:12px; font-weight:600; list-style:none}
+  details.err-d > summary::-webkit-details-marker{display:none}
+  .panel-settings{padding:0 16px 16px; border-top:1px dashed var(--line); background:var(--panel-2)}
+  .panel-settings .pad{padding-top:14px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:0 16px}
+  @media (max-width:560px){ .two{grid-template-columns:1fr} header.topbar{position:static} section,.plugin{scroll-margin-top:0} }
+
+  .cap{border-bottom:1px solid var(--line)}
+  .cap:last-child{border-bottom:0}
+  .cap-head{display:flex; gap:12px; align-items:flex-start; padding:12px 16px}
+  .cap-body{padding:0 16px 16px}
+  .inline-err{color:var(--bad); background:var(--bad-bg); font-size:12px; padding:6px 8px; border-radius:6px; margin-top:8px}
+  .list-ed .item{display:flex; gap:8px; align-items:center; margin-bottom:6px}
+  .browsers{display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:6px 12px}
+  .cb{display:flex; gap:7px; align-items:center; font-weight:500; font-size:13px}
+  .stat{font-size:12px; color:var(--ink-2)}
+
+  /* Modal */
+  .overlay{position:fixed; inset:0; background:rgba(10,12,16,.5); display:flex; align-items:stretch; justify-content:center; z-index:50; padding:4vh 16px}
+  .modal{background:var(--panel); border:1px solid var(--line); border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,.35); width:100%; max-width:760px; display:flex; flex-direction:column; max-height:92vh}
+  .modal-head{display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line)}
+  .modal-head b{flex:1}
+  .modal-body{overflow:auto; padding:0}
+  pre.log{margin:0; padding:14px 16px; font-family:var(--mono); font-size:12.5px; line-height:1.5; white-space:pre-wrap; word-break:break-word; color:var(--ink)}
+
+  .full-msg{max-width:520px; margin:12vh auto; text-align:center; padding:0 16px}
+  .full-msg .card-pad{text-align:left}
+  footer{margin-top:30px; padding-top:16px; border-top:1px solid var(--line); color:var(--ink-3); font-size:12px; display:flex; gap:14px; flex-wrap:wrap}
+  .toast{position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:9px 14px; border-radius:8px; font-size:13px; z-index:60; box-shadow:0 6px 20px rgba(0,0,0,.3); max-width:92vw}
+  .toast.bad{background:var(--bad); color:#fff}
+  .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+  .spin{display:inline-block; width:12px; height:12px; border:2px solid currentColor; border-top-color:transparent; border-radius:999px; animation:sp .7s linear infinite; vertical-align:-1px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){ .spin{animation:none} *{transition:none !important} }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in" id="topbar"></div></header>
+<main class="wrap" id="app"><div class="card" style="margin-top:22px"><div class="card-pad muted">Loading Throughline Companion...</div></div></main>
+<div id="modal-root"></div>
+<div id="toast-root" aria-live="assertive"></div>
+
+<script>
+"use strict";
+(function(){
+  /* ---------- small DOM helper (text is always escaped via textContent) ---------- */
+  function el(tag, props){
+    const n = document.createElement(tag);
+    if(props){
+      for(const k in props){
+        const v = props[k];
+        if(v == null || v === false) continue;
+        if(k === "class") n.className = v;
+        else if(k === "text") n.textContent = v;
+        else if(k === "for") n.htmlFor = v;
+        else if(k === "value") n.value = v;
+        else if(k === "checked") n.checked = !!v;
+        else if(k === "disabled") n.disabled = !!v;
+        else if(k === "html") { /* intentionally unsupported */ }
+        else if(k.slice(0,2) === "on" && typeof v === "function") n.addEventListener(k.slice(2).toLowerCase(), v);
+        else if(v === true) n.setAttribute(k, "");
+        else n.setAttribute(k, v);
+      }
+    }
+    for(let i=2;i<arguments.length;i++) append(n, arguments[i]);
+    return n;
+  }
+  function append(n, kid){
+    if(kid == null || kid === false) return;
+    if(Array.isArray(kid)){ kid.forEach(function(k){ append(n,k); }); return; }
+    n.appendChild(typeof kid === "object" ? kid : document.createTextNode(String(kid)));
+  }
+
+  /* ---------- state ---------- */
+  var state = null, lastJSON = "", unauthorized = false;
+  var ui = {
+    expanded: {},          // plugin name -> true (settings panel open)
+    manifests: {},         // plugin name -> manifest | {error}
+    errOpen: {},           // "plugin:name" -> true
+    showUnsupported: false,
+    pairError: "", pairBusy: false, pairResult: null,
+    capErr: {},            // capability -> error string
+    captureTest: null,     // last /api/capture/test-screen result
+    captureLocalOpen: null,// on-device models <details> open override
+    captureAudioAdvOpen: null, // advanced audio <details> open override
+    infisicalOpen: false,  // Infisical settings card expanded
+    infisicalTest: null,   // last /api/infisical/test result or {error}
+    infisicalSecrets: null,// cached list of {key, path, environment, ref} (names only)
+    infisicalLoading: false,
+    secretMode: {},        // "plugin:ENV" -> "direct" | "infisical"
+    modal: null            // {title, text} for log
+  };
+
+  /* ---------- api ---------- */
+  function api(method, path, body){
+    var opts = { method: method, credentials: "same-origin", headers: {} };
+    if(body !== undefined){ opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+    return fetch(path, opts).then(function(res){
+      if(res.status === 401){ unauthorized = true; render(); throw { status:401, error:"unauthorized" }; }
+      return res.text().then(function(t){
+        var data = null; try{ data = t ? JSON.parse(t) : null; }catch(e){}
+        if(!res.ok){ throw { status:res.status, error:(data && data.error) || ("Request failed ("+res.status+")") }; }
+        return data;
+      });
+    });
+  }
+  function toast(msg, kind){
+    var r = document.getElementById("toast-root"); r.textContent = "";
+    var t = el("div",{class:"toast" + (kind === "bad" ? " bad" : ""),role:"status"}, msg);
+    r.appendChild(t);
+    setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 4200);
+  }
+
+  function refresh(){
+    return api("GET","/api/state").then(function(s){
+      unauthorized = false; applyState(s);
+    }).catch(function(e){ if(e && e.status === 401) return; /* keep last state */ });
+  }
+  function applyState(s){
+    state = s;
+    var j = JSON.stringify(s);
+    if(j !== lastJSON){ lastJSON = j; render(); }
+  }
+  // Mutating action: call api, then refresh and re-render regardless.
+  function act(p){
+    return p.then(function(){ return refresh().then(function(){ return true; }); }).catch(function(e){
+      if(e && e.status === 401) return false;
+      toast((e && e.error) ? e.error : "Something went wrong", "bad");
+      return refresh().then(function(){ return false; });
+    });
+  }
+
+  /* ---------- time helpers ---------- */
+  function toUnix(t){
+    if(t == null || t === "") return null;
+    if(typeof t === "number") return t;
+    var n = Number(t);
+    if(!isNaN(n)) return n;
+    var ms = Date.parse(t);
+    return isNaN(ms) ? null : ms/1000;
+  }
+  function relTime(t){
+    var unix = toUnix(t);
+    if(unix == null) return "never";
+    var d = Math.floor(Date.now()/1000 - unix);
+    var future = d < 0; d = Math.abs(d);
+    var s;
+    if(d < 5) s = "just now";
+    else if(d < 60) s = d + "s";
+    else if(d < 3600) s = Math.floor(d/60) + "m";
+    else if(d < 86400) s = Math.floor(d/3600) + "h";
+    else s = Math.floor(d/86400) + "d";
+    if(s === "just now") return s;
+    return future ? ("in " + s) : (s + " ago");
+  }
+  // A span whose relative time is refreshed on every poll, without a re-render.
+  function timeSpan(prefix, t){
+    var u = toUnix(t);
+    var title = u != null ? new Date(u*1000).toLocaleString() : null;
+    return el("span",{"data-prefix":prefix,"data-ts":(u != null ? String(u) : ""),title:title}, prefix + relTime(u));
+  }
+  function refreshTimes(){
+    document.querySelectorAll("[data-ts]").forEach(function(n){
+      var u = n.getAttribute("data-ts");
+      n.textContent = n.getAttribute("data-prefix") + relTime(u === "" ? null : Number(u));
+    });
+  }
+  function fmtInterval(s){
+    if(s == null) return "";
+    if(s >= 3600 && s % 3600 === 0) return (s/3600) + " h";
+    if(s >= 60 && s % 60 === 0) return (s/60) + " min";
+    return s + "s";
+  }
+
+  /* ---------- editing guard (pause polling while typing) ---------- */
+  function isEditingField(){
+    var a = document.activeElement;
+    if(!a) return false;
+    if(a.tagName === "TEXTAREA") return true;
+    if(a.tagName === "INPUT"){
+      var t = (a.getAttribute("type") || "text").toLowerCase();
+      return ["checkbox","radio","button","submit","reset","range"].indexOf(t) === -1;
+    }
+    return false;
+  }
+
+  /* =========================================================
+     RENDER
+     ========================================================= */
+  function render(){
+    var keep = captureView();
+    renderTopbar();
+    var app = document.getElementById("app");
+    app.textContent = "";
+    try{ renderBody(app); } finally { restoreView(keep); }
+  }
+  // Values typed but not yet saved, by element id; re-applied after each re-render.
+  var drafts = {};
+  document.addEventListener("input",function(e){
+    var t = e.target;
+    if(t && t.id && (t.tagName === "INPUT" || t.tagName === "TEXTAREA") && t.type !== "checkbox" && t.type !== "radio") drafts[t.id] = t.value;
+  });
+  function clearDrafts(prefix){ Object.keys(drafts).forEach(function(k){ if(k.indexOf(prefix) === 0) delete drafts[k]; }); }
+  function captureView(){
+    var a = document.activeElement, v = { x:window.scrollX, y:window.scrollY, id:null };
+    if(a && a.id && document.getElementById("app").contains(a)){
+      v.id = a.id;
+      try{ v.start = a.selectionStart; v.end = a.selectionEnd; }catch(e){}
+    }
+    return v;
+  }
+  function restoreView(v){
+    Object.keys(drafts).forEach(function(id){
+      var n = document.getElementById(id);
+      if(n && n.value !== drafts[id]) n.value = drafts[id];
+    });
+    if(v.id){
+      var n = document.getElementById(v.id);
+      if(n){
+        n.focus({preventScroll:true});
+        try{ if(v.start != null) n.setSelectionRange(v.start, v.end); }catch(e){}
+      }
+    }
+    window.scrollTo(v.x, v.y);
+  }
+  function renderBody(app){
+    if(unauthorized){ app.appendChild(view401()); renderModal(); return; }
+    if(!state){ app.appendChild(el("div",{class:"card",style:"margin-top:22px"}, el("div",{class:"card-pad muted"},"Loading..."))); return; }
+
+    if(!state.paired) app.appendChild(sectionPairing());
+    app.appendChild(sectionConnectors());
+    app.appendChild(sectionActivityWatch());
+    app.appendChild(sectionCapture());
+    app.appendChild(sectionBridge());
+    app.appendChild(sectionInfisical());
+    var jobsSec = sectionJobs(); if(jobsSec) app.appendChild(jobsSec);
+    if(state.paired) app.appendChild(sectionDeviceSettings());
+    app.appendChild(footer());
+    renderModal();
+  }
+
+  function view401(){
+    return el("div",{class:"full-msg"},
+      el("div",{class:"card"}, el("div",{class:"card-pad"},
+        el("h2",{style:"margin:0 0 8px"},"Not signed in"),
+        el("p",{class:"muted",style:"margin:0 0 10px"},"This dashboard needs the companion session cookie."),
+        el("p",{style:"margin:0"}, "Open the dashboard from the tray icon or run ", el("code",{},"throughline-companion open"), ".")
+      ))
+    );
+  }
+
+  /* ---------- Header ---------- */
+  function bridgePill(){
+    var b = state.bridge || {};
+    var map = {
+      connected:["ok","Bridge connected"], offline:["idle","Bridge offline"],
+      refused:["bad","Bridge refused"], error:["bad","Bridge error"],
+      not_paired:["warn","Bridge: not paired"], off:["idle","Bridge off"], stopped:["idle","Bridge stopped"]
+    };
+    var m = map[b.state] || ["idle","Bridge: " + (b.state || "unknown")];
+    return el("span",{class:"pill "+m[0], title:(b.last_error||"")}, el("span",{class:"dot"}), m[1]);
+  }
+  function renderTopbar(){
+    var bar = document.getElementById("topbar");
+    bar.textContent = "";
+    var brand = el("div",{class:"brand"}, el("b",{},"Throughline Companion"));
+    if(state && state.paired && state.server){
+      brand.appendChild(el("small",{title:(state.server.device||"")+" - "+(state.server.url||"")},
+        (state.server.device || "device") + "  -  " + (state.server.url || "")));
+    } else if(state){
+      brand.appendChild(el("small",{}, state.paired ? "" : "Not paired"));
+    }
+    bar.appendChild(brand);
+
+    var right = el("div",{class:"topbar-right"});
+    if(state && !unauthorized){
+      right.appendChild(bridgePill());
+      right.appendChild(toggleControl("Pause all", !!state.paused, function(v){
+        act(api("POST","/api/pause",{paused:v}));
+      }, "pause-all"));
+      right.appendChild(toggleControl("Start at login", !!state.autostart, function(v){
+        act(api("POST","/api/autostart",{enabled:v}));
+      }, "autostart"));
+    }
+    bar.appendChild(right);
+  }
+  function toggleControl(labelText, checked, onChange, id){
+    var input = el("input",{type:"checkbox",id:id,checked:checked,"aria-label":labelText,
+      onchange:function(e){ onChange(e.target.checked); }});
+    var sw = el("span",{class:"switch"}, input, el("span",{class:"track","aria-hidden":"true"}));
+    return el("span",{class:"topbar-toggle"}, el("label",{for:id},labelText), sw);
+  }
+
+  /* ---------- Section head ---------- */
+  function secHead(title, hint){
+    var h = el("div",{class:"sec-head"}, el("h2",{},title));
+    if(hint) h.appendChild(el("span",{class:"hint"},hint));
+    return h;
+  }
+
+  /* =========================================================
+     PAIRING
+     ========================================================= */
+  function sectionPairing(){
+    var sec = el("section",{"aria-label":"Pairing"});
+    sec.appendChild(secHead("Pair with your server"));
+    var card = el("div",{class:"card"});
+    var pad = el("div",{class:"card-pad"});
+    pad.appendChild(el("p",{class:"muted",style:"margin:0 0 12px"},
+      "This desktop is not paired yet. On your Throughline server run:"));
+    pad.appendChild(el("div",{class:"err",style:"color:var(--ink);background:var(--panel-2);border:1px solid var(--line)"},
+      "throughline lib companion enroll <device> --url <https://your-server> --plugin claude_code ..."));
+    pad.appendChild(el("p",{class:"tiny muted",style:"margin:10px 0 12px"},
+      "Paste the code it prints. It contains tokens: treat it like a password."));
+
+    var ta = el("textarea",{id:"pair-code",placeholder:"tlc1....","aria-label":"Pairing code",autocomplete:"off",spellcheck:"false"});
+    var fld = el("div",{class:"field"}, el("label",{for:"pair-code"},"Pairing code"), ta);
+    pad.appendChild(fld);
+
+    if(ui.pairError) pad.appendChild(el("div",{class:"inline-err"}, ui.pairError));
+    if(ui.pairResult){
+      var r = ui.pairResult;
+      var box = el("div",{class:"err",style:"color:var(--ok);background:var(--ok-bg)"});
+      box.appendChild(el("div",{style:"font-weight:700"}, "Paired as " + (r.device || "device")));
+      if(r.plugins && r.plugins.length){
+        box.appendChild(el("div",{style:"margin-top:4px"}, "Tokens received for: " + r.plugins.join(", ")));
+      }
+      pad.appendChild(box);
+    }
+
+    var btn = el("button",{class:"btn primary",disabled:ui.pairBusy,onclick:submitPair},
+      ui.pairBusy ? [el("span",{class:"spin"}), " Pairing..."] : "Pair this device");
+    pad.appendChild(el("div",{class:"row",style:"margin-top:4px"}, btn));
+    card.appendChild(pad);
+    sec.appendChild(card);
+    return sec;
+
+    function submitPair(){
+      var code = (document.getElementById("pair-code").value || "").trim();
+      ui.pairError = ""; ui.pairResult = null;
+      if(!code){ ui.pairError = "Enter the pairing code."; render(); return; }
+      if(code.indexOf("tlc1.") !== 0){ ui.pairError = "That does not look like a pairing code (it should start with tlc1.)."; render(); return; }
+      ui.pairBusy = true; render();
+      api("POST","/api/pair",{code:code}).then(function(res){
+        ui.pairBusy = false; ui.pairResult = res || {}; delete drafts["pair-code"]; render();
+        return refresh();
+      }).catch(function(e){
+        ui.pairBusy = false;
+        if(e && e.status === 401) return;
+        ui.pairError = (e && e.error) ? e.error : "Pairing failed.";
+        render();
+      });
+    }
+  }
+
+  /* =========================================================
+     CONNECTORS
+     ========================================================= */
+  function sectionConnectors(){
+    var sec = el("section",{"aria-label":"Connectors"});
+    var all = state.plugins || [];
+    var supported = all.filter(function(p){ return p.supported !== false; });
+    var unsupported = all.filter(function(p){ return p.supported === false; });
+
+    supported.sort(function(a,b){
+      var ka = (a.enabled || a.installed || (a.detected && a.detected.length)) ? 0 : 1;
+      var kb = (b.enabled || b.installed || (b.detected && b.detected.length)) ? 0 : 1;
+      if(ka !== kb) return ka - kb;
+      return (a.title||a.name||"").localeCompare(b.title||b.name||"");
+    });
+
+    sec.appendChild(secHead("Connectors", supported.length + " available"));
+    var card = el("div",{class:"card"});
+    if(!supported.length) card.appendChild(el("div",{class:"card-pad muted"},"No connectors available on this platform."));
+    supported.forEach(function(p){ card.appendChild(pluginRow(p)); });
+    sec.appendChild(card);
+
+    if(unsupported.length){
+      var plat = state.platform || "this platform";
+      var tgl = el("button",{class:"btn small",style:"margin-top:10px","aria-expanded":ui.showUnsupported?"true":"false",
+        onclick:function(){ ui.showUnsupported = !ui.showUnsupported; render(); }},
+        (ui.showUnsupported ? "Hide " : "Show ") + unsupported.length + " not available on " + plat);
+      sec.appendChild(tgl);
+      if(ui.showUnsupported){
+        var c2 = el("div",{class:"card",style:"margin-top:10px;opacity:.75"});
+        unsupported.forEach(function(p){ c2.appendChild(pluginRow(p)); });
+        sec.appendChild(c2);
+      }
+    }
+    return sec;
+  }
+
+  function pluginBadges(p){
+    var out = [];
+    if(p.detected && p.detected.length){
+      out.push(el("span",{class:"badge ok",title:p.detected.join("\n")}, "Detected (" + p.detected.length + ")"));
+    }
+    if(p.supported === false) out.push(el("span",{class:"badge"},"Not available on " + (state.platform||"this OS")));
+    else if(p.installed === false) out.push(el("span",{class:"badge warn"},"Not installed"));
+    if(p.has_token === false) out.push(el("span",{class:"badge warn"},"Needs token"));
+    (p.required || []).forEach(function(envName){
+      var set = p.env && p.env[envName];
+      if(!set) out.push(el("span",{class:"badge bad"},"Needs " + envName));
+    });
+    return out;
+  }
+  function jobStateBadge(job){
+    if(!job) return el("span",{class:"badge"},"No job");
+    var m = { idle:["","Idle"], running:["warn","Running"], ok:["ok","OK"], failed:["bad","Failed"] };
+    var x = m[job.state] || ["","" + job.state];
+    var b = el("span",{class:"badge " + x[0]}, job.state === "running" ? [el("span",{class:"spin"})," Running"] : x[1]);
+    return b;
+  }
+
+  function pluginRow(p){
+    var row = el("div",{class:"plugin",id:"plugin-"+p.name});
+    var main = el("div",{class:"plugin-main"});
+
+    var info = el("div",{class:"plugin-info"});
+    info.appendChild(el("div",{class:"title"}, (p.title || p.name), jobStateBadge(p.job)));
+    if(p.summary) info.appendChild(el("div",{class:"summary"}, p.summary));
+    var bdg = pluginBadges(p);
+    if(bdg.length) info.appendChild(el("div",{class:"badges",style:"margin-top:7px"}, bdg));
+
+    var meta = el("div",{class:"plugin-meta"});
+    if(p.job){
+      if(p.job.last_run_at != null) meta.appendChild(timeSpan("Last run ", p.job.last_run_at));
+      if(p.job.last_ok_at != null) meta.appendChild(timeSpan("Last ok ", p.job.last_ok_at));
+      if(p.job.next_run_at != null) meta.appendChild(timeSpan("Next run ", p.job.next_run_at));
+    }
+    if(p.interval_s != null) meta.appendChild(el("span",{}, "Every " + fmtInterval(p.interval_s)));
+    if(meta.childNodes.length) info.appendChild(meta);
+
+    var lastErr = p.job && p.job.last_error;
+    if(lastErr) info.appendChild(errorBlock("plugin:"+p.name, lastErr));
+
+    main.appendChild(info);
+
+    var actions = el("div",{class:"plugin-actions"});
+    var enId = "en-" + p.name;
+    var enInput = el("input",{type:"checkbox",id:enId,checked:!!p.enabled,"aria-label":"Enable " + (p.title||p.name),
+      disabled:(p.supported === false),
+      onchange:function(e){ act(api("POST","/api/plugins/"+encodeURIComponent(p.name),{enabled:e.target.checked})); }});
+    actions.appendChild(el("span",{class:"switch",title:"Enable"}, enInput, el("span",{class:"track","aria-hidden":"true"})));
+    main.appendChild(actions);
+    row.appendChild(main);
+
+    // secondary action row
+    var bar = el("div",{class:"row",style:"padding:0 16px 12px;margin-top:-4px"});
+    bar.appendChild(el("button",{class:"btn small",disabled:(p.installed===false||p.supported===false),
+      onclick:function(){ act(api("POST","/api/plugins/"+encodeURIComponent(p.name)+"/run",{})); toast("Running " + (p.title||p.name) + "..."); }},
+      "Run now"));
+    bar.appendChild(el("button",{class:"btn small",onclick:function(){ openLog(p); }},"View log"));
+    var open = !!ui.expanded[p.name];
+    bar.appendChild(el("button",{class:"btn small","aria-expanded":open?"true":"false",
+      onclick:function(){ toggleSettings(p); }}, open ? "Hide settings" : "Settings"));
+    row.appendChild(bar);
+
+    if(open) row.appendChild(settingsPanel(p));
+    return row;
+  }
+
+  function errorBlock(key, text){
+    var openIt = !!ui.errOpen[key];
+    var d = el("details",{class:"err-d",open:openIt});
+    d.addEventListener("toggle",function(){ ui.errOpen[key] = d.open; });
+    d.appendChild(el("summary",{}, "Last error"));
+    d.appendChild(el("div",{class:"err"}, text));
+    return d;
+  }
+
+  function toggleSettings(p){
+    if(ui.expanded[p.name]){ ui.expanded[p.name] = false; render(); return; }
+    ui.expanded[p.name] = true;
+    if(ui.manifests[p.name] === undefined){
+      ui.manifests[p.name] = "loading";
+      render();
+      api("GET","/api/plugins/"+encodeURIComponent(p.name)+"/manifest").then(function(m){
+        ui.manifests[p.name] = m; if(ui.expanded[p.name]) render();
+      }).catch(function(e){
+        if(e && e.status === 401) return;
+        ui.manifests[p.name] = { error:(e && e.error) ? e.error : "Could not load manifest" };
+        if(ui.expanded[p.name]) render();
+      });
+    } else { render(); }
+  }
+
+  function isInfisicalVal(v){
+    if(typeof v === "string") return v.indexOf("infisical:") === 0;
+    return !!(v && typeof v === "object" && typeof v.infisical === "string");
+  }
+  function infisicalTarget(v){
+    if(typeof v === "string" && v.indexOf("infisical:") === 0) return v.slice(10);
+    if(v && typeof v === "object" && typeof v.infisical === "string"){
+      var p = v.path || v.secret_path || "";
+      if(p && p !== "/" && v.infisical.indexOf("/") === -1) return p.replace(/\/+$/,"") + "/" + v.infisical;
+      return v.infisical;
+    }
+    return "";
+  }
+  function ensureInfisicalSecrets(){
+    if(!state || !state.infisical || !state.infisical.configured) return;
+    if(ui.infisicalSecrets !== null || ui.infisicalLoading) return;
+    ui.infisicalLoading = true;
+    api("GET","/api/infisical/secrets?recursive=true").then(function(r){
+      ui.infisicalLoading = false;
+      ui.infisicalSecrets = (r && r.secrets) ? r.secrets : [];
+      render();
+    }).catch(function(){
+      ui.infisicalLoading = false;
+      ui.infisicalSecrets = [];
+    });
+  }
+  function renderInfisicalDatalist(){
+    var dl = el("datalist",{id:"infisical-secret-list"});
+    (ui.infisicalSecrets || []).forEach(function(item){
+      var target = item.ref ? item.ref.replace(/^infisical:/,"") : item.key;
+      dl.appendChild(el("option",{value:target}, item.path + " (" + item.environment + ")"));
+    });
+    return dl;
+  }
+
+  function settingsPanel(p){
+    var wrap = el("div",{class:"panel-settings"});
+    var pad = el("div",{class:"pad"});
+    var man = ui.manifests[p.name];
+    if(man === "loading" || man === undefined){
+      pad.appendChild(el("div",{class:"muted tiny"}, el("span",{class:"spin"}), " Loading settings..."));
+      wrap.appendChild(pad); return wrap;
+    }
+    if(man && man.error){
+      pad.appendChild(el("div",{class:"inline-err"}, man.error));
+      wrap.appendChild(pad); return wrap;
+    }
+    var env = p.env || {};
+    var fieldNames = []; // env names rendered, to gather on save
+    var secretFlags = {};
+    var infConfigured = !!(state && state.infisical && state.infisical.configured);
+    if(infConfigured) ensureInfisicalSecrets();
+
+    function renderGroup(groupLabel, dict, isSecret){
+      if(!dict) return;
+      var keys = Object.keys(dict);
+      if(!keys.length) return;
+      pad.appendChild(el("div",{class:"tiny muted",style:"font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:4px 0 8px"}, groupLabel));
+      var grid = el("div",{class:"two"});
+      keys.forEach(function(key){
+        var def = dict[key] || {};
+        var envName = def.env || key;
+        fieldNames.push(envName);
+        if(isSecret) secretFlags[envName] = true;
+        var inputId = "set-" + p.name + "-" + envName;
+        var modeKey = p.name + ":" + envName;
+        var existing = env[envName];
+        var linked = isInfisicalVal(existing);
+        var mode = ui.secretMode[modeKey] || (linked ? "infisical" : "direct");
+        var f = el("div",{class:"field"});
+        var labRow = el("div",{class:"row",style:"justify-content:space-between;gap:6px"});
+        var lab = el("label",{for:inputId}, envName);
+        if(def.required) lab.appendChild(el("span",{class:"badge bad",style:"margin-left:6px"},"required"));
+        if(isSecret && mode === "infisical") lab.appendChild(el("span",{class:"badge ok",style:"margin-left:6px"},"Infisical"));
+        labRow.appendChild(lab);
+        if(isSecret){
+          var seg = el("div",{class:"seg",role:"group","aria-label":envName + " source",style:"font-size:11px"});
+          [["direct","Direct"],["infisical","Infisical"]].forEach(function(o){
+            seg.appendChild(el("button",{type:"button","aria-pressed":(mode===o[0])?"true":"false",
+              style:"padding:2px 7px;font-size:11px",
+              onclick:function(){
+                ui.secretMode[modeKey] = o[0];
+                delete drafts[inputId];
+                if(o[0] === "infisical") ensureInfisicalSecrets();
+                render();
+              }}, o[1]));
+          });
+          labRow.appendChild(seg);
+        }
+        f.appendChild(labRow);
+        if(def.description) f.appendChild(el("span",{class:"desc"}, def.description));
+        if(isSecret && mode === "infisical"){
+          var inp = el("input",{
+            type:"text", id:inputId, "data-env":envName, "data-mode":"infisical",
+            list:"infisical-secret-list", autocomplete:"off", spellcheck:"false",
+            placeholder:"SECRET_NAME or /folder/SECRET_NAME",
+            value: linked ? infisicalTarget(existing) : ""
+          });
+          f.appendChild(inp);
+          f.appendChild(el("span",{class:"desc"},
+            infConfigured
+              ? "Fetched from Infisical at run time; never stored in Throughline."
+              : "Configure Infisical below; stored as an infisical: reference only."));
+        } else {
+          var isPlain = !isSecret || (typeof existing === "string" && existing.indexOf("env:") === 0);
+          var input = el("input",{
+            type: isSecret ? "password" : "text",
+            id: inputId, "data-env": envName, "data-mode":"direct", autocomplete:"off", spellcheck:"false",
+            placeholder: def.default != null ? String(def.default) : (isSecret ? "Value or infisical:SECRET_NAME" : ""),
+            value: (isPlain && existing != null && typeof existing !== "object") ? existing : ""
+          });
+          f.appendChild(input);
+          if(isSecret && existing && !linked) f.appendChild(el("span",{class:"desc"},"A value is already set; leave blank to keep it."));
+        }
+        grid.appendChild(f);
+      });
+      pad.appendChild(grid);
+    }
+
+    renderGroup("Settings", man.settings, false);
+    renderGroup("Secrets", man.secrets, true);
+    if(infConfigured) pad.appendChild(renderInfisicalDatalist());
+
+    // interval + token
+    var grid2 = el("div",{class:"two"});
+    var intId = "int-" + p.name;
+    var intDefault = (p.interval_s != null) ? p.interval_s : (man.default_interval_s != null ? man.default_interval_s : "");
+    var intF = el("div",{class:"field"},
+      el("label",{for:intId},"Interval (seconds)"),
+      el("span",{class:"desc"}, man.default_interval_s != null ? ("Default " + man.default_interval_s + "s") : "How often to run"),
+      el("input",{type:"number",id:intId,min:"0",value:(intDefault===""?"":String(intDefault)),placeholder:(man.default_interval_s!=null?String(man.default_interval_s):"")})
+    );
+    var tokId = "tok-" + p.name;
+    var tokF = el("div",{class:"field"},
+      el("label",{for:tokId},"Plugin token"),
+      el("span",{class:"desc"}, p.has_token ? "A token is set. Type to replace it (or infisical:KEY)." : "Required to talk to the server."),
+      el("input",{type:"password",id:tokId,autocomplete:"off",placeholder:p.has_token?"(token set)":"Paste token or infisical:KEY"})
+    );
+    grid2.appendChild(intF); grid2.appendChild(tokF);
+    pad.appendChild(grid2);
+
+    if(man.channels && man.channels.length){
+      pad.appendChild(el("div",{class:"tiny muted",style:"margin-bottom:10px"}, "Channels: " + man.channels.join(", ")));
+    }
+
+    var saveBtn = el("button",{class:"btn primary small",onclick:function(){ savePlugin(p, fieldNames, secretFlags); }}, "Save settings");
+    pad.appendChild(el("div",{class:"row"}, saveBtn,
+      el("button",{class:"btn small",onclick:function(){ ui.expanded[p.name]=false; render(); }},"Close")));
+    wrap.appendChild(pad);
+    return wrap;
+  }
+
+  function savePlugin(p, fieldNames, secretFlags){
+    var existing = p.env || {};
+    var envObj = {};
+    // Preserve custom/unrendered env entries (such as desktop bridge references).
+    Object.keys(existing).forEach(function(k){
+      if(fieldNames.indexOf(k) === -1) envObj[k] = existing[k];
+    });
+    fieldNames.forEach(function(name){
+      var inp = document.getElementById("set-" + p.name + "-" + name);
+      if(!inp) return;
+      var v = (inp.value || "").trim();
+      var mode = inp.getAttribute("data-mode") || "direct";
+      if(mode === "infisical"){
+        if(v){
+          envObj[name] = v.indexOf("infisical:") === 0 ? v : ("infisical:" + v);
+        }
+      } else {
+        if(v !== ""){
+          envObj[name] = inp.value;
+        } else if(secretFlags && secretFlags[name] && existing[name] && !isInfisicalVal(existing[name])){
+          envObj[name] = existing[name];
+        }
+      }
+    });
+    var patch = { env: envObj };
+    var intInp = document.getElementById("int-" + p.name);
+    if(intInp && intInp.value !== ""){ var n = parseInt(intInp.value,10); if(!isNaN(n)) patch.interval_s = n; }
+    var tokInp = document.getElementById("tok-" + p.name);
+    if(tokInp && tokInp.value){ patch.token = tokInp.value; }
+    act(api("POST","/api/plugins/"+encodeURIComponent(p.name), patch)).then(function(ok){
+      if(!ok) return;
+      clearDrafts("set-" + p.name + "-"); clearDrafts("int-" + p.name); clearDrafts("tok-" + p.name);
+      fieldNames.forEach(function(name){ delete ui.secretMode[p.name + ":" + name]; });
+      render(); toast("Saved " + (p.title||p.name));
+    });
+  }
+
+  function openLog(p){
+    ui.modal = { title: (p.title || p.name) + " log", text: "Loading..." };
+    render();
+    api("GET","/api/plugins/"+encodeURIComponent(p.name)+"/log").then(function(r){
+      ui.modal = { title:(p.title||p.name)+" log", text:(r && r.log) ? r.log : "(empty log)", scroll:true }; render();
+    }).catch(function(e){
+      if(e && e.status === 401) return;
+      ui.modal = { title:(p.title||p.name)+" log", text:(e && e.error) ? e.error : "Could not load log" }; render();
+    });
+  }
+
+  /* =========================================================
+     ACTIVITYWATCH
+     ========================================================= */
+  function sectionActivityWatch(){
+    var aw = state.activitywatch || {};
+    var sec = el("section",{"aria-label":"ActivityWatch"});
+    sec.appendChild(secHead("ActivityWatch", aw.version ? ("v" + aw.version) : ""));
+    var card = el("div",{class:"card"});
+    var pad = el("div",{class:"card-pad"});
+
+    pad.appendChild(el("p",{class:"muted tiny",style:"margin:0 0 10px"},
+      "Collects window and AFK activity on this computer."));
+
+    var seg = el("div",{class:"seg",role:"group","aria-label":"ActivityWatch mode"});
+    [["off","Off"],["external","Use my own"],["managed","Bundled"]].forEach(function(o){
+      seg.appendChild(el("button",{"aria-pressed":(aw.mode===o[0])?"true":"false",
+        onclick:function(){ if(aw.mode!==o[0]) act(api("POST","/api/activitywatch",{mode:o[0]})); }}, o[1]));
+    });
+    pad.appendChild(el("div",{class:"row",style:"margin-bottom:12px"}, seg));
+
+    // status line
+    var st = el("div",{class:"badges",style:"margin-bottom:10px"});
+    if(aw.mode !== "off"){
+      st.appendChild(el("span",{class:"badge " + (aw.reachable?"ok":"warn")}, aw.reachable ? "Reachable" : "Not reachable"));
+      if(aw.installed) st.appendChild(el("span",{class:"badge"},"Installed"));
+      if(aw.version) st.appendChild(el("span",{class:"badge"},"v" + aw.version));
+      if(aw.restarts) st.appendChild(el("span",{class:"badge warn"}, aw.restarts + " restart" + (aw.restarts===1?"":"s")));
+    } else {
+      st.appendChild(el("span",{class:"badge"},"Off"));
+    }
+    pad.appendChild(st);
+
+    if(aw.running && aw.running.length){
+      pad.appendChild(el("div",{class:"tiny muted",style:"margin-bottom:8px"},"Running modules: " + aw.running.join(", ")));
+    }
+    if(aw.mode === "external" && aw.url){
+      pad.appendChild(el("div",{class:"tiny muted",style:"margin-bottom:8px"}, "Server URL: ", el("span",{class:"mono"}, aw.url)));
+    }
+
+    if(aw.mode === "managed" && aw.installed === false && aw.available){
+      pad.appendChild(el("button",{class:"btn primary small",style:"margin-top:4px",
+        onclick:function(){ act(api("POST","/api/activitywatch/install",{})).then(function(ok){ if(ok) toast("Installing ActivityWatch..."); }); }},
+        "Install bundled ActivityWatch" + (aw.version ? (" " + aw.version) : "")));
+    }
+    if(aw.mode === "managed" && aw.available === false && aw.installed === false){
+      pad.appendChild(el("div",{class:"inline-err"},"A bundled ActivityWatch is not available for this build."));
+    }
+    if(state.platform === "macos" && aw.mode !== "off"){
+      pad.appendChild(el("p",{class:"tiny muted",style:"margin:10px 0 0"},
+        "On macOS the window watcher needs Accessibility permission (System Settings > Privacy & Security > Accessibility)."));
+    }
+    if(aw.last_error){ pad.appendChild(el("div",{class:"err",style:"margin-top:10px"}, aw.last_error)); }
+
+    card.appendChild(pad);
+    sec.appendChild(card);
+    return sec;
+  }
+
+  /* =========================================================
+     CAPTURE (optional screen + audio capture)
+     ========================================================= */
+  var ENGINE_INFO = {
+    groq:     { label:"Groq whisper-large-v3-turbo", cost:"~$0.04 / hour of speech — cheapest cloud option.", model:"whisper-large-v3-turbo", cloud:true },
+    openai:   { label:"OpenAI gpt-4o-mini-transcribe", cost:"~$0.18 / hour of speech.", model:"gpt-4o-mini-transcribe", cloud:true },
+    deepgram: { label:"Deepgram nova-3", cost:"~$0.26 / hour of speech.", model:"nova-3", cloud:true },
+    custom:   { label:"Custom OpenAI-compatible server", cost:"Your own server, e.g. a local speaches or whisper.cpp instance.", model:"whisper-1", custom:true },
+    local:    { label:"On this computer (local)", cost:"Free and private — runs on this machine, no network.", model:"", local:true }
+  };
+  var ENGINE_ORDER = ["groq","openai","deepgram","custom","local"];
+
+  function fmtBytes(n){
+    if(n == null || isNaN(n)) return "—";
+    if(n < 1024) return n + " B";
+    var u = ["KB","MB","GB","TB"], i = -1;
+    do{ n = n/1024; i++; } while(n >= 1024 && i < u.length-1);
+    return (n >= 10 ? Math.round(n) : Math.round(n*10)/10) + " " + u[i];
+  }
+
+  function postCapture(patch){ return act(api("POST","/api/capture", patch)); }
+
+  function captureSwitch(id, checked, label, onChange){
+    var input = el("input",{type:"checkbox",id:id,checked:checked,"aria-label":label,
+      onchange:function(e){ onChange(e.target.checked); }});
+    return el("span",{class:"switch",title:label}, input, el("span",{class:"track","aria-hidden":"true"}));
+  }
+  function captureToggleRow(id, label, desc, checked, onChange){
+    var left = el("div",{class:"grow"},
+      el("div",{style:"font-weight:600;font-size:12.5px"}, label),
+      desc ? el("div",{class:"muted tiny"}, desc) : null);
+    return el("div",{class:"row",style:"align-items:flex-start;margin-bottom:12px;flex-wrap:nowrap"}, left, captureSwitch(id, checked, label, onChange));
+  }
+  function fieldInput(id, label, desc, placeholder, value, isPassword){
+    var f = el("div",{class:"field"});
+    f.appendChild(el("label",{for:id}, label));
+    if(desc) f.appendChild(el("span",{class:"desc"}, desc));
+    f.appendChild(el("input",{type:isPassword?"password":"text",id:id,value:value||"",placeholder:placeholder||"",
+      autocomplete:"off",spellcheck:"false"}));
+    return f;
+  }
+  function numField(id, label, desc, value, placeholder, onCommit, isFloat){
+    var f = el("div",{class:"field"});
+    f.appendChild(el("label",{for:id}, label));
+    if(desc) f.appendChild(el("span",{class:"desc"}, desc));
+    f.appendChild(el("input",{type:"number",id:id,step:isFloat?"0.1":"1",min:"0",
+      value:value!=null?String(value):"",placeholder:placeholder||"",
+      onchange:function(e){ var n = isFloat?parseFloat(e.target.value):parseInt(e.target.value,10); if(!isNaN(n)){ delete drafts[id]; onCommit(n); } }}));
+    return f;
+  }
+  function statBadges(pairs){
+    var box = el("div",{class:"badges",style:"margin-top:8px"}), any = false;
+    pairs.forEach(function(p){ if(p[1] != null){ any = true; box.appendChild(el("span",{class:"badge"}, p[0] + ": " + p[1])); } });
+    return any ? box : null;
+  }
+
+  function sectionCapture(){
+    var cap = state.capture || {};
+    cap.settings = cap.settings || {};
+    var set = cap.settings;
+    var sec = el("section",{"aria-label":"Capture"});
+    sec.appendChild(secHead("Capture", set.enabled ? (cap.state === "running" ? "running" : "on") : "optional"));
+
+    // master card
+    var card = el("div",{class:"card"});
+    var head = el("div",{class:"card-pad",style:"display:flex;gap:12px;align-items:flex-start"});
+    var left = el("div",{class:"grow"});
+    left.appendChild(el("div",{style:"font-weight:700;margin-bottom:3px"},"Capture on this computer"));
+    left.appendChild(el("div",{class:"muted tiny"},
+      "Optional screen and audio capture, similar to Screenpipe. Everything here is off until you turn it on."));
+    var pills = el("div",{class:"badges",style:"margin-top:8px"});
+    pills.appendChild(el("span",{class:"pill " + (cap.state === "running" ? "ok" : "idle")},
+      el("span",{class:"dot"}), cap.state === "running" ? "Running" : "Off"));
+    if(set.device) pills.appendChild(el("span",{class:"badge"}, "Device: " + set.device));
+    left.appendChild(pills);
+    head.appendChild(left);
+    head.appendChild(captureSwitch("cap-master", !!set.enabled, "Capture on this computer",
+      function(v){ postCapture({enabled:v}); }));
+    card.appendChild(head);
+
+    var about = el("div",{class:"card-pad",style:"border-top:1px solid var(--line)"});
+    about.appendChild(el("ul",{class:"muted tiny",style:"margin:0;padding-left:18px;line-height:1.6"},
+      el("li",{},"Screenshots go to your own Immich through the “capture” connector."),
+      el("li",{},"Transcripts of what you type, say and hear go to Throughline."),
+      el("li",{},"Audio is transcribed on the fly and is never saved or uploaded."),
+      el("li",{},"The local spool is emptied after each upload."),
+      el("li",{},"Budget roughly 50–150 MB of Immich storage per active day, depending on the interval.")
+    ));
+    card.appendChild(about);
+    sec.appendChild(card);
+
+    if(!set.enabled){
+      sec.appendChild(el("p",{class:"tiny muted",style:"margin-top:8px"},
+        "Turn capture on to set up screenshots, audio and transcription."));
+      return sec;
+    }
+
+    sec.appendChild(captureCardScreens(cap));
+    sec.appendChild(captureCardAudio(cap));
+    sec.appendChild(captureLocalPanel(cap));
+    sec.appendChild(captureConnectorCard());
+    sec.appendChild(captureSpoolCard(cap));
+    return sec;
+  }
+
+  /* ----- screenshots ----- */
+  function intervalControl(value){
+    var f = el("div",{class:"field"});
+    f.appendChild(el("label",{},"Screenshot every"));
+    var seg = el("div",{class:"seg",role:"group","aria-label":"Screenshot interval"});
+    [[30,"30s"],[60,"1 min"],[120,"2 min"],[300,"5 min"]].forEach(function(o){
+      seg.appendChild(el("button",{"aria-pressed":(value===o[0])?"true":"false",
+        onclick:function(){ if(value!==o[0]) postCapture({screens:{interval_s:o[0]}}); }}, o[1]));
+    });
+    var custom = el("input",{type:"number",id:"cap-scr-interval",min:"5",style:"max-width:100px",value:value!=null?String(value):"",
+      "aria-label":"Custom interval in seconds",
+      onchange:function(e){ var n = parseInt(e.target.value,10); if(!isNaN(n)&&n>0){ delete drafts["cap-scr-interval"]; postCapture({screens:{interval_s:n}}); } }});
+    f.appendChild(el("div",{class:"row"}, seg, el("span",{class:"tiny muted"},"or"), custom, el("span",{class:"tiny muted"},"seconds")));
+    return f;
+  }
+  function monitorsSeg(value){
+    var f = el("div",{class:"field"});
+    f.appendChild(el("label",{},"Monitors"));
+    var seg = el("div",{class:"seg",role:"group","aria-label":"Monitors to capture"});
+    [["active","Active"],["primary","Primary"],["all","All"]].forEach(function(o){
+      seg.appendChild(el("button",{"aria-pressed":(value===o[0])?"true":"false",
+        onclick:function(){ if(value!==o[0]) postCapture({screens:{monitors:o[0]}}); }}, o[1]));
+    });
+    f.appendChild(seg);
+    return f;
+  }
+  function dailyEstimate(interval){
+    if(!interval || interval <= 0) return null;
+    var shots = Math.round(28800/interval); // ~8h active
+    return shots + " shots/day ≈ " + fmtBytes(shots*150*1024) + "/day";
+  }
+  function runTestScreen(){
+    ui.captureTest = { pending:true }; render();
+    api("POST","/api/capture/test-screen",{}).then(function(r){
+      ui.captureTest = r || {}; render(); refresh();
+    }).catch(function(e){
+      if(e && e.status === 401) return;
+      ui.captureTest = { error:(e && e.error) ? e.error : "Could not take a screenshot" }; render();
+    });
+  }
+  function captureCardScreens(cap){
+    var s = cap.settings.screens || {};
+    var card = el("div",{class:"card",style:"margin-top:10px"});
+    var head = el("div",{class:"card-pad",style:"display:flex;gap:12px;align-items:flex-start"});
+    var left = el("div",{class:"grow"});
+    left.appendChild(el("div",{style:"font-weight:700"},"Screenshots"));
+    left.appendChild(el("div",{class:"muted tiny"},"Periodic screenshots upload to your Immich, then leave the local spool."));
+    head.appendChild(left);
+    head.appendChild(captureSwitch("cap-scr-en", !!s.enabled, "Enable screenshots", function(v){ postCapture({screens:{enabled:v}}); }));
+    card.appendChild(head);
+    if(!s.enabled) return card;
+
+    var pad = el("div",{class:"card-pad",style:"border-top:1px solid var(--line)"});
+    pad.appendChild(intervalControl(s.interval_s));
+    pad.appendChild(captureToggleRow("cap-scr-active","Only while I'm at the keyboard/mouse",
+      "Skip screenshots when you are idle.", !!s.only_when_active, function(v){ postCapture({screens:{only_when_active:v}}); }));
+    if(s.only_when_active) pad.appendChild(numField("cap-scr-idle","Idle after (s)",
+      "Treat you as away after this many quiet seconds.", s.idle_after_s, "60", function(n){ postCapture({screens:{idle_after_s:n}}); }));
+    pad.appendChild(monitorsSeg(s.monitors));
+
+    var g = el("div",{class:"two"});
+    var fmtSel = el("select",{id:"cap-scr-format","aria-label":"Image format",
+      onchange:function(e){ postCapture({screens:{format:e.target.value}}); }});
+    [["jpeg","JPEG"],["webp","WebP"]].forEach(function(o){ fmtSel.appendChild(el("option",{value:o[0],selected:s.format===o[0]}, o[1])); });
+    g.appendChild(el("div",{class:"field"}, el("label",{for:"cap-scr-format"},"Format"), fmtSel));
+    g.appendChild(numField("cap-scr-quality","Quality","1–100 (lower is smaller).", s.quality, "70", function(n){ postCapture({screens:{quality:n}}); }));
+    g.appendChild(numField("cap-scr-maxpx","Max size (px)","Longest edge; downscaled past this.", s.max_px, "1600", function(n){ postCapture({screens:{max_px:n}}); }));
+    pad.appendChild(g);
+
+    pad.appendChild(captureToggleRow("cap-scr-skip","Skip unchanged screens",
+      "Don't upload a screenshot identical to the previous one.", !!s.skip_unchanged, function(v){ postCapture({screens:{skip_unchanged:v}}); }));
+    pad.appendChild(el("div",{class:"field"},
+      el("label",{},"Excluded apps"),
+      el("span",{class:"desc"},"Skip screenshots while one of these apps is in front. Wrap a pattern in /slashes/ for a regex."),
+      chipEditor(s.exclude_apps || [], function(next){ postCapture({screens:{exclude_apps:next}}); }, "app name", "chips-exclude-apps")));
+    pad.appendChild(el("div",{class:"field"},
+      el("label",{},"Excluded title keywords"),
+      el("span",{class:"desc"},"Skip screenshots when the window title matches. /regex/ allowed."),
+      chipEditor(s.exclude_titles || [], function(next){ postCapture({screens:{exclude_titles:next}}); }, "title keyword", "chips-exclude-titles")));
+
+    pad.appendChild(el("div",{class:"tiny muted"}, "Screen backend: ", el("span",{class:"mono"}, cap.screen_backend || "none"),
+      cap.idle_backend ? el("span",{}, " · Idle: ", el("span",{class:"mono"}, cap.idle_backend)) : null));
+
+    var st = statBadges([["Screens", cap.stats && cap.stats.screens],["Unchanged", cap.stats && cap.stats.skipped_unchanged],
+      ["Idle", cap.stats && cap.stats.skipped_idle],["Excluded", cap.stats && cap.stats.skipped_excluded],
+      ["Display off", cap.stats && cap.stats.skipped_display_off]]);
+    if(st) pad.appendChild(st);
+    pad.appendChild(el("div",{class:"tiny muted",style:"margin-top:8px"}, timeSpan("Last screenshot ", cap.last_screen_at)));
+    var est = dailyEstimate(s.interval_s);
+    if(est) pad.appendChild(el("div",{class:"tiny muted",style:"margin-top:2px"}, "Estimated storage: ~" + est));
+
+    pad.appendChild(el("div",{class:"row",style:"margin-top:10px"},
+      el("button",{class:"btn small",onclick:runTestScreen},"Take a test screenshot")));
+    if(ui.captureTest){
+      var t = ui.captureTest, node;
+      if(t.pending) node = el("div",{class:"tiny muted",style:"margin-top:8px"}, el("span",{class:"spin"})," Capturing...");
+      else if(t.error) node = el("div",{class:"inline-err"}, t.error);
+      else if(t.captured) node = el("div",{class:"badges",style:"margin-top:8px"}, el("span",{class:"badge ok"},"Captured a test screenshot"));
+      else node = el("div",{class:"tiny muted",style:"margin-top:8px"},"Skipped — the matching counter above moved to show why.");
+      pad.appendChild(node);
+    }
+    card.appendChild(pad);
+    return card;
+  }
+
+  /* ----- audio & transcription ----- */
+  function audioSources(selected){
+    var f = el("div",{class:"field"});
+    f.appendChild(el("label",{},"Record from"));
+    var grid = el("div",{class:"browsers",style:"margin-top:4px"});
+    [["mic","Microphone"],["system","What this computer plays"]].forEach(function(o){
+      var id = "cap-src-" + o[0];
+      var cb = el("input",{type:"checkbox",id:id,checked:selected.indexOf(o[0])!==-1,onchange:function(e){
+        var next = e.target.checked ? selected.concat([o[0]]) : selected.filter(function(x){ return x !== o[0]; });
+        postCapture({audio:{sources:next}});
+      }});
+      grid.appendChild(el("label",{class:"cb",for:id}, cb, o[1]));
+    });
+    f.appendChild(grid);
+    f.appendChild(el("div",{class:"muted tiny",style:"margin-top:4px"},
+      "“What this computer plays” works on Windows and Linux. On macOS it needs a loopback device like BlackHole."));
+    return f;
+  }
+  function recorderBadges(recorders){
+    if(!recorders || !recorders.length) return null;
+    var map = { listening:"ok", paused:"warn", error:"bad", stopped:"idle" };
+    var box = el("div",{class:"badges",style:"margin-top:4px"});
+    recorders.forEach(function(r){
+      var txt = (r.source || "source") + ": " + r.state + (r.paused ? (" (" + r.paused + ")") : "");
+      box.appendChild(el("span",{class:"badge " + (map[r.state]||""),title:r.error||""}, txt));
+    });
+    return box;
+  }
+  function captureCardAudio(cap){
+    var a = cap.settings.audio || {};
+    var card = el("div",{class:"card",style:"margin-top:10px"});
+    var head = el("div",{class:"card-pad",style:"display:flex;gap:12px;align-items:flex-start"});
+    var left = el("div",{class:"grow"});
+    left.appendChild(el("div",{style:"font-weight:700"},"Audio & transcription"));
+    left.appendChild(el("div",{class:"muted tiny"},"Audio is transcribed as it is heard. Only the text is kept — the sound is never saved or uploaded."));
+    head.appendChild(left);
+    head.appendChild(captureSwitch("cap-aud-en", !!a.enabled, "Enable audio", function(v){ postCapture({audio:{enabled:v}}); }));
+    card.appendChild(head);
+
+    var pad = el("div",{class:"card-pad",style:"border-top:1px solid var(--line)"});
+    if(!cap.audio_available){
+      pad.appendChild(el("div",{class:"inline-err"},"Install the audio extra (soundcard, numpy) on this computer to record audio."));
+    }
+    if(a.enabled){
+      pad.appendChild(audioSources(a.sources || []));
+
+      var pf = el("div",{class:"field"});
+      pf.appendChild(el("label",{},"Pause while media plays"));
+      var pg = el("div",{class:"browsers",style:"margin-top:4px"});
+      [["spotify","Spotify"],["youtube","YouTube"],["streaming","Major streaming services"],["any_media","Any media"]].forEach(function(o){
+        var id = "cap-pause-" + o[0], sel = a.pause_on || [];
+        var cb = el("input",{type:"checkbox",id:id,checked:sel.indexOf(o[0])!==-1,onchange:function(e){
+          var next = e.target.checked ? sel.concat([o[0]]) : sel.filter(function(x){ return x !== o[0]; });
+          postCapture({audio:{pause_on:next}});
+        }});
+        pg.appendChild(el("label",{class:"cb",for:id}, cb, o[1]));
+      });
+      pf.appendChild(pg);
+      pad.appendChild(pf);
+
+      pad.appendChild(captureToggleRow("cap-aud-active","Only while I'm at the keyboard/mouse",
+        "Pause recording when you step away.", !!a.only_when_active, function(v){ postCapture({audio:{only_when_active:v}}); }));
+
+      pad.appendChild(fieldInput("cap-aud-mic","Microphone device (optional)","Leave blank for the system default.","default", a.mic_device || "", false));
+      pad.appendChild(el("div",{class:"row",style:"margin:-6px 0 12px"},
+        el("button",{class:"btn small",onclick:function(){ var e = document.getElementById("cap-aud-mic"); delete drafts["cap-aud-mic"]; postCapture({audio:{mic_device:e?e.value:""}}); }},"Save device")));
+
+      var advOpen = ui.captureAudioAdvOpen != null ? ui.captureAudioAdvOpen : false;
+      var adv = el("details",{open:advOpen,style:"margin-bottom:8px"});
+      adv.addEventListener("toggle",function(){ ui.captureAudioAdvOpen = adv.open; });
+      adv.appendChild(el("summary",{class:"tiny",style:"cursor:pointer;font-weight:600;color:var(--ink-2)"},"Advanced audio"));
+      var ag = el("div",{class:"two",style:"margin-top:8px"});
+      ag.appendChild(numField("cap-aud-min","Minimum clip (s)","", a.min_s, "1", function(n){ postCapture({audio:{min_s:n}}); }, true));
+      ag.appendChild(numField("cap-aud-max","Maximum clip (s)","", a.max_s, "30", function(n){ postCapture({audio:{max_s:n}}); }, true));
+      ag.appendChild(numField("cap-aud-sil","Silence to split (s)","", a.silence_s, "1.2", function(n){ postCapture({audio:{silence_s:n}}); }, true));
+      ag.appendChild(numField("cap-aud-sens","Speech threshold","How many times louder than background noise sound must be to count as speech. Lower hears quieter sound; default 3.", a.sensitivity, "3", function(n){ postCapture({audio:{sensitivity:n}}); }, true));
+      adv.appendChild(ag);
+      pad.appendChild(adv);
+
+      var rec = recorderBadges(cap.recorders);
+      if(rec){ pad.appendChild(el("div",{class:"tiny muted",style:"margin-top:4px"},"Recorders")); pad.appendChild(rec); }
+      var ast = statBadges([["Segments", cap.stats && cap.stats.segments],["Transcribed", cap.stats && cap.stats.transcribed],
+        ["Transcribe failed", cap.stats && cap.stats.transcribe_failed],["Paused for media", cap.stats && cap.stats.paused_for_media]]);
+      if(ast) pad.appendChild(ast);
+      if(cap.audio_error) pad.appendChild(el("div",{class:"err",style:"margin-top:8px"}, cap.audio_error));
+
+      pad.appendChild(captureTranscription(cap));
+    }
+    card.appendChild(pad);
+    return card;
+  }
+  function saveTranscription(engine){
+    var info = ENGINE_INFO[engine] || {};
+    var patch = {};
+    function v(id){ var e = document.getElementById(id); return e ? e.value : undefined; }
+    if(info.custom){ var b = v("cap-tr-baseurl"); if(b !== undefined) patch.base_url = b; }
+    if(!info.local){
+      var m = v("cap-tr-model"); if(m !== undefined) patch.model = m;
+      var l = v("cap-tr-lang"); if(l !== undefined) patch.language = l;
+      var k = v("cap-tr-key"); if(k) patch.api_key = k; // only when the user typed a new key
+    }
+    var pr = v("cap-tr-prompt"); if(pr !== undefined) patch.prompt = pr;
+    act(api("POST","/api/capture",{transcription:patch})).then(function(ok){
+      if(!ok) return;
+      clearDrafts("cap-tr-"); render(); toast("Saved transcription settings");
+    });
+  }
+  function captureTranscription(cap){
+    var tr = cap.settings.transcription || {};
+    var engines = cap.engines || [];
+    var box = el("div",{style:"border-top:1px solid var(--line);margin-top:4px;padding-top:12px"});
+    box.appendChild(el("div",{style:"font-weight:700;margin-bottom:8px"},"Transcription"));
+
+    var sel = el("select",{id:"cap-tr-engine","aria-label":"Transcription engine",
+      onchange:function(e){ postCapture({transcription:{engine:e.target.value}}); }});
+    ENGINE_ORDER.forEach(function(k){ if(engines.indexOf(k) === -1) return; sel.appendChild(el("option",{value:k,selected:tr.engine===k}, ENGINE_INFO[k].label)); });
+    var info = ENGINE_INFO[tr.engine] || {};
+    box.appendChild(el("div",{class:"field"}, el("label",{for:"cap-tr-engine"},"Engine"), sel,
+      el("span",{class:"desc"}, info.cost || "")));
+
+    var grid = el("div",{class:"two"});
+    if(info.custom){
+      grid.appendChild(fieldInput("cap-tr-baseurl","Base URL","An OpenAI-compatible endpoint.","http://localhost:8000/v1", tr.base_url || "", false));
+    }
+    if(!info.local){
+      grid.appendChild(fieldInput("cap-tr-model","Model","Leave blank for the engine default.", info.model || "whisper-1", tr.model || "", false));
+      var keyRef = (typeof tr.api_key === "string" && (tr.api_key.indexOf("infisical:") === 0 || tr.api_key.indexOf("env:") === 0)) ? tr.api_key : "";
+      grid.appendChild(fieldInput("cap-tr-key","API key",
+        keyRef ? "Linked by reference; fetched at run time." : "Paste a key or link one with infisical:SECRET_NAME.",
+        (tr.api_key === "set") ? "•••• saved" : "infisical:GROQ_API_KEY or raw key",
+        keyRef, !keyRef));
+      grid.appendChild(fieldInput("cap-tr-lang","Language (optional)","ISO code like en or es.","auto", tr.language || "", false));
+    }
+    box.appendChild(grid);
+    box.appendChild(el("div",{class:"field"},
+      el("label",{for:"cap-tr-prompt"},"Vocabulary hint (optional)"),
+      el("span",{class:"desc"},"Names or jargon to bias transcription toward."),
+      el("textarea",{id:"cap-tr-prompt",rows:"2",spellcheck:"false",value:tr.prompt || "",placeholder:"e.g. Immich, Throughline, Screenpipe"})));
+    if(info.local) box.appendChild(el("div",{class:"tiny muted"},"Pick and download a model in the panel below. Local transcription is free and stays on this computer."));
+    box.appendChild(el("div",{class:"row",style:"margin-top:4px"},
+      el("button",{class:"btn primary small",onclick:function(){ saveTranscription(tr.engine); }},"Save transcription")));
+    return box;
+  }
+
+  /* ----- on-device models ----- */
+  function downloadModel(){
+    var sel = document.getElementById("cap-local-model");
+    var m = sel ? sel.value : "";
+    if(!m){ toast("Pick a model to download"); return; }
+    act(api("POST","/api/capture/local-model",{model:m})).then(function(ok){ if(ok) toast("Downloading " + m + "..."); });
+  }
+  function removeModel(m){
+    if(!confirm("Remove the " + m + " model from this computer?")) return;
+    act(api("POST","/api/capture/local-model/remove",{model:m})).then(function(ok){ if(ok) toast("Removed " + m); });
+  }
+  function removeAllModels(freed){
+    if(!confirm("Remove all downloaded models? This frees " + freed + ".")) return;
+    act(api("POST","/api/capture/local-model/remove",{})).then(function(ok){ if(ok) toast("Removed all models"); });
+  }
+  function captureLocalPanel(cap){
+    var tr = cap.settings.transcription || {};
+    var local = cap.local || {};
+    var avail = local.available || {};
+    var installed = local.models || [];
+    var names = Object.keys(avail);
+    var job = cap.job || {};
+    var open = ui.captureLocalOpen != null ? ui.captureLocalOpen : (tr.engine === "local");
+
+    var d = el("details",{class:"card",style:"margin-top:10px",open:open});
+    d.addEventListener("toggle",function(){ ui.captureLocalOpen = d.open; });
+    d.appendChild(el("summary",{class:"card-pad",style:"cursor:pointer;font-weight:700"},"On-device transcription models"));
+
+    var pad = el("div",{class:"card-pad",style:"border-top:1px solid var(--line)"});
+    pad.appendChild(el("div",{class:"muted tiny",style:"margin-bottom:10px"},
+      "Nothing is downloaded until you ask. Models run locally, so transcription stays free and private."));
+    if(local.runtime === false) pad.appendChild(el("div",{class:"inline-err",style:"margin-bottom:10px"},
+      "The local transcription runtime is not installed on this computer."));
+
+    if(job.state === "running") pad.appendChild(el("div",{class:"tiny",style:"margin-bottom:10px"}, el("span",{class:"spin"})," ", job.detail || "Working..."));
+    else if(job.state === "failed" && job.detail) pad.appendChild(el("div",{class:"inline-err",style:"margin-bottom:10px"}, job.detail));
+    else if(job.state === "done" && job.detail) pad.appendChild(el("div",{class:"tiny muted",style:"margin-bottom:10px"}, job.detail));
+
+    if(names.length){
+      var list = el("div",{class:"list-ed"});
+      names.forEach(function(n){
+        var isI = installed.indexOf(n) !== -1;
+        list.appendChild(el("div",{class:"item"},
+          el("span",{class:"grow"}, el("span",{class:"mono tiny"}, n), " ", el("span",{class:"tiny muted"}, avail[n]),
+            isI ? el("span",{class:"badge ok",style:"margin-left:6px"},"Installed") : null),
+          isI ? el("button",{type:"button",class:"btn small danger","aria-label":"Remove " + n,onclick:function(){ removeModel(n); }},"Remove") : null));
+      });
+      pad.appendChild(list);
+      var msel = el("select",{id:"cap-local-model","aria-label":"Model to download"});
+      var hasDl = false;
+      names.forEach(function(n){ if(installed.indexOf(n) === -1){ hasDl = true; msel.appendChild(el("option",{value:n}, n + " (" + avail[n] + ")")); } });
+      pad.appendChild(el("div",{class:"row",style:"margin-top:8px"},
+        el("div",{class:"grow"}, msel),
+        el("button",{type:"button",class:"btn small primary",disabled:(!hasDl || job.state === "running"),onclick:downloadModel},"Download")));
+    } else {
+      pad.appendChild(el("div",{class:"tiny muted"},"No models are offered for this build."));
+    }
+
+    var devSel = el("select",{id:"cap-local-device","aria-label":"Compute device",
+      onchange:function(e){ postCapture({transcription:{local_device:e.target.value}}); }});
+    [["auto","Auto"],["cpu","CPU"],["cuda","GPU (CUDA)"]].forEach(function(o){ devSel.appendChild(el("option",{value:o[0],selected:tr.local_device===o[0]}, o[1])); });
+    pad.appendChild(el("div",{class:"field",style:"margin-top:12px"}, el("label",{for:"cap-local-device"},"Run on"), devSel));
+
+    var foot = el("div",{class:"row",style:"justify-content:space-between;margin-top:4px"});
+    foot.appendChild(el("span",{class:"tiny muted"}, "Disk used: " + fmtBytes(local.bytes),
+      local.folder ? el("span",{}, " · ", el("span",{class:"mono tiny"}, local.folder)) : null));
+    if(installed.length) foot.appendChild(el("button",{type:"button",class:"btn small danger",
+      onclick:function(){ removeAllModels(fmtBytes(local.bytes)); }},"Remove everything"));
+    pad.appendChild(foot);
+
+    d.appendChild(pad);
+    return d;
+  }
+
+  /* ----- uploader connector + spool ----- */
+  function focusConnector(name){
+    var p = (state.plugins || []).find(function(x){ return x.name === name; });
+    if(!p){ toast("The capture connector is not available here"); return; }
+    if(!ui.expanded[name]) toggleSettings(p); else render();
+    setTimeout(function(){ var node = document.getElementById("plugin-" + name); if(node) node.scrollIntoView({behavior:"smooth",block:"start"}); }, 60);
+  }
+  function captureConnectorCard(){
+    var p = (state.plugins || []).find(function(x){ return x.name === "capture"; });
+    var card = el("div",{class:"card",style:"margin-top:10px"});
+    var pad = el("div",{class:"card-pad"});
+    pad.appendChild(el("div",{style:"font-weight:700;margin-bottom:3px"},"Immich uploader"));
+    pad.appendChild(el("div",{class:"muted tiny"},
+      "The “capture” connector uploads screenshots to Immich. It needs ", el("code",{},"IMMICH_URL"),
+      " and an ", el("code",{},"IMMICH_API_KEY"), " (an Immich API key with asset.upload permission) in its settings."));
+    var row = el("div",{class:"row",style:"margin-top:8px"});
+    if(p){
+      row.appendChild(jobStateBadge(p.job));
+      if(p.enabled === false) row.appendChild(el("span",{class:"badge warn"},"Disabled"));
+      row.appendChild(el("button",{class:"btn small",onclick:function(){ focusConnector("capture"); }},"Configure uploader"));
+    } else {
+      row.appendChild(el("span",{class:"badge warn"},"Connector not available"));
+    }
+    pad.appendChild(row);
+    card.appendChild(pad);
+    return card;
+  }
+  function captureSpoolCard(cap){
+    var set = cap.settings;
+    var card = el("div",{class:"card",style:"margin-top:10px"});
+    var pad = el("div",{class:"card-pad"});
+    pad.appendChild(el("div",{style:"font-weight:700;margin-bottom:6px"},"Local spool"));
+    pad.appendChild(el("div",{class:"muted tiny",style:"margin-bottom:10px"},"Captured files wait here briefly before upload, then are deleted."));
+    pad.appendChild(el("div",{class:"badges",style:"margin-bottom:10px"},
+      el("span",{class:"badge"}, "Used: " + fmtBytes(cap.spool_bytes)),
+      el("span",{class:"badge"}, "Limit: " + (set.spool_max_mb != null ? set.spool_max_mb + " MB" : "—"))));
+    pad.appendChild(numField("cap-spool-max","Spool limit (MB)","Oldest files are dropped once the spool passes this size.",
+      set.spool_max_mb, "2048", function(n){ postCapture({spool_max_mb:n}); }));
+    if(cap.spool) pad.appendChild(el("div",{class:"tiny muted"}, "Path: ", el("span",{class:"mono"}, cap.spool)));
+    if(cap.last_error) pad.appendChild(el("div",{class:"err",style:"margin-top:10px"}, cap.last_error));
+    if(cap.audio_error) pad.appendChild(el("div",{class:"err",style:"margin-top:8px"}, "Audio: " + cap.audio_error));
+    card.appendChild(pad);
+    return card;
+  }
+
+  /* =========================================================
+     DESKTOP BRIDGE
+     ========================================================= */
+  var CAP_INFO = {
+    "cookies":    { label:"Browser cookies", desc:"Hand allow-listed sites' cookies to server connectors." },
+    "file.read":  { label:"Read shared files", desc:"Let server connectors read files inside the folders you share." },
+    "http.local": { label:"Local services", desc:"Forward requests to named services running on this computer." },
+    "plugin.run": { label:"Run connectors", desc:"Let the server ask this desktop to run a connector now." },
+    "status":     { label:"Status", desc:"Report this desktop's status to the server." }
+  };
+  var CAP_ORDER = ["cookies","file.read","http.local","plugin.run","status"];
+  var BROWSERS = ["chrome","firefox","edge","brave","chromium","safari","opera","vivaldi"];
+
+  function sectionBridge(){
+    var b = state.bridge || {};
+    var settings = b.settings || {};
+    var sec = el("section",{"aria-label":"Desktop bridge"});
+    sec.appendChild(secHead("Desktop bridge"));
+
+    var card = el("div",{class:"card"});
+    var head = el("div",{class:"card-pad",style:"display:flex;gap:12px;align-items:flex-start"});
+    var left = el("div",{class:"grow"});
+    left.appendChild(el("div",{style:"font-weight:700;margin-bottom:3px"},"Let your server ask this desktop for things"));
+    left.appendChild(el("div",{class:"muted tiny"},
+      "Connectors on your server can ask this desktop for the things below. Nothing is shared until you switch it on and name the connectors allowed to ask."));
+    var stats = el("div",{class:"badges",style:"margin-top:8px"});
+    stats.appendChild(bridgePill());
+    if(b.served != null) stats.appendChild(el("span",{class:"badge"}, "Served " + b.served));
+    if(b.last_contact != null) stats.appendChild(el("span",{class:"badge"}, timeSpan("Last contact ", b.last_contact)));
+    left.appendChild(stats);
+    if(b.last_error && (b.state === "error" || b.state === "refused")){
+      left.appendChild(el("div",{class:"err",style:"margin-top:8px"}, b.last_error));
+    }
+    head.appendChild(left);
+
+    var masterId = "bridge-master";
+    var master = el("input",{type:"checkbox",id:masterId,checked:!!b.enabled,"aria-label":"Enable desktop bridge",
+      onchange:function(e){ act(api("POST","/api/bridge",{enabled:e.target.checked})); }});
+    head.appendChild(el("span",{class:"switch",title:"Enable bridge"}, master, el("span",{class:"track","aria-hidden":"true"})));
+    card.appendChild(head);
+    sec.appendChild(card);
+
+    if(!b.enabled){
+      sec.appendChild(el("p",{class:"tiny muted",style:"margin-top:8px"},"Turn the bridge on to configure what connectors may request."));
+      return sec;
+    }
+
+    var capCard = el("div",{class:"card",style:"margin-top:10px"});
+    CAP_ORDER.forEach(function(capName){
+      var cfg = settings[capName] || { enabled:false, allowed_plugins:[] };
+      capCard.appendChild(capRow(capName, cfg));
+    });
+    sec.appendChild(capCard);
+    return sec;
+  }
+
+  function postCap(capName, patch){
+    ui.capErr[capName] = "";
+    return act(api("POST","/api/bridge/"+encodeURIComponent(capName), patch)).catch(function(e){
+      ui.capErr[capName] = (e && e.error) ? e.error : "Failed"; render();
+    });
+  }
+
+  function capRow(capName, cfg){
+    var info = CAP_INFO[capName] || { label:capName, desc:"" };
+    var wrap = el("div",{class:"cap"});
+    var head = el("div",{class:"cap-head"});
+    var left = el("div",{class:"grow"});
+    left.appendChild(el("div",{style:"font-weight:700"}, info.label, " ", el("span",{class:"mono tiny muted"}, "(" + capName + ")")));
+    if(info.desc) left.appendChild(el("div",{class:"muted tiny",style:"margin-top:2px"}, info.desc));
+    head.appendChild(left);
+
+    var swId = "cap-" + capName;
+    var sw = el("input",{type:"checkbox",id:swId,checked:!!cfg.enabled,"aria-label":"Enable " + info.label,
+      onchange:function(e){ postCap(capName,{enabled:e.target.checked}); }});
+    head.appendChild(el("span",{class:"switch"}, sw, el("span",{class:"track","aria-hidden":"true"})));
+    wrap.appendChild(head);
+
+    if(!cfg.enabled) return wrap;
+
+    var body = el("div",{class:"cap-body"});
+
+    // Allowed connectors (chips) - common to all
+    body.appendChild(el("div",{class:"field"},
+      el("label",{},"Allowed connectors"),
+      el("span",{class:"desc"},'Plugin names that may use this. Use "*" to allow any.'),
+      chipEditor(cfg.allowed_plugins || [], function(next){ postCap(capName,{allowed_plugins:next}); }, "connector name", "chips-allowed-" + capName)
+    ));
+
+    // Capability-specific editors
+    if(capName === "cookies"){
+      body.appendChild(el("div",{class:"field"},
+        el("label",{},"Sites"),
+        el("span",{class:"desc"},"Domains whose cookies may be shared, e.g. youtube.com"),
+        listEditor(cfg.domains || [], function(next){ postCap(capName,{domains:next}); }, "youtube.com", "list-cookies-domains")
+      ));
+      body.appendChild(browserEditor(cfg.browsers || [], function(next){ postCap(capName,{browsers:next}); }));
+    } else if(capName === "file.read"){
+      body.appendChild(el("div",{class:"field"},
+        el("label",{},"Shared folders"),
+        el("span",{class:"desc"},"Absolute paths that connectors may read from."),
+        listEditor(cfg.roots || [], function(next){ postCap(capName,{roots:next}); }, "/home/you/Shared", "list-file-roots")
+      ));
+    } else if(capName === "http.local"){
+      body.appendChild(el("div",{class:"field"},
+        el("label",{},"Named targets"),
+        el("span",{class:"desc"},"name -> http://localhost:port that connectors may reach."),
+        targetsEditor(cfg.targets || {}, function(next){ postCap(capName,{targets:next}); })
+      ));
+    }
+
+    if(ui.capErr[capName]) body.appendChild(el("div",{class:"inline-err"}, ui.capErr[capName]));
+    wrap.appendChild(body);
+    return wrap;
+  }
+
+  /* ----- chip editor (allowed_plugins) ----- */
+  function chipEditor(values, onChange, placeholder, id){
+    var box = el("div",{class:"chips",style:"border:1px solid var(--line-2);border-radius:7px;padding:6px;background:var(--panel-2)"});
+    values.forEach(function(v){
+      box.appendChild(el("span",{class:"chip"}, v,
+        el("button",{type:"button","aria-label":"Remove " + v, onclick:function(){
+          onChange(values.filter(function(x){ return x !== v; }));
+        }}, "×")));
+    });
+    var inp = el("input",{type:"text",id:id,class:"chip-input",placeholder:placeholder||"add...","aria-label":"Add " + (placeholder||"item"),autocomplete:"off"});
+    inp.addEventListener("keydown",function(e){
+      if(e.key === "Enter" || e.key === ","){
+        e.preventDefault();
+        var v = inp.value.trim().replace(/,$/,"");
+        if(v && values.indexOf(v) === -1){ onChange(values.concat([v])); }
+        inp.value = "";
+      } else if(e.key === "Backspace" && !inp.value && values.length){
+        onChange(values.slice(0,-1));
+      }
+    });
+    box.appendChild(inp);
+    return box;
+  }
+
+  /* ----- list editor (domains / roots) ----- */
+  function listEditor(values, onChange, placeholder, id){
+    var wrap = el("div",{class:"list-ed"});
+    values.forEach(function(v,i){
+      wrap.appendChild(el("div",{class:"item"},
+        el("span",{class:"grow mono tiny",style:"overflow:hidden;text-overflow:ellipsis;white-space:nowrap"}, v),
+        el("button",{type:"button",class:"btn small","aria-label":"Remove " + v, onclick:function(){
+          onChange(values.filter(function(_,j){ return j !== i; }));
+        }}, "Remove")
+      ));
+    });
+    var inp = el("input",{type:"text",id:id,placeholder:placeholder||"","aria-label":"New entry",autocomplete:"off",spellcheck:"false"});
+    function add(){
+      var v = inp.value.trim();
+      if(v && values.indexOf(v) === -1){ onChange(values.concat([v])); }
+      inp.value = "";
+    }
+    inp.addEventListener("keydown",function(e){ if(e.key === "Enter"){ e.preventDefault(); add(); } });
+    wrap.appendChild(el("div",{class:"row",style:"margin-top:4px"},
+      el("div",{class:"grow"}, inp),
+      el("button",{type:"button",class:"btn small",onclick:add},"Add")));
+    return wrap;
+  }
+
+  /* ----- browsers checkboxes ----- */
+  function browserEditor(selected, onChange){
+    var f = el("div",{class:"field"});
+    f.appendChild(el("label",{},"Browsers"));
+    f.appendChild(el("span",{class:"desc"},"Which browsers' cookie stores may be used."));
+    var grid = el("div",{class:"browsers",style:"margin-top:4px"});
+    BROWSERS.forEach(function(b){
+      var id = "br-" + b;
+      var checked = selected.indexOf(b) !== -1;
+      var cb = el("input",{type:"checkbox",id:id,checked:checked,onchange:function(e){
+        var next = e.target.checked ? selected.concat([b]) : selected.filter(function(x){ return x !== b; });
+        onChange(next);
+      }});
+      grid.appendChild(el("label",{class:"cb",for:id}, cb, b));
+    });
+    f.appendChild(grid);
+    return f;
+  }
+
+  /* ----- targets editor (name -> url) ----- */
+  function targetsEditor(targets, onChange){
+    var wrap = el("div",{class:"list-ed"});
+    var names = Object.keys(targets);
+    names.forEach(function(name){
+      wrap.appendChild(el("div",{class:"item"},
+        el("span",{class:"mono tiny",style:"font-weight:700;min-width:80px"}, name),
+        el("span",{class:"grow mono tiny",style:"overflow:hidden;text-overflow:ellipsis;white-space:nowrap"}, targets[name]),
+        el("button",{type:"button",class:"btn small","aria-label":"Remove " + name, onclick:function(){
+          var next = {}; names.forEach(function(k){ if(k!==name) next[k]=targets[k]; }); onChange(next);
+        }}, "Remove")
+      ));
+    });
+    var nameInp = el("input",{type:"text",id:"target-name",placeholder:"name","aria-label":"Target name",autocomplete:"off",spellcheck:"false",style:"max-width:130px"});
+    var urlInp = el("input",{type:"text",id:"target-url",placeholder:"http://localhost:8080","aria-label":"Target URL",autocomplete:"off",spellcheck:"false"});
+    function add(){
+      var n = nameInp.value.trim(), u = urlInp.value.trim();
+      if(n && u){ var next = {}; names.forEach(function(k){ next[k]=targets[k]; }); next[n]=u; onChange(next); nameInp.value=""; urlInp.value=""; }
+    }
+    urlInp.addEventListener("keydown",function(e){ if(e.key === "Enter"){ e.preventDefault(); add(); } });
+    wrap.appendChild(el("div",{class:"row",style:"margin-top:4px"},
+      nameInp, el("div",{class:"grow"}, urlInp),
+      el("button",{type:"button",class:"btn small",onclick:add},"Add")));
+    return wrap;
+  }
+
+  /* =========================================================
+     INFISICAL SECRET STORE
+     ========================================================= */
+  function saveInfisical(){
+    function v(id){ var n = document.getElementById(id); return n ? n.value.trim() : ""; }
+    var patch = {
+      site_url: v("inf-site-url"),
+      project_id: v("inf-project-id"),
+      project_slug: v("inf-project-slug"),
+      environment: v("inf-environment"),
+      secret_path: v("inf-secret-path"),
+      client_id: v("inf-client-id")
+    };
+    var sec = v("inf-client-secret");
+    if(sec) patch.client_secret = sec;
+    var tok = v("inf-token");
+    if(tok) patch.token = tok;
+    ui.infisicalTest = null;
+    ui.infisicalSecrets = null;
+    act(api("POST","/api/infisical", patch)).then(function(ok){
+      if(!ok) return;
+      clearDrafts("inf-");
+      render();
+      toast("Saved Infisical settings");
+    });
+  }
+  function testInfisical(){
+    ui.infisicalTest = { loading: true };
+    render();
+    api("POST","/api/infisical/test",{}).then(function(r){
+      ui.infisicalTest = r;
+      ui.infisicalSecrets = null;
+      render();
+      toast("Connected to Infisical (" + r.secret_count + " secrets at " + r.secret_path + ")");
+    }).catch(function(e){
+      if(e && e.status === 401) return;
+      ui.infisicalTest = { error: (e && e.error) ? e.error : "Connection failed" };
+      render();
+    });
+  }
+  function browseInfisicalSecrets(){
+    ui.modal = { title: "Infisical secret names", text: "Loading..." };
+    render();
+    api("GET","/api/infisical/secrets?recursive=true").then(function(r){
+      var list = (r && r.secrets) ? r.secrets : [];
+      ui.infisicalSecrets = list;
+      var lines = list.length
+        ? list.map(function(s){ return s.ref + "   [" + s.path + ", " + s.environment + (s.imported ? ", imported" : "") + "]"; }).join("\n")
+        : "(no secrets found at this path)";
+      ui.modal = { title: "Infisical secret names (" + list.length + ")", text: lines, scroll: false };
+      render();
+    }).catch(function(e){
+      if(e && e.status === 401) return;
+      ui.modal = { title: "Infisical secret names", text: (e && e.error) ? e.error : "Could not list secrets" };
+      render();
+    });
+  }
+  function sectionInfisical(){
+    var inf = state.infisical || {};
+    var sec = el("section",{"aria-label":"Infisical"});
+    sec.appendChild(secHead("Infisical", "link secrets without storing them"));
+    var card = el("div",{class:"card"});
+    var pad = el("div",{class:"card-pad"});
+    pad.appendChild(el("p",{class:"muted tiny",style:"margin:0 0 10px"},
+      "Link connector secrets from Infisical using ", el("code",{},"infisical:SECRET_NAME"),
+      ". Credentials are fetched in memory right before each run and never saved in Throughline."));
+
+    var st = el("div",{class:"badges",style:"margin-bottom:10px"});
+    if(inf.configured){
+      st.appendChild(el("span",{class:"badge ok"},
+        inf.auth_mode === "universal_auth" ? "Configured (Universal Auth)" : "Configured (Token)"));
+      if(inf.source === "env") st.appendChild(el("span",{class:"badge"},"From environment"));
+      if(inf.project_id || inf.project_slug) st.appendChild(el("span",{class:"badge mono"}, inf.project_id || inf.project_slug));
+      if(inf.environment) st.appendChild(el("span",{class:"badge"}, "env: " + inf.environment));
+      if(inf.secret_path) st.appendChild(el("span",{class:"badge mono"}, inf.secret_path));
+    } else {
+      st.appendChild(el("span",{class:"badge"},"Not configured"));
+    }
+    pad.appendChild(st);
+
+    var bar = el("div",{class:"row",style:"margin-bottom:" + (ui.infisicalOpen ? "12px" : "0")});
+    bar.appendChild(el("button",{class:"btn small",onclick:function(){ ui.infisicalOpen = !ui.infisicalOpen; render(); }},
+      ui.infisicalOpen ? "Hide settings" : "Configure Infisical"));
+    if(inf.configured){
+      bar.appendChild(el("button",{class:"btn small",onclick:testInfisical},"Test connection"));
+      bar.appendChild(el("button",{class:"btn small",onclick:browseInfisicalSecrets},"Browse secret names"));
+    }
+    pad.appendChild(bar);
+
+    if(ui.infisicalTest){
+      if(ui.infisicalTest.loading) pad.appendChild(el("div",{class:"tiny muted",style:"margin-top:8px"}, el("span",{class:"spin"})," Testing connection..."));
+      else if(ui.infisicalTest.error) pad.appendChild(el("div",{class:"inline-err",style:"margin-top:8px"}, ui.infisicalTest.error));
+      else if(ui.infisicalTest.ok) pad.appendChild(el("div",{class:"tiny",style:"margin-top:8px;color:var(--ok)"},
+        "Connected to " + ui.infisicalTest.site_url + " (" + ui.infisicalTest.secret_count + " secrets at " + ui.infisicalTest.secret_path + ")"));
+    }
+
+    if(ui.infisicalOpen){
+      var box = el("div",{style:"border-top:1px solid var(--line);margin-top:12px;padding-top:12px"});
+      var g1 = el("div",{class:"two"});
+      g1.appendChild(fieldInput("inf-site-url","Site URL","Infisical Cloud or your self-hosted URL.","https://app.infisical.com", inf.site_url || "https://app.infisical.com", false));
+      g1.appendChild(fieldInput("inf-environment","Environment slug","e.g. prod, staging, dev.","prod", inf.environment || "prod", false));
+      g1.appendChild(fieldInput("inf-project-id","Project ID","Workspace / project UUID (preferred).","e.g. 66f10299...", inf.project_id || "", false));
+      g1.appendChild(fieldInput("inf-project-slug","Project slug (optional)","Used when Project ID is blank.","my-project", inf.project_slug || "", false));
+      g1.appendChild(fieldInput("inf-secret-path","Default secret path","Folder path inside the environment.","/", inf.secret_path || "/", false));
+      g1.appendChild(fieldInput("inf-client-id","Universal Auth Client ID","Machine Identity Client ID (recommended).","", inf.client_id || "", false));
+      g1.appendChild(fieldInput("inf-client-secret","Universal Auth Client Secret",
+        "Leave blank to keep saved value, or use env:INFISICAL_CLIENT_SECRET.",
+        inf.client_secret_ref || (inf.has_client_secret ? "•••• saved" : ""), inf.client_secret_ref || "", !inf.client_secret_ref));
+      g1.appendChild(fieldInput("inf-token","Access / Service Token (alternative)",
+        "Only needed if not using Universal Auth; supports env:INFISICAL_TOKEN.",
+        inf.token_ref || (inf.has_token ? "•••• saved" : ""), inf.token_ref || "", !inf.token_ref));
+      box.appendChild(g1);
+      box.appendChild(el("div",{class:"row",style:"margin-top:4px"},
+        el("button",{class:"btn primary small",onclick:saveInfisical},"Save Infisical settings"),
+        el("button",{class:"btn small",onclick:testInfisical},"Test connection")));
+      pad.appendChild(box);
+    }
+
+    card.appendChild(pad);
+    sec.appendChild(card);
+    return sec;
+  }
+
+  /* =========================================================
+     SERVER JOBS
+     ========================================================= */
+  function sectionJobs(){
+    var jobs = state.jobs || [];
+    if(!jobs.length && !state.headless) return null;
+    var sec = el("section",{"aria-label":"Server jobs"});
+    sec.appendChild(secHead("Server jobs", "read-only"));
+    var card = el("div",{class:"card"});
+    if(!jobs.length){ card.appendChild(el("div",{class:"card-pad muted tiny"},"No server jobs.")); sec.appendChild(card); return sec; }
+    jobs.forEach(function(job){
+      var row = el("div",{class:"plugin"});
+      var main = el("div",{class:"plugin-main"});
+      var info = el("div",{class:"plugin-info"});
+      info.appendChild(el("div",{class:"title"}, (job.name || "job"), jobStateBadge(job)));
+      var meta = el("div",{class:"plugin-meta"});
+      if(job.interval_s != null) meta.appendChild(el("span",{},"Every " + fmtInterval(job.interval_s)));
+      if(job.last_run_at != null) meta.appendChild(timeSpan("Last run ", job.last_run_at));
+      if(job.last_ok_at != null) meta.appendChild(timeSpan("Last ok ", job.last_ok_at));
+      if(job.next_run_at != null) meta.appendChild(timeSpan("Next run ", job.next_run_at));
+      if(meta.childNodes.length) info.appendChild(meta);
+      if(job.last_error) info.appendChild(errorBlock("job:"+(job.name||""), job.last_error));
+      main.appendChild(info);
+      row.appendChild(main);
+      card.appendChild(row);
+    });
+    sec.appendChild(card);
+    return sec;
+  }
+
+  /* =========================================================
+     DEVICE SETTINGS (unpair)
+     ========================================================= */
+  function sectionDeviceSettings(){
+    var sec = el("section",{"aria-label":"Device"});
+    sec.appendChild(secHead("This device"));
+    var card = el("div",{class:"card"});
+    var pad = el("div",{class:"card-pad",style:"display:flex;gap:12px;align-items:center;flex-wrap:wrap"});
+    var left = el("div",{class:"grow"});
+    left.appendChild(el("div",{style:"font-weight:700"}, (state.server && state.server.device) || "This device"));
+    left.appendChild(el("div",{class:"muted tiny"}, "Paired with " + ((state.server && state.server.url) || "server")));
+    pad.appendChild(left);
+    pad.appendChild(el("button",{class:"btn danger small",onclick:function(){
+      if(confirm("Unpair this device? Connectors will stop talking to your server until you pair again.")){
+        act(api("POST","/api/unpair",{})).then(function(ok){ if(ok) toast("Device unpaired"); });
+      }
+    }},"Unpair"));
+    card.appendChild(pad);
+    sec.appendChild(card);
+    return sec;
+  }
+
+  /* =========================================================
+     FOOTER + MODAL
+     ========================================================= */
+  function footer(){
+    var f = el("footer",{});
+    if(state.version) f.appendChild(el("span",{}, "Version " + state.version));
+    if(state.platform) f.appendChild(el("span",{}, "Platform: " + state.platform + (state.headless ? " (headless)" : "")));
+    if(state.logs) f.appendChild(el("span",{}, "Logs: ", el("span",{class:"mono"}, state.logs)));
+    return f;
+  }
+
+  var shownModal = null;
+  function renderModal(){
+    var root = document.getElementById("modal-root");
+    if(ui.modal === shownModal) return; // unchanged: keep its scroll position and focus
+    shownModal = ui.modal;
+    root.textContent = "";
+    if(!ui.modal){ document.body.style.overflow = ""; return; }
+    document.body.style.overflow = "hidden";
+    var m = ui.modal;
+    var overlay = el("div",{class:"overlay",onclick:function(e){ if(e.target === overlay) closeModal(); }});
+    var pre = el("pre",{class:"log"}, m.text);
+    var body = el("div",{class:"modal-body"}, pre);
+    var modal = el("div",{class:"modal",role:"dialog","aria-modal":"true","aria-label":m.title},
+      el("div",{class:"modal-head"},
+        el("b",{}, m.title),
+        el("button",{class:"btn small",onclick:closeModal,"aria-label":"Close"},"Close")),
+      body);
+    overlay.appendChild(modal);
+    root.appendChild(overlay);
+    if(m.scroll){ body.scrollTop = body.scrollHeight; }
+    var closeBtn = modal.querySelector("button"); if(closeBtn) closeBtn.focus();
+  }
+  function closeModal(){ ui.modal = null; render(); }
+  document.addEventListener("keydown",function(e){ if(e.key === "Escape" && ui.modal) closeModal(); });
+
+  /* =========================================================
+     POLLING
+     ========================================================= */
+  function tick(){ refreshTimes(); if(isEditingField()) return; refresh(); }
+  refresh();
+  setInterval(tick, 3000);
+})();
+</script>
+</body>
+</html>

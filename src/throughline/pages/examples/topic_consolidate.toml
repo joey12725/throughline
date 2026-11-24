@@ -1,0 +1,21 @@
+# Dedupe and consolidate ideas and topics. Adapted from GBrain's
+# concept-synthesis skill (MIT): merge only the same mechanism; default is
+# don't merge.
+name = "topic_consolidate"
+description = "Merges duplicate idea and topic pages; links related ones."
+output = "pages"
+grain = "message"
+schedule = "30 4 * * 0"
+channels = ["pages"]
+max_items_per_run = 20
+
+prompt = """The evidence is one ideas/, topics/ or patterns/ page.
+Search for pages that may be the same idea (search_pages by its title, aliases and first paragraph; read the top candidates).
+Merge only if they are clearly the same idea, not just shared vocabulary. Ask: does the other page add a new angle, example, feeling, audience or phrasing? If yes, keep both and link them (related_to, with evidence). If no, merge the weaker into the stronger (merge keeps aliases and timeline), then edit the kept page's top so it reads as one page.
+Do not rewrite otherwise."""
+
+[worker_config]
+input_kinds = ["ideas", "topics", "patterns"]
+kinds = ["ideas", "topics", "patterns"]
+allow = ["edit", "link", "merge"]
+max_turns = 5

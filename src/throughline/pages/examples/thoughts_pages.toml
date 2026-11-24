@@ -1,0 +1,31 @@
+# The owner's own original thinking. Adapted from GBrain's signal-detector
+# ("original thinking is at least as valuable as entity extraction"), voice-note
+# ingest and the dream-cycle synthesis prompt (MIT).
+name = "thoughts_pages"
+description = "The owner's ideas, reflections, opinions with reasons and decisions with why."
+output = "pages"
+grain = "day"
+schedule = "20 */3 * * *"
+# Channels to read. Onboarding adds every channel whose declared role is
+# in channel_roles; when defining this file by hand, list your own.
+channels = []
+channel_roles = ["transcript", "chat"]
+max_items_per_run = 3
+
+prompt = """Find the owner's own original thinking in this window: a new idea, frame, plan for their life, opinion with reasons, self-reflection, a named pattern in themselves, a decision and why, a strong reaction to something. Judge by the window's best moment, not its average; routine logistics and questions are not thinking.
+For each one worth keeping:
+- an idea, thesis or framework the owner came up with -> ideas/<specific-slug-in-their-words>;
+- a reflection about themselves, their feelings or their life -> reflections/<YYYY-MM-DD>-<topic>;
+- a thought mainly about a person, place or project -> edit that page instead (Opinions & worldview, Open threads, or a timeline line).
+Search for an existing page first (search_pages by the idea's wording and synonyms) and extend it rather than creating a near-duplicate.
+Page sections: Summary (2-3 sentences a stranger could follow), In their words (verbatim blockquotes with citations; keep their phrasing including roughness), Analysis (your reading, marked as such), Related. Timeline: dated lines each time it came up.
+Attribute speculation as speculation ("wondered whether"). Never present an assistant's or another person's suggestion as the owner's idea unless the owner adopted it. Every page links at least one related page (person, event, day, other idea)."""
+
+[worker_config]
+kinds = ["ideas", "reflections", "people", "projects", "topics"]
+allow = ["write", "edit", "timeline", "link"]
+max_turns = 5
+max_new_pages = 3
+lookback_days = 7
+exclude_annotations = ["media_noise"]
+exclude_patterns = ["(?i)\\btherap(y|ist)\\b"]   # a deterministic privacy wall: edit to taste

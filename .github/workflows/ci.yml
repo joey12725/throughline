@@ -1,0 +1,140 @@
+name: CI
+# Everything here runs from an anonymous clone: no submodules, no secrets,
+# no model keys. Tests make and drop throwaway tl_test_* databases on the
+# pgvector service.
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  # uv never re-resolves in CI: uv.lock is used exactly as committed.
+  UV_FROZEN: "1"
+  TERM: dumb
+  THROUGHLINE_DEV: "1"
+  THROUGHLINE_TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:54331/postgres
+  PNPM_VERSION: "12.15.0"
+jobs:
+  python:
+    name: Python (${{ matrix.shard }})
+    # 24.04: its archive carries the PostgreSQL 16 client the service needs.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [core-1, core-2, plugins-1, plugins-2]
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ["54331:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      # Backup and restore tests need pg_dump/pg_restore/psql of the server's
+      # major version (16); they skip without them.
+      - name: PostgreSQL 16 client tools
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends postgresql-client-16
+          echo "THROUGHLINE_PG_BIN=/usr/lib/postgresql/16/bin" >> "$GITHUB_ENV"
+      - name: Tune ephemeral test PostgreSQL
+        run: |
+          psql "$THROUGHLINE_TEST_DATABASE_URL" -v ON_ERROR_STOP=1 \
+            -c "ALTER SYSTEM SET fsync = off;" \
+            -c "ALTER SYSTEM SET synchronous_commit = off;" \
+            -c "ALTER SYSTEM SET full_page_writes = off;" \
+            -c "SELECT pg_reload_conf();"
+      # Node runs the template-node plugin's contract tests.
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+      - run: uv sync --frozen --all-packages
+      - if: matrix.shard == 'core-1'
+        run: uv run ruff check .
+      - name: Run pytest (${{ matrix.shard }})
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          mapfile -t FILES < <(python3 -c '
+          import os
+          from pathlib import Path
+          shard = os.environ["SHARD"]
+          def find_tests(base):
+              return sorted(
+                  str(p)
+                  for p in Path(base).rglob("*.py")
+                  if (p.name.startswith("test_") or p.name.endswith("_test.py"))
+                  and ".venv" not in p.parts
+                  and "node_modules" not in p.parts
+              )
+          if shard == "core-1":
+              files = find_tests("tests")[0::2]
+          elif shard == "core-2":
+              files = find_tests("tests")[1::2]
+          elif shard == "plugins-1":
+              files = find_tests("sdk/tests") + find_tests("clients/python/tests") + find_tests("fixtures/tests") + find_tests("plugins")[0::2]
+          elif shard == "plugins-2":
+              files = find_tests("plugins")[1::2]
+          else:
+              raise SystemExit(f"unknown shard: {shard}")
+          for f in files:
+              print(f)
+          ')
+          echo "Running ${#FILES[@]} test files in shard ${SHARD}"
+          uv run pytest -q -n auto --dist loadfile --tb=short "${FILES[@]}"
+
+  web:
+    name: Web (typecheck, vitest, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+      - run: npm install -g pnpm@${{ env.PNPM_VERSION }}
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+  hygiene:
+    name: Leak guard and links
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - name: No owner names, hosts or private stores
+        run: scripts/leak-check.sh
+      - name: Every relative link in README and docs resolves
+        run: python3 scripts/check-links.py
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - run: docker build -t throughline:ci .
+      - name: Smoke
+        run: |
+          docker run --rm throughline:ci throughline --help > /dev/null
+          docker run --rm throughline:ci sh -c 'pg_dump --version && python -c "import fixtures, throughline_sdk"'
+          docker run --rm throughline:ci test -f /app/src/throughline/web/static/index.html

@@ -1,0 +1,177 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.name {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.desc {
+  font-family: var(--font-read);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 68ch;
+}
+
+.flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.fact,
+.coverage {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.factLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+.factValue {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.factHint {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+.covButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.covWhy {
+  font-size: 11px;
+  color: var(--patina);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.archetypes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.noArch {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.archChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-1);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  color: var(--ink-2);
+  transition: border-color 160ms cubic-bezier(0.2, 0.8, 0.2, 1), background 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.archChip:hover {
+  border-color: var(--line-strong);
+  background: var(--bg-2);
+}
+.archChip:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+.archPrimary {
+  border-color: color-mix(in oklch, var(--brass) 55%, var(--line));
+  background: color-mix(in oklch, var(--brass) 10%, var(--bg-1));
+  color: var(--ink);
+}
+.archName {
+  font-size: 13px;
+}
+.archPct {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.archPrimary .archPct {
+  color: var(--brass);
+}
+
+.pop {
+  max-width: 320px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.popTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  text-transform: capitalize;
+}
+.popEmpty {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin: 0;
+}
+.reasons {
+  margin: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.reasons li {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archChip {
+    transition: none;
+  }
+}

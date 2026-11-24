@@ -1,0 +1,14 @@
+[project]
+name = "throughline-capture"
+version = "0.1.0"
+description = "Throughline connector for the Companion's screen and audio capture"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = ["throughline-sdk", "httpx"]
+[project.scripts]
+throughline-capture = "throughline_capture:main"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[tool.uv.sources]
+throughline-sdk = { workspace = true }

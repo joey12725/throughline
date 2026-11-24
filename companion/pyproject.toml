@@ -1,0 +1,56 @@
+[project]
+name = "throughline-companion"
+version = "0.1.0"
+description = "Throughline Companion: runs desktop connectors, bundles ActivityWatch and bridges the desktop to a Throughline server"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = ["httpx", "throughline-sdk"]
+[project.optional-dependencies]
+# System tray icon (Windows, macOS, Linux with AppIndicator/X11).
+tray = ["pystray>=0.19", "pillow>=10"]
+# Screen capture (screenshots on Windows, macOS, X11; Wayland uses grim).
+capture = ["mss>=9", "pillow>=10"]
+# Audio capture (microphone; loopback of what the computer plays on Windows/Linux).
+audio = ["soundcard>=0.4.3", "numpy>=1.26"]
+# Browser cookie extraction for the cookies bridge capability.
+cookies = ["yt-dlp>=2025.1.1"]
+# The desktop connectors bundled into the packaged app.
+desktop-plugins = [
+    "throughline-activitywatch",
+    "throughline-aider",
+    "throughline-apple-notes",
+    "throughline-browser-history",
+    "throughline-claude-code",
+    "throughline-codex",
+    "throughline-cursor",
+    "throughline-imessage",
+    "throughline-lmstudio",
+    "throughline-markdown-notes",
+    "throughline-t3code",
+    "throughline-capture",
+    "throughline-youtube",
+]
+[project.scripts]
+throughline-companion = "throughline_companion.cli:main"
+[project.gui-scripts]
+throughline-companion-gui = "throughline_companion.cli:gui"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[tool.hatch.build.targets.wheel]
+packages = ["src/throughline_companion"]
+[tool.uv.sources]
+throughline-sdk = { workspace = true }
+throughline-activitywatch = { workspace = true }
+throughline-aider = { workspace = true }
+throughline-apple-notes = { workspace = true }
+throughline-browser-history = { workspace = true }
+throughline-claude-code = { workspace = true }
+throughline-codex = { workspace = true }
+throughline-cursor = { workspace = true }
+throughline-imessage = { workspace = true }
+throughline-lmstudio = { workspace = true }
+throughline-markdown-notes = { workspace = true }
+throughline-t3code = { workspace = true }
+throughline-capture = { workspace = true }
+throughline-youtube = { workspace = true }

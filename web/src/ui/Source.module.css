@@ -1,0 +1,42 @@
+.dot {
+  display: inline-block;
+  border-radius: var(--r-pill);
+  background: var(--dot);
+  flex: none;
+}
+.dot.ring {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--dot);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--t-sm);
+  line-height: 1.2;
+}
+.chip.interactive { cursor: pointer; }
+.chip.interactive:hover .chipText { text-decoration: underline; text-decoration-color: var(--src); }
+.chipDot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: var(--r-pill);
+  background: var(--src);
+}
+.chipText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}

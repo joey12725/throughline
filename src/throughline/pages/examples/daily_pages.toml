@@ -1,0 +1,34 @@
+# A pages lens: query + prompt + schedule, like any lens, but the Librarian
+# answers each window with page actions instead of table rows.
+# Day pages in GBrain's compiled-truth + timeline anatomy; the "one event,
+# every page it touches" rule is from GBrain's filing rules (MIT).
+# Define with: throughline lib lens define daily_pages.toml
+name = "daily_pages"
+description = "One page per day on what mattered, linked to the people, events and places of the day."
+output = "pages"
+grain = "day"                      # one work item per owner-local day; a day is re-read when it changes
+schedule = "*/30 * * * *"
+# Channels to read. Onboarding adds every channel whose declared role is
+# in channel_roles; when defining this file by hand, list your own.
+channels = ["visits"]
+channel_roles = ["chat", "transcript", "email", "calendar"]
+max_items_per_run = 4
+max_cost_per_run = 0.50
+
+prompt = """Keep the page days/<YYYY-MM-DD> for this window's day (window.day). A busy day comes in parts (window.part): read the page and extend it with each part.
+Sections: Summary, People, Conversations, Plans & commitments, Decisions & ideas, Notable details. Timeline: the day's notable moments with times.
+Link the day to the pages of the people, events, places and projects that featured. One event, every page it touches: for each notable item, also add a timeline line to the person, event or place page it concerns (timeline op), in that page's own words.
+When something on the day deserves its own page and has none (a notable event, trip, gathering, purchase, decision), write that page too and link it.
+Open threads: carry forward commitments from earlier days that are still open (get_timeline and search_messages to check whether a later record closed them)."""
+
+[worker_config]
+kinds = ["days", "events"]
+max_turns = 5
+max_new_pages = 4
+lookback_days = 7                  # scheduled runs read only the last week of days
+max_chars_per_record = 1500        # each record line is cut here
+max_chars_per_item = 120000        # a busy day is split into parts of this size
+exclude_annotations = ["media_noise"]
+# model = "google/gemini-2.5-flash"   # any OpenAI-compatible endpoint (defaults: THROUGHLINE_TABLE_LLM_*)
+# base_url = "https://openrouter.ai/api/v1"
+# api_key_env = "OPENROUTER_API_KEY"

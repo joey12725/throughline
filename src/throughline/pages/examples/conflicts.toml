@@ -1,0 +1,20 @@
+# Contradiction review. Adapted from GBrain's contradiction judge and
+# edge-contradictions prompts (MIT): time first, same entity only, silence is
+# not a conflict, different holders are not a conflict.
+name = "conflicts"
+description = "Finds claims across pages that cannot both be true and settles or records them."
+output = "pages"
+grain = "message"
+schedule = "0 4 * * 3"
+channels = ["pages"]
+max_items_per_run = 15
+
+prompt = """The evidence is a page that just changed. Read the pages it links to and those about the same people. Look for claims that cannot both be true about the same thing at the same time (where someone lives, a relationship status, a date, who was at an event, a job).
+Decide: a later fact replacing an earlier one is an update, not a conflict: make sure the top states the current fact with dates and the older one is history. Different people holding different opinions is not a conflict. A thing one page is silent about is not a conflict. Never infer an order from the values themselves; use dates.
+For a real conflict: if the records clearly settle it, correct the page with the weaker or older evidence; otherwise edit it to state both sides with citations under '## Conflicts'. Do not resolve a conflict by guessing."""
+
+[worker_config]
+input_kinds = ["people", "events", "places", "organizations", "projects", "trips"]
+allow = ["edit", "timeline"]
+max_actions = 6
+max_turns = 5

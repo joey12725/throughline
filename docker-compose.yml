@@ -1,0 +1,190 @@
+# Throughline. Install or apply changed settings with `scripts/install.sh`
+# (it writes .env, starts everything and prints the owner token); update
+# with `scripts/update.sh`. Every service runs the same image, built once.
+#
+# Settings that are yours live next to this file and are never overwritten:
+#   .env               database and role passwords, COMPOSE_PROFILES, timezone
+#   throughline.env    optional settings: embeddings, models, egress (.env.example)
+#   connectors.env     secrets for server connectors, referenced as "env:NAME"
+#   infisical.env      optional Infisical machine identity; enables "infisical:KEY" refs
+#   docker/connectors.json, docker/maintenance.json   schedules (examples beside)
+# Don't edit this file: use docker-compose.override.yml for local changes.
+
+x-image: &image
+  build: .
+  image: throughline:latest
+
+x-timezone: &timezone
+  TZ: ${THROUGHLINE_TIMEZONE:-UTC}
+  THROUGHLINE_TIMEZONE: ${THROUGHLINE_TIMEZONE:-UTC}
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: throughline
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+    # Room for a clean shutdown during updates (the default is 10 s).
+    stop_grace_period: 1m
+    # Docker's default 64 MB /dev/shm is too small for parallel index builds
+    # during a restore or a restore drill.
+    shm_size: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 20
+  # One-shot administration: the only service that holds the superuser
+  # password besides the opt-in maintenance service. It applies migrations
+  # (writing a pre-upgrade snapshot to the throughline-home volume first,
+  # docs/updating.md), sets the two runtime role passwords, and keeps the
+  # connectors service enrolled for the plugins enabled in
+  # docker/connectors.json, then exits. The superuser password travels as
+  # PGPASSWORD, never inside a URL, so any characters are safe in it.
+  # Owner commands (token create, purge, backup) also run here:
+  #   docker compose run --rm migrate throughline token create owner --json
+  migrate:
+    <<: *image
+    environment:
+      <<: *timezone
+      THROUGHLINE_DATABASE_URL: postgresql://postgres@postgres:5432/throughline
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      THROUGHLINE_APP_PASSWORD: ${THROUGHLINE_APP_PASSWORD:?set THROUGHLINE_APP_PASSWORD}
+      THROUGHLINE_READER_PASSWORD: ${THROUGHLINE_READER_PASSWORD:?set THROUGHLINE_READER_PASSWORD}
+      THROUGHLINE_UPGRADE_SNAPSHOT: ${THROUGHLINE_UPGRADE_SNAPSHOT:-on}
+      # Set: the connectors use this pasted code and provisioning is skipped.
+      THROUGHLINE_COMPANION_PAIRING: ${THROUGHLINE_COMPANION_PAIRING:-}
+    env_file:
+      - path: throughline.env
+        required: false
+      - path: infisical.env
+        required: false
+    volumes:
+      - throughline-home:/home/throughline/.throughline
+      - ./docker:/config:ro
+      - connectors-pairing:/home/throughline/pairing
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    command:
+      - sh
+      - -c
+      # Provisioning never fails the migration: a broken connectors.json is
+      # reported here and leaves the API, the update and the old tokens alone.
+      - >-
+        throughline migrate && throughline configure-passwords &&
+        { throughline lib companion provision docker --url http://throughline:8000
+        --config /config/connectors.json --out /home/throughline/pairing/connectors
+        || echo "connectors provisioning failed; fix docker/connectors.json and run scripts/install.sh" >&2; }
+  # The API receives connection coordinates and the runtime role passwords
+  # only. It connects as throughline_app and throughline_reader. Optional
+  # settings (embeddings, egress, models: .env.example) go in throughline.env,
+  # which updates never touch; don't edit this file for them.
+  throughline:
+    <<: *image
+    environment:
+      <<: *timezone
+      THROUGHLINE_DATABASE_URL: postgresql://postgres:5432/throughline
+      THROUGHLINE_APP_PASSWORD: ${THROUGHLINE_APP_PASSWORD:?set THROUGHLINE_APP_PASSWORD}
+      THROUGHLINE_READER_PASSWORD: ${THROUGHLINE_READER_PASSWORD:?set THROUGHLINE_READER_PASSWORD}
+    # Optional settings, web sign-in included (THROUGHLINE_PUBLIC_URL,
+    # THROUGHLINE_AUTH_*; docs/web/auth.md), go in throughline.env.
+    env_file:
+      - path: throughline.env
+        required: false
+      - path: infisical.env
+        required: false
+    volumes:
+      - throughline-home:/home/throughline/.throughline
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    command: ["throughline", "serve", "--host", "0.0.0.0"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 6
+    ports:
+      # Desktops running the Throughline Companion must reach this port: put
+      # it behind your HTTPS reverse proxy or VPN, or set THROUGHLINE_BIND.
+      - "${THROUGHLINE_BIND:-127.0.0.1}:${THROUGHLINE_PORT:-8000}:8000"
+  # Server-side connectors (cloud APIs, LAN services), run on their schedules
+  # by the companion's scheduler in server mode. Opt in with the
+  # "connectors" profile (COMPOSE_PROFILES in .env). Enable connectors in
+  # docker/connectors.json (start from docker/connectors.example.json) and
+  # put their secrets in connectors.env, referenced by name ("env:NAME").
+  # Their tokens need no pasting: migrate enrolls this service for every
+  # enabled connector and leaves the pairing code in the connectors-pairing
+  # volume. After changing connectors.json, run scripts/install.sh again.
+  # Desktop-only connectors run in the companion app on each desktop instead
+  # (docs/companion.md).
+  connectors:
+    <<: *image
+    profiles: ["connectors"]
+    environment:
+      <<: *timezone
+      THROUGHLINE_COMPANION_PAIRING: ${THROUGHLINE_COMPANION_PAIRING:-}
+      THROUGHLINE_COMPANION_PAIRING_FILE: /home/throughline/pairing/connectors
+      THROUGHLINE_COMPANION_URL: http://throughline:8000
+    env_file:
+      - path: connectors.env
+        required: false
+      - path: infisical.env
+        required: false
+    volumes:
+      - ./docker:/config:ro
+      - connectors-state:/home/throughline/companion
+      - connectors-pairing:/home/throughline/pairing:ro
+    depends_on:
+      throughline:
+        condition: service_healthy
+    command: ["throughline-companion", "--config", "/config/connectors.json", "run", "--server"]
+    restart: unless-stopped
+  # Core maintenance on a schedule, in place of host timers: the embedding
+  # worker, lenses, curation, source alerts and backups.
+  # Jobs come from docker/maintenance.json, or the built-in
+  # docker/maintenance.example.json while that file does not exist. It holds
+  # the superuser password like migrate does, and reads throughline.env for
+  # the model and embedding settings its jobs use. Opt in with the
+  # "maintenance" profile (scripts/install.sh turns it on).
+  maintenance:
+    <<: *image
+    profiles: ["maintenance"]
+    environment:
+      <<: *timezone
+      THROUGHLINE_DATABASE_URL: postgresql://postgres@postgres:5432/throughline
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      THROUGHLINE_APP_PASSWORD: ${THROUGHLINE_APP_PASSWORD:?set THROUGHLINE_APP_PASSWORD}
+      THROUGHLINE_READER_PASSWORD: ${THROUGHLINE_READER_PASSWORD:?set THROUGHLINE_READER_PASSWORD}
+      THROUGHLINE_COMPANION_DEFAULT_CONFIG: /app/docker/maintenance.example.json
+    env_file:
+      - path: throughline.env
+        required: false
+      - path: maintenance.env
+        required: false
+      - path: infisical.env
+        required: false
+    volumes:
+      - ./docker:/config:ro
+      - maintenance-state:/home/throughline/companion
+      # Backup settings, passphrase and bundles, shared with migrate.
+      - throughline-home:/home/throughline/.throughline
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    command: ["throughline-companion", "--config", "/config/maintenance.json", "run", "--server"]
+    restart: unless-stopped
+# Everything an install keeps lives in these volumes and in the files listed
+# at the top: images are rebuilt on every update and hold nothing.
+volumes:
+  postgres:
+  throughline-home:
+  connectors-state:
+  connectors-pairing:
+  maintenance-state:

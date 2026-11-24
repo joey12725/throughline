@@ -1,0 +1,20 @@
+name = "places_pages"
+description = "Places the owner goes back to or that mattered."
+output = "pages"
+grain = "day"
+schedule = "40 */6 * * *"
+# Channels to read. Onboarding adds every channel whose declared role is
+# in channel_roles; when defining this file by hand, list your own.
+channels = ["visits"]
+channel_roles = ["calendar", "chat", "transcript"]
+max_items_per_run = 3
+
+prompt = """Maintain places/<name-city> pages for places the owner goes back to or that mattered (home, friends' homes by the owner's name for them, favorite restaurants, venues, trip destinations). Skip one-off errands and transit.
+Sections: What it is (one line, with neighborhood/city), The owner and this place (how often, with whom, what they think of it), Notable visits (linked to event and day pages), Details (what to order, parking, hours mentioned). Timeline: dated visits.
+Use aliases for the owner's names for it ("the lake house", "Grandma's"). Link events and days at the place, and the people who live there (lives_in) or were there."""
+
+[worker_config]
+kinds = ["places"]
+allow = ["write", "edit", "timeline", "link"]
+max_new_pages = 3
+lookback_days = 7

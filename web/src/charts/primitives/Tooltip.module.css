@@ -1,0 +1,52 @@
+.tip {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+  min-width: 96px;
+  max-width: 240px;
+  padding: var(--s-2) var(--s-3);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-control);
+  font-size: var(--t-xs);
+  line-height: var(--lh-snug);
+  color: var(--ink);
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  margin-bottom: var(--s-1);
+  white-space: nowrap;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+}
+
+.swatch {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  transform: translateY(1px);
+}
+
+.label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+
+.value {
+  flex: none;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}

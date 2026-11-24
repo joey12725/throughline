@@ -1,0 +1,94 @@
+.page {
+  height: 100%;
+  overflow: auto;
+  padding: var(--s-5) var(--s-6);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: var(--s-5);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--t-xl);
+  font-weight: var(--fw-semibold);
+}
+
+.sub {
+  margin: var(--s-1) 0 0;
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+  max-width: 70ch;
+}
+
+.group {
+  margin-bottom: var(--s-8);
+}
+
+.groupTitle {
+  margin: 0 0 var(--s-3);
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--s-1);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: var(--s-4);
+}
+
+.item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.lensLabel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2);
+  font-size: var(--t-xs);
+}
+.lensLabel code {
+  font-family: var(--font-mono);
+  color: var(--brass);
+}
+.chan {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+  border: 1px dashed var(--line);
+  border-radius: var(--r-panel);
+  color: var(--ink-3);
+  font-size: var(--t-sm);
+}
+
+.note {
+  padding: var(--s-8);
+  text-align: center;
+  color: var(--ink-3);
+}
+
+@media (max-width: 720px) {
+  .grid { grid-template-columns: 1fr; }
+  .page { padding: var(--s-4); }
+}

@@ -1,0 +1,70 @@
+name: Companion app
+# Builds the Throughline Companion desktop app for Windows, macOS (Apple
+# silicon and Intel) and Linux, and runs its unit tests on each OS.
+on:
+  push:
+    branches: [master, main]
+    paths: ["companion/**", "sdk/**", "plugins/**", ".github/workflows/companion.yml"]
+  pull_request:
+    paths: ["companion/**", "sdk/**", "plugins/**", ".github/workflows/companion.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: throughline-companion-windows-x86_64
+          - os: macos-latest
+            artifact: throughline-companion-macos-arm64
+          # Intel macOS runner (macos-13 is retired).
+          - os: macos-15-intel
+            artifact: throughline-companion-macos-x86_64
+          - os: ubuntu-22.04
+            artifact: throughline-companion-linux-x86_64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv sync --frozen --package throughline-companion --extra tray --extra cookies --extra desktop-plugins --group dev
+      - name: Unit tests (no database)
+        run: uv run --package throughline-companion pytest -q companion/tests/test_companion.py companion/tests/test_infisical.py
+      - name: Build
+        working-directory: companion/packaging
+        run: uv run --package throughline-companion --extra tray --extra cookies --extra desktop-plugins --with pyinstaller==6.16.0 pyinstaller --noconfirm --clean companion.spec
+      - name: Smoke test the packaged app
+        shell: bash
+        working-directory: companion/packaging/dist
+        run: |
+          if [ -d "Throughline Companion.app" ]; then
+            BIN="Throughline Companion.app/Contents/MacOS/throughline-companion"
+          else
+            BIN="throughline-companion/throughline-companion"
+          fi
+          "$BIN" --version
+          "$BIN" detect
+          "$BIN" exec throughline_claude_code:main manifest > /dev/null
+      - name: Archive
+        shell: bash
+        working-directory: companion/packaging/dist
+        run: |
+          if [ -d "Throughline Companion.app" ]; then
+            ditto -c -k --keepParent "Throughline Companion.app" "${{ matrix.artifact }}.zip"
+          elif [ "$RUNNER_OS" = "Windows" ]; then
+            7z a "${{ matrix.artifact }}.zip" throughline-companion
+          else
+            tar czf "${{ matrix.artifact }}.tar.gz" throughline-companion
+          fi
+      - uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            companion/packaging/dist/*.zip
+            companion/packaging/dist/*.tar.gz
+          if-no-files-found: error

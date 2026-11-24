@@ -1,0 +1,82 @@
+.shell {
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+  grid-template-rows: var(--header-h) 1fr;
+  grid-template-areas:
+    "rail header"
+    "rail main";
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+.main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: var(--bg-0);
+}
+.scroll { flex: 1; min-height: 0; }
+.content { min-height: 100%; }
+
+.degraded {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-4);
+  background: color-mix(in oklab, var(--brass) 10%, var(--bg-1));
+  border-bottom: 1px solid color-mix(in oklab, var(--brass) 30%, var(--line));
+  color: var(--ink-2);
+  font-size: var(--t-xs);
+}
+.degraded code { font-family: var(--font-mono); color: var(--brass); }
+
+.bootError { max-width: 640px; margin: var(--s-10) auto; padding: 0 var(--s-4); }
+
+/* ---- Phone: hide the rail, lay nav along the bottom as a tab bar. -------- */
+@media (max-width: 720px) {
+  .shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--header-h) 1fr var(--bottomnav-h);
+    grid-template-areas:
+      "header"
+      "main"
+      "bottomnav";
+  }
+}
+
+/* First-run "finish setting up" nudge */
+.setupBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-4);
+  background: color-mix(in oklab, var(--patina) 10%, var(--bg-1));
+  border-bottom: 1px solid color-mix(in oklab, var(--patina) 30%, var(--line));
+  color: var(--ink-2);
+  font-size: var(--t-xs);
+}
+.setupBannerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  color: var(--patina);
+  font-weight: var(--fw-medium);
+}
+.setupBannerLink:hover { text-decoration: underline; }
+.setupBannerSpacer { flex: 1; }
+.setupBannerClose {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: var(--r-control);
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.setupBannerClose:hover { color: var(--ink); background: var(--bg-3); }
+.setupBannerClose:focus-visible { outline: none; box-shadow: var(--focus-tight); }

@@ -1,0 +1,1 @@
+{"kind": "screen", "device": "synthbox", "captured_at": "2020-01-01T10:00:00+00:00", "file": "20200101T100000000000Z.jpg", "mime": "image/jpeg", "width": 1600, "height": 900, "bytes": 16, "sha256": "4835207814612e4182b5d5feb00c882d1159206a03ecb907217aa9d28ef09166", "app": "code", "title": "throughline \u2014 orchard.py", "monitor": "1", "idle_backend": "wayland"}

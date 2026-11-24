@@ -1,0 +1,55 @@
+.skeleton {
+  display: block;
+  background: linear-gradient(90deg, var(--bg-2) 25%, var(--bg-3) 37%, var(--bg-2) 63%);
+  background-size: 400% 100%;
+  border-radius: var(--r-control);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.stack { display: flex; flex-direction: column; gap: var(--s-2); }
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; opacity: 0.7; }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  text-align: center;
+  padding: var(--s-12) var(--s-6);
+  color: var(--ink-2);
+}
+.empty.compact { padding: var(--s-6) var(--s-4); }
+.emptyIcon { color: var(--ink-3); margin-bottom: var(--s-1); display: inline-flex; }
+.emptyIcon :global(svg) { width: 28px; height: 28px; }
+.emptyTitle { font-size: var(--t-md); font-weight: var(--fw-semibold); color: var(--ink); }
+.compact .emptyTitle { font-size: var(--t-base); }
+.emptyDesc { font-size: var(--t-sm); max-width: 44ch; line-height: var(--lh-normal); }
+.emptyAction { margin-top: var(--s-3); }
+
+.error {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  background: color-mix(in oklab, var(--bad) 7%, var(--bg-1));
+  border: 1px solid color-mix(in oklab, var(--bad) 35%, var(--line));
+  border-radius: var(--r-panel);
+}
+.errorIcon { color: var(--bad); flex: none; margin-top: 1px; }
+.errorBody { min-width: 0; }
+.errorTitle { font-size: var(--t-sm); font-weight: var(--fw-semibold); }
+.errorMsg { font-size: var(--t-sm); color: var(--ink); margin-top: 2px; word-break: break-word; }
+.errorMeta { display: flex; gap: var(--s-3); margin-top: var(--s-2); font-size: var(--t-xs); color: var(--ink-3); }
+.issues {
+  margin: var(--s-2) 0 0;
+  padding-left: var(--s-4);
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+}
+.issues code { font-family: var(--font-mono); color: var(--ink); }
+.errorAction { margin-top: var(--s-3); }

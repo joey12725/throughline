@@ -1,0 +1,40 @@
+# Paths scripts/export-public.sh never copies into the public tree, even
+# when committed. One shell glob per line, matched against the repository
+# path (a trailing / matches a directory and everything below it).
+# Everything at the top level must also be in the script's allowlist.
+
+# Private working files and agent state.
+OPEN_SOURCE_PLAN.md
+.claude/
+private/
+moved-recipes/
+.gitmodules
+scripts/leak-patterns.private.txt
+scripts/leak-allowlist.private.txt
+
+# Connectors that stay private (they read stores only their owner has).
+plugins/morning-context/
+plugins/who/
+
+# Secrets and local settings, should one ever be committed by mistake.
+.env
+*.env
+connectors.env
+throughline.env
+maintenance.env
+docker/connectors.json
+docker/maintenance.json
+*.pem
+*.key
+*.dump
+*.passphrase
+
+# Scratch files.
+*.orig
+*.rej
+*.bak
+*.swp
+*.log
+*.tmp
+scratch/
+**/scratch/

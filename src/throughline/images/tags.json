@@ -1,0 +1,1851 @@
+{
+ "version": 2,
+ "model": "siglip2-so400m-384",
+ "notes": "Zero-shot kind and tags over SigLIP2 image vectors. A tag's margin is its best prompt's cosine minus the cosine of that prompt's template reference (references, by prefix; longest prefix wins). prob = sigmoid(logit_scale*margin + logit_bias); a tag is kept at prob >= its threshold (default_threshold) when the asset's kind is in its kinds list. Kind = softmax(kind_temperature * max prompt cosine + signal priors). Tune with `throughline lib images calibrate`.",
+ "logit_scale": 117.0,
+ "logit_bias": -2.3,
+ "kind_temperature": 100.0,
+ "default_threshold": 0.5,
+ "max_tags": 8,
+ "meme": {
+  "threshold": 0.5,
+  "caption_bonus": 0.3,
+  "hint_bonus": 0.15,
+  "hints": [
+   "meme",
+   "imgflip",
+   "9gag",
+   "ifunny",
+   "knowyourmeme"
+  ]
+ },
+ "kinds": {
+  "photo": [
+   "a photo",
+   "a photo of something",
+   "a photograph taken with a phone camera",
+   "a close-up photo of an object",
+   "a photo of a person",
+   "a photo of a room",
+   "a photo of an outdoor scene"
+  ],
+  "screenshot": [
+   "a screenshot",
+   "a screenshot of something",
+   "a screenshot of an app",
+   "a screenshot of a website",
+   "a screenshot of a chat",
+   "a screenshot of a terminal"
+  ],
+  "document": [
+   "a scan of a document",
+   "a photo of a receipt",
+   "a page of printed text",
+   "an invoice",
+   "a presentation slide",
+   "a printed ticket"
+  ],
+  "artwork": [
+   "a drawing",
+   "an illustration",
+   "a cartoon",
+   "a sticker",
+   "a logo",
+   "digital art",
+   "an anime drawing"
+  ],
+  "other": [
+   "a blank image",
+   "a solid color",
+   "random noise"
+  ]
+ },
+ "tags": {
+  "selfie": {
+   "prompts": [
+    "a photo of a selfie",
+    "a photo of a person taking a selfie with a phone"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "group-photo": {
+   "prompts": [
+    "a photo of a group of friends posing together",
+    "a photo of a group photo of people"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "portrait": {
+   "prompts": [
+    "a photo of a portrait of a person",
+    "a photo of a close-up of a person's face"
+   ],
+   "kinds": [
+    "photo",
+    "artwork"
+   ],
+   "threshold": 0.7
+  },
+  "baby": {
+   "prompts": [
+    "a photo of a baby",
+    "a photo of an infant"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "child": {
+   "prompts": [
+    "a photo of a young child",
+    "a photo of kids playing"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "couple": {
+   "prompts": [
+    "a photo of a romantic couple",
+    "a photo of two people in love"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "wedding": {
+   "prompts": [
+    "a photo of a wedding",
+    "a photo of a bride and groom"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "party": {
+   "prompts": [
+    "a photo of a party with friends",
+    "a photo of people celebrating at a party"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "birthday": {
+   "prompts": [
+    "a photo of a birthday celebration",
+    "a photo of a birthday cake with candles"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "graduation": {
+   "prompts": [
+    "a photo of a graduation ceremony",
+    "a photo of a graduate in a cap and gown"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "crowd": {
+   "prompts": [
+    "a photo of a large crowd of people"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "concert": {
+   "prompts": [
+    "a photo of a live music concert",
+    "a photo of a band playing on stage"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "festival": {
+   "prompts": [
+    "a photo of an outdoor festival"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "sports": {
+   "prompts": [
+    "a photo of people playing sports",
+    "a photo of a sports game"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "gym": {
+   "prompts": [
+    "a photo of a gym workout",
+    "a photo of people exercising in a gym"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "hiking": {
+   "prompts": [
+    "a photo of hiking on a trail",
+    "a photo of a hiker in nature"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "camping": {
+   "prompts": [
+    "a photo of a camping trip with a tent",
+    "a photo of a campfire"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "swimming": {
+   "prompts": [
+    "a photo of people swimming"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "skiing": {
+   "prompts": [
+    "a photo of skiing or snowboarding on a slope"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "running": {
+   "prompts": [
+    "a photo of a person running a race"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "cycling": {
+   "prompts": [
+    "a photo of a person riding a bicycle"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "dancing": {
+   "prompts": [
+    "a photo of people dancing"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "costume": {
+   "prompts": [
+    "a photo of people wearing costumes",
+    "a photo of cosplay"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "pet": {
+   "prompts": [
+    "a photo of a pet",
+    "a photo of a pet animal at home"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "dog": {
+   "prompts": [
+    "a photo of a dog",
+    "a photo of a puppy"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "cat": {
+   "prompts": [
+    "a photo of a cat",
+    "a photo of a kitten"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "bird": {
+   "prompts": [
+    "a photo of a bird"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "horse": {
+   "prompts": [
+    "a photo of a horse"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "fish": {
+   "prompts": [
+    "a photo of fish",
+    "a photo of an aquarium"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "wildlife": {
+   "prompts": [
+    "a photo of a wild animal in nature"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "insect": {
+   "prompts": [
+    "a photo of an insect",
+    "a photo of a butterfly"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "food": {
+   "prompts": [
+    "a photo of food on a plate",
+    "a photo of a meal"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "restaurant": {
+   "prompts": [
+    "a photo of a restaurant",
+    "a photo of dining out at a restaurant"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "dessert": {
+   "prompts": [
+    "a photo of a dessert",
+    "a photo of ice cream"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "cake": {
+   "prompts": [
+    "a photo of a cake"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "pizza": {
+   "prompts": [
+    "a photo of a pizza"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "burger": {
+   "prompts": [
+    "a photo of a hamburger"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "sushi": {
+   "prompts": [
+    "a photo of sushi"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "coffee": {
+   "prompts": [
+    "a photo of a cup of coffee"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "cocktail": {
+   "prompts": [
+    "a photo of a cocktail drink"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "beer": {
+   "prompts": [
+    "a photo of a glass of beer"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "wine": {
+   "prompts": [
+    "a photo of a glass of wine"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "breakfast": {
+   "prompts": [
+    "a photo of breakfast food"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "groceries": {
+   "prompts": [
+    "a photo of groceries",
+    "a photo of a grocery store aisle"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "cooking": {
+   "prompts": [
+    "a photo of cooking in a kitchen",
+    "a photo of food being prepared"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "bbq": {
+   "prompts": [
+    "a photo of a barbecue grill"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "beach": {
+   "prompts": [
+    "a photo of a beach",
+    "a photo of a sandy beach by the sea"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "ocean": {
+   "prompts": [
+    "a photo of the ocean",
+    "a photo of sea waves"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "lake": {
+   "prompts": [
+    "a photo of a lake"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "river": {
+   "prompts": [
+    "a photo of a river"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "mountain": {
+   "prompts": [
+    "a photo of mountains",
+    "a photo of a mountain landscape"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "forest": {
+   "prompts": [
+    "a photo of a forest",
+    "a photo of woods with trees"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "desert": {
+   "prompts": [
+    "a photo of a desert"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "snow": {
+   "prompts": [
+    "a photo of snow",
+    "a photo of a snowy landscape"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "waterfall": {
+   "prompts": [
+    "a photo of a waterfall"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "park": {
+   "prompts": [
+    "a photo of a city park"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "garden": {
+   "prompts": [
+    "a photo of a garden"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "flowers": {
+   "prompts": [
+    "a photo of flowers"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "plant": {
+   "prompts": [
+    "a photo of a house plant",
+    "a photo of a potted plant"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "sky": {
+   "prompts": [
+    "a photo of the sky"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "sunset": {
+   "prompts": [
+    "a photo of a sunset",
+    "a photo of a sunrise"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "clouds": {
+   "prompts": [
+    "a photo of dramatic clouds"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "rain": {
+   "prompts": [
+    "a photo of rain",
+    "a photo of a rainy day"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "storm": {
+   "prompts": [
+    "a photo of a thunderstorm",
+    "a photo of lightning"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "landscape": {
+   "prompts": [
+    "a photo of a scenic landscape"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "city": {
+   "prompts": [
+    "a photo of a city",
+    "a photo of an urban scene"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "skyline": {
+   "prompts": [
+    "a photo of a city skyline"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "street": {
+   "prompts": [
+    "a photo of a street",
+    "a photo of a road in a town"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "building": {
+   "prompts": [
+    "a photo of a building"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "architecture": {
+   "prompts": [
+    "a photo of architecture",
+    "a photo of an interesting building facade"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "house": {
+   "prompts": [
+    "a photo of a house",
+    "a photo of the outside of a home"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "bedroom": {
+   "prompts": [
+    "a photo of a bedroom"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "kitchen": {
+   "prompts": [
+    "a photo of a kitchen"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "living-room": {
+   "prompts": [
+    "a photo of a living room"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "bathroom": {
+   "prompts": [
+    "a photo of a bathroom"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "office": {
+   "prompts": [
+    "a photo of an office",
+    "a photo of a desk at work"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "desk-setup": {
+   "prompts": [
+    "a photo of a computer desk setup with monitors"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "classroom": {
+   "prompts": [
+    "a photo of a classroom",
+    "a photo of a lecture hall"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "church": {
+   "prompts": [
+    "a photo of a church"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "museum": {
+   "prompts": [
+    "a photo of a museum exhibit"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "stadium": {
+   "prompts": [
+    "a photo of a stadium"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "airport": {
+   "prompts": [
+    "a photo of an airport terminal"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "hotel": {
+   "prompts": [
+    "a photo of a hotel room"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "store": {
+   "prompts": [
+    "a photo of a shop interior",
+    "a photo of a retail store"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "pool": {
+   "prompts": [
+    "a photo of a swimming pool"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "bridge": {
+   "prompts": [
+    "a photo of a bridge"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "road": {
+   "prompts": [
+    "a photo of a highway",
+    "a photo of a road trip view from a car"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "landmark": {
+   "prompts": [
+    "a photo of a famous landmark",
+    "a photo of a tourist attraction"
+   ],
+   "kinds": [
+    "photo"
+   ],
+   "threshold": 0.7
+  },
+  "night": {
+   "prompts": [
+    "a photo of a scene at night",
+    "a photo of city lights at night"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "outdoors": {
+   "prompts": [
+    "a photo of an outdoor scene"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "indoors": {
+   "prompts": [
+    "a photo of an indoor scene",
+    "a photo of inside a room"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "fireworks": {
+   "prompts": [
+    "a photo of fireworks"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "christmas": {
+   "prompts": [
+    "a photo of christmas decorations",
+    "a photo of a christmas tree"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "halloween": {
+   "prompts": [
+    "a photo of halloween decorations",
+    "a photo of a carved pumpkin"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "other"
+   ]
+  },
+  "car": {
+   "prompts": [
+    "a photo of a car"
+   ],
+   "kinds": [
+    "photo",
+    "artwork"
+   ]
+  },
+  "truck": {
+   "prompts": [
+    "a photo of a pickup truck"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "motorcycle": {
+   "prompts": [
+    "a photo of a motorcycle"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "bicycle": {
+   "prompts": [
+    "a photo of a bicycle"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "bus": {
+   "prompts": [
+    "a photo of a bus"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "airplane": {
+   "prompts": [
+    "a photo of an airplane",
+    "a photo of the view from an airplane window"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "train": {
+   "prompts": [
+    "a photo of a train"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "boat": {
+   "prompts": [
+    "a photo of a boat"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "car-interior": {
+   "prompts": [
+    "a photo of the inside of a car",
+    "a photo of a car dashboard"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "phone": {
+   "prompts": [
+    "a photo of a smartphone"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "computer": {
+   "prompts": [
+    "a photo of a computer",
+    "a photo of a laptop"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "electronics": {
+   "prompts": [
+    "a photo of electronic components",
+    "a photo of a circuit board"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "circuit-board": {
+   "prompts": [
+    "a photo of a printed circuit board",
+    "a photo of a PCB with chips"
+   ],
+   "kinds": [
+    "photo",
+    "screenshot"
+   ]
+  },
+  "3d-printing": {
+   "prompts": [
+    "a photo of a 3D printer",
+    "a photo of a 3D printed part"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "tools": {
+   "prompts": [
+    "a photo of hand tools",
+    "a photo of a workshop with tools"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "book": {
+   "prompts": [
+    "a photo of a book"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "clothing": {
+   "prompts": [
+    "a photo of clothing",
+    "a photo of an outfit"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "shoes": {
+   "prompts": [
+    "a photo of shoes",
+    "a photo of sneakers"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "jewelry": {
+   "prompts": [
+    "a photo of jewelry",
+    "a photo of a ring"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "toy": {
+   "prompts": [
+    "a photo of a toy"
+   ],
+   "kinds": [
+    "photo"
+   ],
+   "threshold": 0.6
+  },
+  "furniture": {
+   "prompts": [
+    "a photo of furniture"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "guitar": {
+   "prompts": [
+    "a photo of a guitar"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "musical-instrument": {
+   "prompts": [
+    "a photo of a musical instrument"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "camera": {
+   "prompts": [
+    "a photo of a camera"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "money": {
+   "prompts": [
+    "a photo of money",
+    "a photo of cash and coins"
+   ],
+   "kinds": [
+    "photo",
+    "document"
+   ]
+  },
+  "cards": {
+   "prompts": [
+    "a photo of playing cards",
+    "a photo of trading cards"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "medical": {
+   "prompts": [
+    "a photo of a hospital",
+    "a photo of medical equipment"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "x-ray": {
+   "prompts": [
+    "an x-ray image",
+    "a medical scan"
+   ]
+  },
+  "tattoo": {
+   "prompts": [
+    "a photo of a tattoo"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "art-piece": {
+   "prompts": [
+    "a photo of a painting on a wall",
+    "a photo of an art exhibition"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "product": {
+   "prompts": [
+    "a photo of a product photo",
+    "a photo of an item for sale"
+   ],
+   "kinds": [
+    "photo"
+   ],
+   "threshold": 0.9
+  },
+  "package": {
+   "prompts": [
+    "a photo of a delivery package",
+    "a photo of a cardboard box"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "car-damage": {
+   "prompts": [
+    "a photo of a damaged car",
+    "a photo of a car accident"
+   ],
+   "kinds": [
+    "photo"
+   ]
+  },
+  "photo-of-screen": {
+   "prompts": [
+    "a photo of a computer monitor showing text",
+    "a photo of a phone photographed showing its screen"
+   ],
+   "kinds": [
+    "photo"
+   ],
+   "threshold": 0.8
+  },
+  "code": {
+   "prompts": [
+    "a screenshot of source code in a code editor",
+    "a screenshot of programming code"
+   ],
+   "kinds": [
+    "screenshot",
+    "photo",
+    "document"
+   ]
+  },
+  "terminal": {
+   "prompts": [
+    "a screenshot of a terminal window with command line text",
+    "a command line terminal"
+   ],
+   "kinds": [
+    "screenshot",
+    "photo"
+   ]
+  },
+  "chat-screenshot": {
+   "prompts": [
+    "a screenshot of a chat conversation in a messaging app",
+    "a screenshot of text messages"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "social-media": {
+   "prompts": [
+    "a screenshot of a social media post",
+    "a screenshot of a tweet"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "email-screenshot": {
+   "prompts": [
+    "a screenshot of an email"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "website": {
+   "prompts": [
+    "a screenshot of a website in a web browser"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "app-ui": {
+   "prompts": [
+    "a screenshot of a mobile app user interface",
+    "a screenshot of a software dashboard"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "settings": {
+   "prompts": [
+    "a screenshot of a settings menu"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "error-message": {
+   "prompts": [
+    "a screenshot of an error message",
+    "a screenshot of an error dialog"
+   ],
+   "kinds": [
+    "screenshot",
+    "photo"
+   ]
+  },
+  "video-game": {
+   "prompts": [
+    "a screenshot of a video game",
+    "a screenshot of gameplay"
+   ],
+   "kinds": [
+    "screenshot",
+    "photo"
+   ]
+  },
+  "video-call": {
+   "prompts": [
+    "a screenshot of a video call"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "notification": {
+   "prompts": [
+    "a screenshot of a phone notification"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "shopping": {
+   "prompts": [
+    "a screenshot of an online shopping product page"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "calendar": {
+   "prompts": [
+    "a screenshot of a calendar"
+   ],
+   "kinds": [
+    "screenshot",
+    "document"
+   ]
+  },
+  "map": {
+   "prompts": [
+    "a screenshot of a map",
+    "a map with roads and locations"
+   ]
+  },
+  "spreadsheet": {
+   "prompts": [
+    "a screenshot of a spreadsheet",
+    "a table of numbers"
+   ],
+   "kinds": [
+    "screenshot",
+    "document",
+    "photo"
+   ],
+   "threshold": 0.8
+  },
+  "chart": {
+   "prompts": [
+    "a chart or graph",
+    "a bar chart",
+    "a line graph of data"
+   ],
+   "threshold": 0.7
+  },
+  "diagram": {
+   "prompts": [
+    "a diagram",
+    "a flowchart",
+    "a technical diagram"
+   ],
+   "kinds": [
+    "screenshot",
+    "document",
+    "artwork"
+   ],
+   "threshold": 0.8
+  },
+  "whiteboard": {
+   "prompts": [
+    "a photo of a whiteboard with writing"
+   ],
+   "kinds": [
+    "photo",
+    "document"
+   ]
+  },
+  "handwriting": {
+   "prompts": [
+    "handwritten notes",
+    "handwriting on paper"
+   ],
+   "kinds": [
+    "photo",
+    "document"
+   ]
+  },
+  "receipt": {
+   "prompts": [
+    "a photo of a store receipt",
+    "a printed receipt"
+   ],
+   "kinds": [
+    "document",
+    "photo",
+    "screenshot"
+   ],
+   "threshold": 0.8
+  },
+  "invoice": {
+   "prompts": [
+    "an invoice",
+    "a bill"
+   ],
+   "kinds": [
+    "document",
+    "screenshot"
+   ],
+   "threshold": 0.85
+  },
+  "ticket": {
+   "prompts": [
+    "an event ticket",
+    "a ticket"
+   ],
+   "kinds": [
+    "document",
+    "screenshot",
+    "photo"
+   ]
+  },
+  "boarding-pass": {
+   "prompts": [
+    "an airline boarding pass"
+   ],
+   "kinds": [
+    "document",
+    "screenshot",
+    "photo"
+   ]
+  },
+  "id-card": {
+   "prompts": [
+    "an ID card",
+    "a driver's license"
+   ],
+   "kinds": [
+    "document",
+    "photo"
+   ]
+  },
+  "form": {
+   "prompts": [
+    "a paper form",
+    "a filled-in form"
+   ],
+   "kinds": [
+    "document",
+    "screenshot"
+   ],
+   "threshold": 0.9
+  },
+  "menu": {
+   "prompts": [
+    "a restaurant menu"
+   ],
+   "kinds": [
+    "document",
+    "photo"
+   ]
+  },
+  "letter": {
+   "prompts": [
+    "a printed letter",
+    "a document page"
+   ],
+   "kinds": [
+    "document"
+   ],
+   "threshold": 0.9
+  },
+  "slide": {
+   "prompts": [
+    "a presentation slide"
+   ],
+   "kinds": [
+    "document",
+    "screenshot"
+   ]
+  },
+  "poster": {
+   "prompts": [
+    "a poster",
+    "a flyer"
+   ],
+   "kinds": [
+    "document",
+    "photo",
+    "artwork"
+   ],
+   "threshold": 0.8
+  },
+  "sign": {
+   "prompts": [
+    "a photo of a sign with text",
+    "a photo of a street sign"
+   ],
+   "kinds": [
+    "photo"
+   ],
+   "threshold": 0.8
+  },
+  "book-page": {
+   "prompts": [
+    "a page of a book"
+   ],
+   "kinds": [
+    "document",
+    "photo"
+   ],
+   "threshold": 0.8
+  },
+  "qr-code": {
+   "prompts": [
+    "a QR code"
+   ]
+  },
+  "schematic": {
+   "prompts": [
+    "an electronics schematic",
+    "a circuit diagram"
+   ],
+   "kinds": [
+    "screenshot",
+    "document",
+    "artwork"
+   ],
+   "threshold": 0.8
+  },
+  "cad": {
+   "prompts": [
+    "a screenshot of CAD software with a 3D model"
+   ],
+   "kinds": [
+    "screenshot"
+   ]
+  },
+  "meme": {
+   "prompts": [
+    "a meme",
+    "an internet meme with caption text",
+    "a funny image macro meme"
+   ],
+   "kinds": [
+    "photo",
+    "artwork",
+    "screenshot",
+    "other"
+   ]
+  },
+  "comic": {
+   "prompts": [
+    "a comic strip"
+   ],
+   "kinds": [
+    "artwork",
+    "screenshot"
+   ]
+  },
+  "cartoon": {
+   "prompts": [
+    "a cartoon"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "anime": {
+   "prompts": [
+    "an anime character",
+    "anime art"
+   ],
+   "kinds": [
+    "artwork",
+    "screenshot"
+   ]
+  },
+  "sticker": {
+   "prompts": [
+    "a sticker",
+    "a cute sticker with a transparent background"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "emoji": {
+   "prompts": [
+    "an emoji"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "logo": {
+   "prompts": [
+    "a logo",
+    "a brand logo"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "illustration": {
+   "prompts": [
+    "a digital illustration"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "ai-art": {
+   "prompts": [
+    "AI generated art",
+    "a fantasy digital artwork"
+   ],
+   "kinds": [
+    "artwork"
+   ],
+   "threshold": 0.8
+  },
+  "painting": {
+   "prompts": [
+    "a painting"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "drawing": {
+   "prompts": [
+    "a pencil drawing",
+    "a sketch"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "pixel-art": {
+   "prompts": [
+    "pixel art"
+   ],
+   "kinds": [
+    "artwork"
+   ]
+  },
+  "3d-render": {
+   "prompts": [
+    "a 3D render"
+   ],
+   "kinds": [
+    "artwork"
+   ],
+   "threshold": 0.8
+  }
+ },
+ "references": {
+  "a photo of ": "a photo of something",
+  "a screenshot of ": "a screenshot of something",
+  "": "an image"
+ },
+ "medians": {
+  "selfie": 0.04149,
+  "group-photo": 0.02287,
+  "portrait": 0.05872,
+  "baby": 0.00654,
+  "child": 0.00933,
+  "couple": 0.00722,
+  "wedding": -0.00992,
+  "party": 0.01144,
+  "birthday": 0.00202,
+  "graduation": -0.01793,
+  "crowd": -0.0153,
+  "concert": -0.01793,
+  "festival": -0.0353,
+  "sports": -0.00239,
+  "gym": -0.00739,
+  "hiking": -0.02119,
+  "camping": -0.01182,
+  "swimming": -0.01732,
+  "skiing": -0.03536,
+  "running": -0.00018,
+  "cycling": -0.00107,
+  "dancing": -0.00377,
+  "costume": 0.03177,
+  "pet": -0.01941,
+  "dog": 0.0085,
+  "cat": 0.01128,
+  "bird": 0.00108,
+  "horse": -0.0062,
+  "fish": 0.00736,
+  "wildlife": -0.04722,
+  "insect": 0.00049,
+  "food": -0.00356,
+  "restaurant": -0.00497,
+  "dessert": -0.006,
+  "cake": 0.00641,
+  "pizza": -0.01125,
+  "burger": -0.01399,
+  "sushi": 0.00443,
+  "coffee": -0.00285,
+  "cocktail": -0.01721,
+  "beer": -0.01279,
+  "wine": -0.00406,
+  "breakfast": -0.01902,
+  "groceries": -0.02246,
+  "cooking": -0.01948,
+  "bbq": -0.0163,
+  "beach": -0.01128,
+  "ocean": -0.01677,
+  "lake": -0.01693,
+  "river": -0.0186,
+  "mountain": -0.00444,
+  "forest": -0.0209,
+  "desert": -0.01213,
+  "snow": -0.00087,
+  "waterfall": -0.01079,
+  "park": -0.03103,
+  "garden": -0.0151,
+  "flowers": 0.00367,
+  "plant": -0.00036,
+  "sky": 0.00427,
+  "sunset": -0.01213,
+  "clouds": -0.03042,
+  "rain": 0.00722,
+  "storm": 0.01131,
+  "landscape": -0.01806,
+  "city": -0.00386,
+  "skyline": -0.01633,
+  "street": -0.01115,
+  "building": -0.00196,
+  "architecture": 0.00601,
+  "house": -0.00315,
+  "bedroom": -0.00999,
+  "kitchen": -0.00618,
+  "living-room": -0.00679,
+  "bathroom": 0.00697,
+  "office": -0.00042,
+  "desk-setup": -0.04598,
+  "classroom": -0.00577,
+  "church": -0.01764,
+  "museum": 0.00877,
+  "stadium": -0.01783,
+  "airport": -0.03167,
+  "hotel": -0.01059,
+  "store": -0.006,
+  "pool": 0.00161,
+  "bridge": -0.00985,
+  "road": -0.01419,
+  "landmark": 0.02188,
+  "night": 0.00319,
+  "outdoors": -0.00172,
+  "indoors": 0.00796,
+  "fireworks": -0.00542,
+  "christmas": -0.00954,
+  "halloween": -0.01267,
+  "car": 0.00417,
+  "truck": -0.02392,
+  "motorcycle": -0.00679,
+  "bicycle": -0.00895,
+  "bus": -0.00703,
+  "airplane": -0.00507,
+  "train": -0.00534,
+  "boat": -0.00643,
+  "car-interior": 0.00333,
+  "phone": 0.00136,
+  "computer": 0.00752,
+  "electronics": -0.00476,
+  "circuit-board": -0.01781,
+  "3d-printing": -0.00972,
+  "tools": -0.01823,
+  "book": 0.00765,
+  "clothing": 0.01964,
+  "shoes": 0.0197,
+  "jewelry": 0.00376,
+  "toy": 0.01711,
+  "furniture": -0.00025,
+  "guitar": -0.01487,
+  "musical-instrument": 0.00434,
+  "camera": 0.00408,
+  "money": -0.00399,
+  "cards": 0.00429,
+  "medical": -0.01239,
+  "x-ray": -0.00257,
+  "tattoo": 0.01493,
+  "art-piece": -0.0024,
+  "product": 0.0473,
+  "package": -0.00476,
+  "car-damage": -0.01749,
+  "photo-of-screen": 0.00657,
+  "code": -0.00147,
+  "terminal": -0.00622,
+  "chat-screenshot": 0.01538,
+  "social-media": 0.04662,
+  "email-screenshot": 0.01419,
+  "website": 0.02781,
+  "app-ui": 0.02565,
+  "settings": 0.007,
+  "error-message": 0.01042,
+  "video-game": 0.05613,
+  "video-call": 0.03354,
+  "notification": 0.01454,
+  "shopping": 0.00991,
+  "calendar": -0.00281,
+  "map": 0.0077,
+  "spreadsheet": 0.01693,
+  "chart": -0.0015,
+  "diagram": 0.01109,
+  "whiteboard": -0.00755,
+  "handwriting": -0.00248,
+  "receipt": -0.00973,
+  "invoice": 0.00829,
+  "ticket": 0.00798,
+  "boarding-pass": -0.05337,
+  "id-card": 0.00632,
+  "form": 0.02358,
+  "menu": -0.02513,
+  "letter": 0.01714,
+  "slide": 0.02342,
+  "poster": 0.02947,
+  "sign": 0.02929,
+  "book-page": 0.02796,
+  "qr-code": 0.00377,
+  "schematic": -0.00679,
+  "cad": -0.02152,
+  "meme": 0.04235,
+  "comic": 0.02518,
+  "cartoon": 0.02711,
+  "anime": 0.03811,
+  "sticker": 0.00297,
+  "emoji": 0.0162,
+  "logo": 0.00579,
+  "illustration": 0.01236,
+  "ai-art": 0.05056,
+  "painting": 0.00457,
+  "drawing": -0.001,
+  "pixel-art": 0.0041,
+  "3d-render": 0.01605
+ },
+ "relative": {
+  "min_delta": 0.085,
+  "top_k": 2,
+  "note": "medians = per-tag median raw cosine over the library; recompute with calibrate when the library changes a lot"
+ }
+}

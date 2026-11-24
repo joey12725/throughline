@@ -1,0 +1,2433 @@
+{
+  "schema": 1,
+  "generated_from": "plugins/throughline-plugins.toml",
+  "roles": [
+    "chat",
+    "email",
+    "calendar",
+    "telemetry",
+    "transcript",
+    "voice_summary",
+    "location",
+    "media",
+    "notes",
+    "other"
+  ],
+  "plugins": [
+    {
+      "id": "activitywatch",
+      "path": "activitywatch",
+      "name": "ActivityWatch",
+      "summary": "Which apps, windows, pages and files you used, and when you were at the computer.",
+      "category": "activity",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "activitywatch.windows",
+          "role": "telemetry"
+        },
+        {
+          "name": "activitywatch.web",
+          "role": "telemetry"
+        },
+        {
+          "name": "activitywatch.editor",
+          "role": "telemetry"
+        },
+        {
+          "name": "activitywatch.afk",
+          "role": "telemetry"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "ACTIVITYWATCH_EXCLUDE_APPS",
+          "label": "Apps never stored",
+          "required": false
+        },
+        {
+          "key": "ACTIVITYWATCH_URL",
+          "label": "ActivityWatch API",
+          "required": false
+        }
+      ],
+      "entry": "throughline-activitywatch",
+      "homepage": "https://activitywatch.net",
+      "package": "throughline-activitywatch",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/activitywatch"
+    },
+    {
+      "id": "aider",
+      "path": "aider",
+      "name": "aider",
+      "summary": "Your aider sessions from the chat history files in your repositories.",
+      "category": "ai",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "aider.messages",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "AIDER_ROOTS",
+          "label": "Folders to search",
+          "required": true
+        }
+      ],
+      "entry": "throughline-aider",
+      "homepage": "https://aider.chat",
+      "package": "throughline-aider",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/aider"
+    },
+    {
+      "id": "android_sms",
+      "path": "android-sms",
+      "name": "Android SMS",
+      "summary": "SMS, MMS and call log from an Android phone's scheduled backups.",
+      "category": "messages",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "android_sms.messages",
+          "role": "chat"
+        },
+        {
+          "name": "android_sms.calls",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "upload"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "ANDROID_SMS_DIR",
+          "label": "Backup folder",
+          "required": true
+        },
+        {
+          "key": "ANDROID_SMS_OWNER_NUMBER",
+          "label": "Your phone number",
+          "required": false
+        },
+        {
+          "key": "ANDROID_SMS_COUNTRY_CODE",
+          "label": "Country calling code",
+          "required": false
+        }
+      ],
+      "entry": "throughline-android-sms",
+      "package": "throughline-android-sms",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/android-sms"
+    },
+    {
+      "id": "apple_health",
+      "path": "apple-health",
+      "name": "Apple Health",
+      "summary": "Live Apple Health metrics, sleep, heart rate, weight and workouts from your iPhone.",
+      "category": "health",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "apple_health.metrics",
+          "role": "telemetry"
+        },
+        {
+          "name": "apple_health.heart_rate",
+          "role": "telemetry"
+        },
+        {
+          "name": "apple_health.sleep",
+          "role": "telemetry"
+        },
+        {
+          "name": "apple_health.weight",
+          "role": "telemetry"
+        },
+        {
+          "name": "apple_health.workouts",
+          "role": "telemetry"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "network"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "APPLE_HEALTH_SPOOL_DIR",
+          "label": "Receiver spool folder",
+          "required": true
+        }
+      ],
+      "entry": "throughline-apple-health",
+      "homepage": "https://www.healthyapps.dev",
+      "package": "throughline-apple-health",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/apple-health"
+    },
+    {
+      "id": "apple_notes",
+      "path": "apple-notes",
+      "name": "Apple Notes",
+      "summary": "Your Apple Notes, including notes synced from iPhone, as versioned pages.",
+      "category": "notes",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "apple_notes.notes",
+          "role": "notes"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "APPLE_NOTES_INCLUDE_TRASH",
+          "label": "Keep notes in Recently Deleted",
+          "required": false
+        }
+      ],
+      "entry": "throughline-apple-notes",
+      "package": "throughline-apple-notes",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/apple-notes"
+    },
+    {
+      "id": "audio_transcripts",
+      "path": "audio-transcripts",
+      "name": "Audio transcripts",
+      "summary": "Transcribes voice memos and recordings dropped into folders you choose.",
+      "category": "meetings",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "audio_transcripts.recordings",
+          "role": "voice_summary"
+        },
+        {
+          "name": "audio_transcripts.segments",
+          "role": "transcript"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [
+        {
+          "key": "AUDIO_TRANSCRIPTS_API_KEY",
+          "label": "Endpoint API key",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "AUDIO_TRANSCRIPTS_DIRS",
+          "label": "Folders to watch",
+          "required": true
+        },
+        {
+          "key": "AUDIO_TRANSCRIPTS_URL",
+          "label": "Transcription endpoint",
+          "required": true
+        },
+        {
+          "key": "AUDIO_TRANSCRIPTS_MODEL",
+          "label": "Model",
+          "required": false
+        }
+      ],
+      "entry": "throughline-audio-transcripts",
+      "package": "throughline-audio-transcripts",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/audio-transcripts"
+    },
+    {
+      "id": "beeper",
+      "path": "beeper",
+      "name": "Beeper",
+      "summary": "Chats from the networks you connect in Beeper (Discord, Instagram, SMS and more).",
+      "category": "messages",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "chat.*",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [
+        {
+          "key": "BEEPER_ACCESS_TOKEN",
+          "label": "Desktop API token",
+          "required": true,
+          "when": {
+            "BEEPER_SOURCE": [
+              "live"
+            ]
+          }
+        },
+        {
+          "key": "BEEPER_ARCHIVE_DSN",
+          "label": "Archive database (Postgres DSN)",
+          "required": true,
+          "when": {
+            "BEEPER_SOURCE": [
+              "archive"
+            ]
+          }
+        }
+      ],
+      "settings": [
+        {
+          "key": "BEEPER_SOURCE",
+          "label": "Source",
+          "required": true
+        },
+        {
+          "key": "BEEPER_BASE_URL",
+          "label": "Desktop API address",
+          "required": false,
+          "when": {
+            "BEEPER_SOURCE": [
+              "live"
+            ]
+          }
+        }
+      ],
+      "entry": "throughline-beeper",
+      "homepage": "https://www.beeper.com",
+      "package": "throughline-beeper",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/beeper"
+    },
+    {
+      "id": "bluesky",
+      "path": "bluesky",
+      "name": "Bluesky",
+      "summary": "Your Bluesky posts, replies, reposts and likes.",
+      "category": "social",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "bluesky.posts",
+          "role": "other"
+        },
+        {
+          "name": "bluesky.reposts",
+          "role": "other"
+        },
+        {
+          "name": "bluesky.likes",
+          "role": "other"
+        },
+        {
+          "name": "bluesky.notifications",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "BLUESKY_APP_PASSWORD",
+          "label": "App password",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "BLUESKY_IDENTIFIER",
+          "label": "Handle or DID",
+          "required": true
+        },
+        {
+          "key": "BLUESKY_SERVICE",
+          "label": "Sign-in server",
+          "required": false
+        }
+      ],
+      "entry": "throughline-bluesky",
+      "homepage": "https://bsky.app",
+      "package": "throughline-bluesky",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/bluesky"
+    },
+    {
+      "id": "browser_history",
+      "path": "browser-history",
+      "name": "Browser history",
+      "summary": "Pages you visit and your bookmarks, from Chrome, Firefox, Safari, Brave, Edge and more.",
+      "category": "activity",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "browser_history.visits",
+          "role": "telemetry"
+        },
+        {
+          "name": "browser_history.bookmarks",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "BROWSER_HISTORY_EXCLUDE_DOMAINS",
+          "label": "Domains never recorded",
+          "required": false
+        },
+        {
+          "key": "BROWSER_HISTORY_BROWSERS",
+          "label": "Browsers",
+          "required": false
+        }
+      ],
+      "entry": "throughline-browser-history",
+      "package": "throughline-browser-history",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/browser-history"
+    },
+    {
+      "id": "caldav",
+      "path": "caldav",
+      "name": "CalDAV & ICS calendars",
+      "summary": "Calendars from iCloud, Fastmail, Nextcloud or any CalDAV server, plus ICS feeds.",
+      "category": "calendar",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "caldav.events",
+          "role": "calendar"
+        },
+        {
+          "name": "caldav.changes",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "CALDAV_PASSWORD",
+          "label": "Password or app password",
+          "required": false
+        },
+        {
+          "key": "CALDAV_ICS_URLS",
+          "label": "ICS subscription links",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "CALDAV_URL",
+          "label": "CalDAV server",
+          "required": false
+        },
+        {
+          "key": "CALDAV_USERNAME",
+          "label": "Login",
+          "required": false
+        }
+      ],
+      "entry": "throughline-caldav",
+      "package": "throughline-caldav",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/caldav"
+    },
+    {
+      "id": "calendar",
+      "path": "calendar",
+      "name": "Google Calendar (Composio)",
+      "summary": "Google Calendar events from accounts connected in Composio.",
+      "category": "calendar",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "calendar.events",
+          "role": "calendar"
+        },
+        {
+          "name": "calendar.changes",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "COMPOSIO_API_KEY",
+          "label": "Composio API key",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "CALENDAR_ACCOUNTS",
+          "label": "Connected account ids",
+          "required": false
+        },
+        {
+          "key": "CALENDAR_BACKFILL_FROM",
+          "label": "Backfill from",
+          "required": false
+        }
+      ],
+      "entry": "throughline-calendar",
+      "homepage": "https://composio.dev",
+      "package": "throughline-calendar",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/calendar"
+    },
+    {
+      "id": "capture",
+      "path": "capture",
+      "name": "Screen and audio capture",
+      "summary": "Uploads what the desktop Companion's optional screen and audio capture records.",
+      "category": "activity",
+      "kind": "plugin",
+      "onboarding": false,
+      "channels": [
+        {
+          "name": "capture.screens",
+          "role": "media"
+        },
+        {
+          "name": "capture.transcripts",
+          "role": "transcript"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [
+        {
+          "key": "IMMICH_API_KEY",
+          "label": "Immich API key",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "CAPTURE_SPOOL_DIR",
+          "label": "Capture spool folder (set by the Companion)",
+          "required": true
+        },
+        {
+          "key": "IMMICH_URL",
+          "label": "Immich server",
+          "required": false
+        }
+      ],
+      "entry": "throughline-capture",
+      "note": "Configured and run by the Companion; see docs/capture.md.",
+      "package": "throughline-capture",
+      "license": "Apache-2.0",
+      "install": "uv pip install ./plugins/capture"
+    },
+    {
+      "id": "claude_code",
+      "path": "claude-code",
+      "name": "Claude Code",
+      "summary": "Your Claude Code sessions: prompts, replies and tool-call summaries.",
+      "category": "ai",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "claude_code.messages",
+          "role": "chat"
+        },
+        {
+          "name": "claude_code.sessions",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "CLAUDE_CODE_HOMES",
+          "label": "Claude Code homes",
+          "required": false
+        }
+      ],
+      "entry": "throughline-claude-code",
+      "homepage": "https://docs.anthropic.com/en/docs/claude-code",
+      "package": "throughline-claude-code",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/claude-code"
+    },
+    {
+      "id": "codex",
+      "path": "codex",
+      "name": "Codex",
+      "summary": "Your OpenAI Codex sessions: prompts, replies and reasoning summaries.",
+      "category": "ai",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "codex.messages",
+          "role": "chat"
+        },
+        {
+          "name": "codex.sessions",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "CODEX_HOMES",
+          "label": "Codex homes",
+          "required": false
+        }
+      ],
+      "entry": "throughline-codex",
+      "homepage": "https://github.com/openai/codex",
+      "package": "throughline-codex",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/codex"
+    },
+    {
+      "id": "consumption",
+      "path": "consumption",
+      "name": "Media consumption (Audiobookshelf and more)",
+      "summary": "Listening sessions from Audiobookshelf, plus Plex, Spotify and YouTube in one channel.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "media.consumption",
+          "role": "media"
+        },
+        {
+          "name": "audiobooks.text",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "AUDIOBOOKSHELF_TOKEN",
+          "label": "Audiobookshelf API token",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "AUDIOBOOKSHELF_URL",
+          "label": "Audiobookshelf URL",
+          "required": false
+        },
+        {
+          "key": "CONSUMPTION_SERVICES",
+          "label": "Services",
+          "required": false
+        }
+      ],
+      "entry": "throughline-consumption",
+      "package": "throughline-consumption",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/consumption"
+    },
+    {
+      "id": "cursor",
+      "path": "cursor",
+      "name": "Cursor",
+      "summary": "Your Cursor chat and agent conversations.",
+      "category": "ai",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "cursor.messages",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "CURSOR_USER_DIR",
+          "label": "Cursor User folder",
+          "required": false
+        }
+      ],
+      "entry": "throughline-cursor",
+      "homepage": "https://cursor.com",
+      "package": "throughline-cursor",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/cursor"
+    },
+    {
+      "id": "email",
+      "path": "email",
+      "name": "Gmail (Composio)",
+      "summary": "Gmail messages from one or more accounts connected in Composio.",
+      "category": "email",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "email.message",
+          "role": "email"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "COMPOSIO_API_KEY",
+          "label": "Composio API key",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "EMAIL_ACCOUNTS",
+          "label": "Connected account ids",
+          "required": false
+        },
+        {
+          "key": "EMAIL_MAX_MESSAGES",
+          "label": "Backfill cap per account",
+          "required": false
+        }
+      ],
+      "entry": "throughline-email",
+      "homepage": "https://composio.dev",
+      "package": "throughline-email",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/email"
+    },
+    {
+      "id": "gbrain",
+      "path": "gbrain",
+      "name": "GBrain",
+      "summary": "Import a GBrain knowledge base: pages, history and timelines.",
+      "category": "migration",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "gbrain.pages",
+          "role": "notes"
+        },
+        {
+          "name": "gbrain.timeline",
+          "role": "notes"
+        },
+        {
+          "name": "gbrain.legacy",
+          "role": "notes"
+        },
+        {
+          "name": "gbrain.legacy_timeline",
+          "role": "notes"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "GBRAIN_DSN",
+          "label": "GBrain database (Postgres DSN)",
+          "required": true
+        }
+      ],
+      "settings": [],
+      "entry": "throughline-gbrain",
+      "package": "throughline-gbrain",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/gbrain"
+    },
+    {
+      "id": "github",
+      "path": "github",
+      "name": "GitHub",
+      "summary": "Your GitHub activity: commits, pull requests, issues, reviews, releases and stars.",
+      "category": "dev",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "github.commits",
+          "role": "other"
+        },
+        {
+          "name": "github.pull_requests",
+          "role": "other"
+        },
+        {
+          "name": "github.issues",
+          "role": "other"
+        },
+        {
+          "name": "github.comments",
+          "role": "other"
+        },
+        {
+          "name": "github.reviews",
+          "role": "other"
+        },
+        {
+          "name": "github.releases",
+          "role": "other"
+        },
+        {
+          "name": "github.stars",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "GITHUB_TOKEN",
+          "label": "Personal access token",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "GITHUB_API_URL",
+          "label": "API URL",
+          "required": false
+        }
+      ],
+      "entry": "throughline-github",
+      "homepage": "https://github.com",
+      "package": "throughline-github",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/github"
+    },
+    {
+      "id": "goodreads",
+      "path": "goodreads",
+      "name": "Goodreads",
+      "summary": "Your Goodreads shelves, read dates, ratings and reviews.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "goodreads.books",
+          "role": "media"
+        },
+        {
+          "name": "goodreads.reading",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "GOODREADS_FEED_KEY",
+          "label": "RSS key (private profiles)",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "GOODREADS_USER_ID",
+          "label": "Goodreads user ID",
+          "required": true
+        }
+      ],
+      "entry": "throughline-goodreads",
+      "homepage": "https://www.goodreads.com",
+      "package": "throughline-goodreads",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/goodreads"
+    },
+    {
+      "id": "google_timeline",
+      "path": "google-timeline",
+      "name": "Google Timeline",
+      "summary": "Your Google Maps Timeline location history, from the on-device export.",
+      "category": "location",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [],
+      "track_sources": [
+        {
+          "name": "google_timeline",
+          "role": "location"
+        }
+      ],
+      "requires": [
+        "upload"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "GOOGLE_TIMELINE_EXPORT",
+          "label": "Timeline.json",
+          "required": true
+        }
+      ],
+      "entry": "throughline-google-timeline",
+      "package": "throughline-google-timeline",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/google-timeline"
+    },
+    {
+      "id": "gps_push",
+      "path": "gps-push",
+      "name": "Phone GPS (OwnTracks, Overland, GPSLogger)",
+      "summary": "Live location from a GPS tracker app on your phone.",
+      "category": "location",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "gps_push.transitions",
+          "role": "location"
+        },
+        {
+          "name": "gps_push.regions",
+          "role": "location"
+        }
+      ],
+      "track_sources": [
+        {
+          "name": "gps_push",
+          "role": "location"
+        }
+      ],
+      "requires": [
+        "network"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "GPS_PUSH_SPOOL_DIR",
+          "label": "Receiver spool folder",
+          "required": false
+        },
+        {
+          "key": "GPS_PUSH_RECORDER_URL",
+          "label": "OwnTracks Recorder URL",
+          "required": false
+        }
+      ],
+      "entry": "throughline-gps-push",
+      "homepage": "https://owntracks.org",
+      "package": "throughline-gps-push",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/gps-push"
+    },
+    {
+      "id": "granola",
+      "path": "granola",
+      "name": "Granola",
+      "summary": "Granola meetings: transcripts, attendees, your notes and Granola's AI notes.",
+      "category": "meetings",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "granola.transcript",
+          "role": "transcript"
+        },
+        {
+          "name": "granola.meetings",
+          "role": "other"
+        },
+        {
+          "name": "granola.my_notes",
+          "role": "notes"
+        },
+        {
+          "name": "granola.summaries",
+          "role": "voice_summary"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "GRANOLA_API_KEY",
+          "label": "API key",
+          "required": true,
+          "when": {
+            "GRANOLA_SOURCE": [
+              "api",
+              "auto"
+            ]
+          }
+        }
+      ],
+      "settings": [
+        {
+          "key": "GRANOLA_SOURCE",
+          "label": "Source",
+          "required": false
+        },
+        {
+          "key": "GRANOLA_CACHE_PATH",
+          "label": "Cache file or folder",
+          "required": false,
+          "when": {
+            "GRANOLA_SOURCE": [
+              "cache"
+            ]
+          }
+        },
+        {
+          "key": "GRANOLA_OWNER_EMAIL",
+          "label": "Your email",
+          "required": false
+        }
+      ],
+      "entry": "throughline-granola",
+      "homepage": "https://www.granola.ai",
+      "package": "throughline-granola",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/granola"
+    },
+    {
+      "id": "health",
+      "path": "health",
+      "name": "Oura & Weight Gurus",
+      "summary": "Sleep, readiness, activity and heart rate from Oura, and weigh-ins from Weight Gurus.",
+      "category": "health",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "health.oura.daily",
+          "role": "telemetry"
+        },
+        {
+          "name": "health.oura.sleep",
+          "role": "telemetry"
+        },
+        {
+          "name": "health.oura.session",
+          "role": "telemetry"
+        },
+        {
+          "name": "health.oura.workout",
+          "role": "telemetry"
+        },
+        {
+          "name": "health.oura.heartrate",
+          "role": "telemetry"
+        },
+        {
+          "name": "health.weight",
+          "role": "telemetry"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "OURA_ACCESS_TOKEN",
+          "label": "Oura access token",
+          "required": false
+        },
+        {
+          "key": "WEIGHTGURUS_EMAIL",
+          "label": "Weight Gurus email",
+          "required": false
+        },
+        {
+          "key": "WEIGHTGURUS_PASSWORD",
+          "label": "Weight Gurus password",
+          "required": false
+        }
+      ],
+      "settings": [],
+      "entry": "throughline-health",
+      "homepage": "https://ouraring.com",
+      "package": "throughline-health",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/health"
+    },
+    {
+      "id": "hermes",
+      "path": "hermes",
+      "name": "Hermes Agent",
+      "summary": "Import every conversation with a Hermes Agent assistant, from every surface it serves.",
+      "category": "migration",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "hermes.messages",
+          "role": "chat"
+        },
+        {
+          "name": "hermes.automation",
+          "role": "other"
+        },
+        {
+          "name": "hermes.sessions",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "HERMES_HOME",
+          "label": "Hermes home folder",
+          "required": true
+        },
+        {
+          "key": "HERMES_CLI",
+          "label": "Hermes command",
+          "required": false
+        }
+      ],
+      "entry": "throughline-hermes",
+      "homepage": "https://github.com/NousResearch/hermes-agent",
+      "package": "throughline-hermes",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/hermes"
+    },
+    {
+      "id": "homeassistant",
+      "path": "homeassistant",
+      "name": "Home Assistant location",
+      "summary": "Your phone's GPS track as recorded by Home Assistant.",
+      "category": "location",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [],
+      "track_sources": [
+        {
+          "name": "homeassistant",
+          "role": "location"
+        }
+      ],
+      "requires": [],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "HOMEASSISTANT_RECORDING",
+          "label": "Export file",
+          "required": true
+        }
+      ],
+      "entry": "throughline-homeassistant",
+      "homepage": "https://www.home-assistant.io",
+      "package": "throughline-homeassistant",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/homeassistant"
+    },
+    {
+      "id": "imap",
+      "path": "imap",
+      "name": "Email (IMAP)",
+      "summary": "Mail from any IMAP mailbox: Fastmail, iCloud, Proton Bridge, Gmail and more.",
+      "category": "email",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "imap.message",
+          "role": "email"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "IMAP_PASSWORD",
+          "label": "Password or app password",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "IMAP_HOST",
+          "label": "IMAP server",
+          "required": true
+        },
+        {
+          "key": "IMAP_USERNAME",
+          "label": "Login",
+          "required": true
+        },
+        {
+          "key": "IMAP_SINCE",
+          "label": "Skip mail before",
+          "required": false
+        }
+      ],
+      "entry": "throughline-imap",
+      "package": "throughline-imap",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/imap"
+    },
+    {
+      "id": "imessage",
+      "path": "imessage",
+      "name": "iMessage",
+      "summary": "iMessage, SMS and RCS conversations from the Messages app on your Mac.",
+      "category": "messages",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "imessage.messages",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "IMESSAGE_OWNER_HANDLE",
+          "label": "Your phone number or Apple ID email",
+          "required": false
+        },
+        {
+          "key": "IMESSAGE_DB",
+          "label": "Messages database",
+          "required": false
+        }
+      ],
+      "entry": "throughline-imessage",
+      "package": "throughline-imessage",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/imessage"
+    },
+    {
+      "id": "instagram_feed",
+      "path": "instagram-feed",
+      "name": "Instagram feed",
+      "summary": "New posts and stories from public Instagram accounts you follow.",
+      "category": "social",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "instagram.feed",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "INSTAGRAM_FEED_ACCOUNTS",
+          "label": "Accounts to follow",
+          "required": true
+        }
+      ],
+      "entry": "throughline-instagram-feed",
+      "package": "throughline-instagram-feed",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/instagram-feed"
+    },
+    {
+      "id": "jellyfin",
+      "path": "jellyfin",
+      "name": "Jellyfin",
+      "summary": "What you play on your Jellyfin server, and what gets added to it.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "jellyfin.plays",
+          "role": "media"
+        },
+        {
+          "name": "jellyfin.library",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "JELLYFIN_API_KEY",
+          "label": "API key",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "JELLYFIN_URL",
+          "label": "Server URL",
+          "required": true
+        },
+        {
+          "key": "JELLYFIN_USER",
+          "label": "Jellyfin user name",
+          "required": true
+        }
+      ],
+      "entry": "throughline-jellyfin",
+      "homepage": "https://jellyfin.org",
+      "package": "throughline-jellyfin",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/jellyfin"
+    },
+    {
+      "id": "lastfm",
+      "path": "lastfm",
+      "name": "Last.fm",
+      "summary": "Your complete Last.fm scrobble history and loved tracks.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "lastfm.scrobbles",
+          "role": "media"
+        },
+        {
+          "name": "lastfm.loved",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "LASTFM_API_KEY",
+          "label": "API key",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "LASTFM_USER",
+          "label": "Last.fm user name",
+          "required": true
+        }
+      ],
+      "entry": "throughline-lastfm",
+      "homepage": "https://www.last.fm",
+      "package": "throughline-lastfm",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/lastfm"
+    },
+    {
+      "id": "letterboxd",
+      "path": "letterboxd",
+      "name": "Letterboxd",
+      "summary": "Your film diary, ratings, likes and reviews from Letterboxd.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "letterboxd.diary",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "LETTERBOXD_USER",
+          "label": "Letterboxd user name",
+          "required": true
+        }
+      ],
+      "entry": "throughline-letterboxd",
+      "homepage": "https://letterboxd.com",
+      "package": "throughline-letterboxd",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/letterboxd"
+    },
+    {
+      "id": "listenbrainz",
+      "path": "listenbrainz",
+      "name": "ListenBrainz",
+      "summary": "Your full ListenBrainz listen history and loved or hated recordings.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "listenbrainz.listens",
+          "role": "media"
+        },
+        {
+          "name": "listenbrainz.feedback",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "LISTENBRAINZ_TOKEN",
+          "label": "User token",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "LISTENBRAINZ_USER",
+          "label": "ListenBrainz user name",
+          "required": true
+        },
+        {
+          "key": "LISTENBRAINZ_API_URL",
+          "label": "API root",
+          "required": false
+        }
+      ],
+      "entry": "throughline-listenbrainz",
+      "homepage": "https://listenbrainz.org",
+      "package": "throughline-listenbrainz",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/listenbrainz"
+    },
+    {
+      "id": "lmstudio",
+      "path": "lmstudio",
+      "name": "LM Studio",
+      "summary": "Your chats with local models in LM Studio.",
+      "category": "ai",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "lmstudio.messages",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "LMSTUDIO_CONVERSATIONS_DIRS",
+          "label": "Conversation folders",
+          "required": false
+        }
+      ],
+      "entry": "throughline-lmstudio",
+      "homepage": "https://lmstudio.ai",
+      "package": "throughline-lmstudio",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/lmstudio"
+    },
+    {
+      "id": "markdown_notes",
+      "path": "markdown-notes",
+      "name": "Markdown notes",
+      "summary": "Obsidian vaults, Logseq graphs or any folder of Markdown notes, versioned.",
+      "category": "notes",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "markdown_notes.notes",
+          "role": "notes"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "MARKDOWN_NOTES_ROOTS",
+          "label": "Note folders",
+          "required": true
+        },
+        {
+          "key": "MARKDOWN_NOTES_IGNORE",
+          "label": "Ignore patterns",
+          "required": false
+        }
+      ],
+      "entry": "throughline-markdown-notes",
+      "package": "throughline-markdown-notes",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/markdown-notes"
+    },
+    {
+      "id": "mastodon",
+      "path": "mastodon",
+      "name": "Mastodon",
+      "summary": "Your Mastodon posts, favourites and bookmarks from any instance.",
+      "category": "social",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "mastodon.statuses",
+          "role": "other"
+        },
+        {
+          "name": "mastodon.favourites",
+          "role": "other"
+        },
+        {
+          "name": "mastodon.bookmarks",
+          "role": "other"
+        },
+        {
+          "name": "mastodon.notifications",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "MASTODON_ACCESS_TOKEN",
+          "label": "Access token",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "MASTODON_BASE_URL",
+          "label": "Your instance",
+          "required": true
+        }
+      ],
+      "entry": "throughline-mastodon",
+      "homepage": "https://joinmastodon.org",
+      "package": "throughline-mastodon",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/mastodon"
+    },
+    {
+      "id": "media",
+      "path": "media",
+      "name": "Media enrichment library",
+      "summary": "Shared transcription, ffmpeg, yt-dlp and asset-store helpers used by other plugins.",
+      "category": "other",
+      "kind": "library",
+      "onboarding": false,
+      "channels": [],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [],
+      "settings": [],
+      "entry": null,
+      "note": "Not a plugin: installed as a dependency of beeper and youtube.",
+      "package": "throughline-media",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/media"
+    },
+    {
+      "id": "msgraph",
+      "path": "msgraph",
+      "name": "Microsoft 365 / Outlook",
+      "summary": "Mail and calendar from Microsoft 365 or Outlook.com through Microsoft Graph.",
+      "category": "email",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "msgraph.message",
+          "role": "email"
+        },
+        {
+          "name": "msgraph.events",
+          "role": "calendar"
+        },
+        {
+          "name": "msgraph.changes",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "MSGRAPH_CLIENT_ID",
+          "label": "Application (client) id",
+          "required": true
+        },
+        {
+          "key": "MSGRAPH_TENANT",
+          "label": "Account type",
+          "required": false
+        },
+        {
+          "key": "MSGRAPH_TOKEN_CACHE",
+          "label": "Token cache file",
+          "required": false
+        }
+      ],
+      "entry": "throughline-msgraph",
+      "homepage": "https://learn.microsoft.com/graph/",
+      "package": "throughline-msgraph",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/msgraph"
+    },
+    {
+      "id": "notion",
+      "path": "notion",
+      "name": "Notion (Composio)",
+      "summary": "Your Notion pages and databases, read-only, as versioned pages.",
+      "category": "notes",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "notion.pages",
+          "role": "notes"
+        },
+        {
+          "name": "notion.databases",
+          "role": "notes"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "COMPOSIO_MCP_URL",
+          "label": "Composio MCP URL",
+          "required": true
+        },
+        {
+          "key": "COMPOSIO_MCP_TOKEN",
+          "label": "Composio MCP token",
+          "required": false
+        }
+      ],
+      "settings": [],
+      "entry": "throughline-notion",
+      "homepage": "https://www.notion.so",
+      "package": "throughline-notion",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/notion"
+    },
+    {
+      "id": "openwebui",
+      "path": "openwebui",
+      "name": "Open WebUI",
+      "summary": "Every chat on your Open WebUI server, including regenerated branches.",
+      "category": "ai",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "openwebui.messages",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "OPENWEBUI_API_KEY",
+          "label": "API key",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "OPENWEBUI_URL",
+          "label": "Server URL",
+          "required": true
+        }
+      ],
+      "entry": "throughline-openwebui",
+      "homepage": "https://openwebui.com",
+      "package": "throughline-openwebui",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/openwebui"
+    },
+    {
+      "id": "plex",
+      "path": "plex",
+      "name": "Plex",
+      "summary": "Watch and listen history from your Plex server, polled live.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "media.plex",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "PLEX_TOKEN",
+          "label": "Plex token",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "PLEX_SERVER_URL",
+          "label": "Server URL",
+          "required": true
+        },
+        {
+          "key": "PLEX_ACCOUNTS",
+          "label": "Accounts",
+          "required": false
+        }
+      ],
+      "entry": "throughline-plex",
+      "homepage": "https://www.plex.tv",
+      "package": "throughline-plex",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/plex"
+    },
+    {
+      "id": "qbittorrent",
+      "path": "qbittorrent",
+      "name": "qBittorrent",
+      "summary": "Torrents added, completed and removed in qBittorrent.",
+      "category": "other",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "downloads.qbittorrent",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "QBITTORRENT_USERNAME",
+          "label": "WebUI username",
+          "required": true
+        },
+        {
+          "key": "QBITTORRENT_PASSWORD",
+          "label": "WebUI password",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "QBITTORRENT_URL",
+          "label": "WebUI URL",
+          "required": true
+        }
+      ],
+      "entry": "throughline-qbittorrent",
+      "homepage": "https://www.qbittorrent.org",
+      "package": "throughline-qbittorrent",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/qbittorrent"
+    },
+    {
+      "id": "readwise",
+      "path": "readwise",
+      "name": "Readwise",
+      "summary": "Every highlight and note in Readwise, plus documents saved to Reader.",
+      "category": "notes",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "readwise.highlights",
+          "role": "notes"
+        },
+        {
+          "name": "readwise.books",
+          "role": "media"
+        },
+        {
+          "name": "readwise.reader",
+          "role": "notes"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "READWISE_TOKEN",
+          "label": "Access token",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "READWISE_READER",
+          "label": "Import Reader documents",
+          "required": false
+        }
+      ],
+      "entry": "throughline-readwise",
+      "homepage": "https://readwise.io",
+      "package": "throughline-readwise",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/readwise"
+    },
+    {
+      "id": "reddit",
+      "path": "reddit",
+      "name": "Reddit",
+      "summary": "What you saved, upvoted, posted and commented on Reddit.",
+      "category": "social",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "reddit.saved",
+          "role": "other"
+        },
+        {
+          "name": "reddit.votes",
+          "role": "other"
+        },
+        {
+          "name": "reddit.posts",
+          "role": "other"
+        },
+        {
+          "name": "reddit.comments",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "REDDIT_CLIENT_ID",
+          "label": "App client id",
+          "required": true,
+          "when": {
+            "REDDIT_TRANSPORT": [
+              "oauth"
+            ]
+          }
+        },
+        {
+          "key": "REDDIT_CLIENT_SECRET",
+          "label": "App secret",
+          "required": false,
+          "when": {
+            "REDDIT_TRANSPORT": [
+              "oauth"
+            ]
+          }
+        },
+        {
+          "key": "REDDIT_REFRESH_TOKEN",
+          "label": "Refresh token",
+          "required": false,
+          "when": {
+            "REDDIT_TRANSPORT": [
+              "oauth"
+            ]
+          }
+        },
+        {
+          "key": "REDDIT_PASSWORD",
+          "label": "Reddit password",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "REDDIT_USER_AGENT",
+          "label": "User agent",
+          "required": true
+        },
+        {
+          "key": "REDDIT_TRANSPORT",
+          "label": "Sign-in",
+          "required": true
+        },
+        {
+          "key": "REDDIT_SESSION_PROFILE",
+          "label": "Browser profile folder",
+          "required": true,
+          "when": {
+            "REDDIT_TRANSPORT": [
+              "session"
+            ]
+          }
+        },
+        {
+          "key": "REDDIT_USERNAME",
+          "label": "Reddit username",
+          "required": false
+        }
+      ],
+      "entry": "throughline-reddit",
+      "homepage": "https://www.reddit.com",
+      "package": "throughline-reddit",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/reddit"
+    },
+    {
+      "id": "research",
+      "path": "research",
+      "name": "Research streams",
+      "summary": "Recurring web searches you define, with their findings and cited sources.",
+      "category": "other",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "research.results",
+          "role": "other"
+        },
+        {
+          "name": "research.items",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "RESEARCH_OPENAI_API_KEY",
+          "label": "Endpoint API key",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "RESEARCH_STREAMS",
+          "label": "Stream config",
+          "required": true
+        },
+        {
+          "key": "RESEARCH_OPENAI_BASE_URL",
+          "label": "Model endpoint",
+          "required": false
+        },
+        {
+          "key": "RESEARCH_OPENAI_MODEL",
+          "label": "Model",
+          "required": false
+        }
+      ],
+      "entry": "throughline-research",
+      "package": "throughline-research",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/research"
+    },
+    {
+      "id": "signal",
+      "path": "signal",
+      "name": "Signal",
+      "summary": "Your Signal messages, received through signal-cli as a linked device.",
+      "category": "messages",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "signal.messages",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "SIGNAL_RPC_TOKEN",
+          "label": "Proxy bearer token",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "SIGNAL_RPC_URL",
+          "label": "signal-cli daemon address",
+          "required": true
+        },
+        {
+          "key": "SIGNAL_ACCOUNT",
+          "label": "Your Signal number",
+          "required": false
+        }
+      ],
+      "entry": "throughline-signal",
+      "homepage": "https://signal.org",
+      "package": "throughline-signal",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/signal"
+    },
+    {
+      "id": "simplefin",
+      "path": "simplefin",
+      "name": "SimpleFIN Bridge",
+      "summary": "Bank, card, loan and investment accounts and their transactions.",
+      "category": "finance",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "simplefin.accounts",
+          "role": "other"
+        },
+        {
+          "name": "simplefin.transactions",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "SIMPLEFIN_ACCESS_URL",
+          "label": "Access URL",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "SIMPLEFIN_ACCESS_URL_FILE",
+          "label": "Access URL file",
+          "required": false
+        },
+        {
+          "key": "SIMPLEFIN_START_DATE",
+          "label": "Start date",
+          "required": false
+        }
+      ],
+      "entry": "throughline-simplefin",
+      "homepage": "https://beta-bridge.simplefin.org",
+      "package": "throughline-simplefin",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/simplefin"
+    },
+    {
+      "id": "spotify",
+      "path": "spotify",
+      "name": "Spotify",
+      "summary": "Everything you've played on Spotify, from your streaming history export and live.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "music.spotify",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "upload"
+      ],
+      "credentials": [
+        {
+          "key": "SPOTIFY_CLIENT_ID",
+          "label": "App client ID",
+          "required": false
+        },
+        {
+          "key": "SPOTIFY_CLIENT_SECRET",
+          "label": "App client secret",
+          "required": false
+        }
+      ],
+      "settings": [
+        {
+          "key": "SPOTIFY_EXPORT_PATH",
+          "label": "Extracted export folder",
+          "required": false
+        },
+        {
+          "key": "SPOTIFY_TOKEN_FILE",
+          "label": "Refresh-token file",
+          "required": false
+        }
+      ],
+      "entry": "throughline-spotify",
+      "homepage": "https://www.spotify.com",
+      "package": "throughline-spotify",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/spotify"
+    },
+    {
+      "id": "t3code",
+      "path": "t3code",
+      "name": "T3 Code",
+      "summary": "Your T3 Code projects, threads and messages, plus AI subscription usage.",
+      "category": "ai",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "t3code.messages",
+          "role": "chat"
+        },
+        {
+          "name": "t3code.threads",
+          "role": "other"
+        },
+        {
+          "name": "t3code.projects",
+          "role": "other"
+        },
+        {
+          "name": "t3code.usage",
+          "role": "telemetry"
+        },
+        {
+          "name": "t3code.resets",
+          "role": "telemetry"
+        },
+        {
+          "name": "t3code.subscriptions",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "companion"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "T3CODE_HOMES",
+          "label": "T3 homes",
+          "required": false
+        }
+      ],
+      "entry": "throughline-t3code",
+      "package": "throughline-t3code",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/t3code"
+    },
+    {
+      "id": "telegram",
+      "path": "telegram",
+      "name": "Telegram",
+      "summary": "Your Telegram private chats and small groups, with full history.",
+      "category": "messages",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "telegram.messages",
+          "role": "chat"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "TELEGRAM_API_HASH",
+          "label": "api_hash",
+          "required": true
+        },
+        {
+          "key": "TELEGRAM_SESSION",
+          "label": "Session string",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "TELEGRAM_API_ID",
+          "label": "api_id",
+          "required": true
+        }
+      ],
+      "entry": "throughline-telegram",
+      "homepage": "https://telegram.org",
+      "package": "throughline-telegram",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/telegram"
+    },
+    {
+      "id": "trakt",
+      "path": "trakt",
+      "name": "Trakt",
+      "summary": "Your complete Trakt movie and episode history, ratings and watchlist.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "trakt.history",
+          "role": "media"
+        },
+        {
+          "name": "trakt.ratings",
+          "role": "media"
+        },
+        {
+          "name": "trakt.watchlist",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "TRAKT_CLIENT_ID",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "key": "TRAKT_CLIENT_SECRET",
+          "label": "Client secret",
+          "required": true
+        }
+      ],
+      "settings": [
+        {
+          "key": "TRAKT_TOKEN_FILE",
+          "label": "Token file",
+          "required": false
+        }
+      ],
+      "entry": "throughline-trakt",
+      "homepage": "https://trakt.tv",
+      "package": "throughline-trakt",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/trakt"
+    },
+    {
+      "id": "wave",
+      "path": "wave",
+      "name": "Wave",
+      "summary": "Meeting recordings and transcripts from Wave.",
+      "category": "meetings",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "transcripts.wave",
+          "role": "transcript"
+        },
+        {
+          "name": "recordings.wave",
+          "role": "voice_summary"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "WAVE_API_TOKEN",
+          "label": "API token",
+          "required": true,
+          "when": {
+            "WAVE_SOURCE": [
+              "api"
+            ]
+          }
+        },
+        {
+          "key": "WAVE_ARCHIVE_DSN",
+          "label": "Archive database (Postgres DSN)",
+          "required": true,
+          "when": {
+            "WAVE_SOURCE": [
+              "archive"
+            ]
+          }
+        }
+      ],
+      "settings": [
+        {
+          "key": "WAVE_SOURCE",
+          "label": "Source",
+          "required": true
+        }
+      ],
+      "entry": "throughline-wave",
+      "homepage": "https://wave.co",
+      "package": "throughline-wave",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/wave"
+    },
+    {
+      "id": "youtube",
+      "path": "youtube",
+      "name": "YouTube",
+      "summary": "Your YouTube watch history, Watch Later and subscriptions from Google Takeout.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "youtube.history",
+          "role": "media"
+        },
+        {
+          "name": "youtube.watch_later",
+          "role": "media"
+        },
+        {
+          "name": "youtube.subscriptions",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [
+        "upload"
+      ],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "YOUTUBE_TAKEOUT",
+          "label": "Extracted Takeout folder",
+          "required": true
+        }
+      ],
+      "entry": "throughline-youtube",
+      "homepage": "https://www.youtube.com",
+      "package": "throughline-youtube",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/youtube"
+    },
+    {
+      "id": "youtube_feed",
+      "path": "youtube-feed",
+      "name": "YouTube channel feed",
+      "summary": "New uploads from the YouTube channels you follow.",
+      "category": "media",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "youtube.uploads",
+          "role": "media"
+        },
+        {
+          "name": "youtube.picks",
+          "role": "media"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [],
+      "settings": [
+        {
+          "key": "YOUTUBE_FEED_CHANNELS",
+          "label": "Channel list file",
+          "required": false
+        },
+        {
+          "key": "YOUTUBE_FEED_CHANNEL_IDS",
+          "label": "Channel IDs",
+          "required": false
+        }
+      ],
+      "entry": "throughline-youtube-feed",
+      "package": "throughline-youtube-feed",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/youtube-feed"
+    },
+    {
+      "id": "zoom",
+      "path": "zoom",
+      "name": "Zoom",
+      "summary": "Transcripts of your Zoom cloud recordings, as speaker turns.",
+      "category": "meetings",
+      "kind": "plugin",
+      "onboarding": true,
+      "channels": [
+        {
+          "name": "zoom.transcripts",
+          "role": "transcript"
+        },
+        {
+          "name": "zoom.meetings",
+          "role": "other"
+        }
+      ],
+      "track_sources": [],
+      "requires": [],
+      "credentials": [
+        {
+          "key": "ZOOM_ACCOUNT_ID",
+          "label": "Account ID",
+          "required": true
+        },
+        {
+          "key": "ZOOM_CLIENT_ID",
+          "label": "Client ID",
+          "required": true
+        },
+        {
+          "key": "ZOOM_CLIENT_SECRET",
+          "label": "Client secret",
+          "required": true
+        }
+      ],
+      "settings": [],
+      "entry": "throughline-zoom",
+      "homepage": "https://zoom.us",
+      "package": "throughline-zoom",
+      "license": "GPL-3.0-or-later",
+      "install": "uv pip install ./plugins/zoom"
+    }
+  ]
+}

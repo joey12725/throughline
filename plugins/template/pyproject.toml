@@ -1,0 +1,11 @@
+[project]
+name = "throughline-template"
+version = "0.1.0"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = ["throughline-sdk"]
+[project.scripts]
+throughline-template = "throughline_template:main"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

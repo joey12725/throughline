@@ -1,0 +1,26 @@
+# One page per real event. Adapted from GBrain's meeting-ingestion skill (MIT):
+# presence vs invitation, dedupe across recorders, verbatim quotes, true order.
+name = "event_pages"
+description = "A page for every gathering, trip or event: when, where, who was there, what happened."
+output = "pages"
+grain = "day"
+schedule = "0 */4 * * *"
+# Channels to read. Onboarding adds every channel whose declared role is
+# in channel_roles; when defining this file by hand, list your own.
+channels = ["visits"]
+channel_roles = ["calendar", "transcript", "chat", "email"]
+max_items_per_run = 3
+
+prompt = """Write or update an events/<YYYY-MM-DD>-<name> page for each real event in this window that the owner attended or organized (dinner, party, trip, concert, an appointment that mattered, a family visit, a meeting). Skip routine days and invitations the owner did not attend.
+Before writing, search_pages for the same event (same date ±1 day, overlapping people, similar name) and edit it instead of duplicating. A single recording or day can hold several events: one page each.
+Set when. Sections: What (2-3 sentences that stand alone), Who was there (only people the evidence places there: a calendar invitation is not presence; list unknown speakers as unidentified, never guess), What happened (in the order it happened; nobody in two places without travel between), Decisions, Follow-ups (who owes what, by when, only if stated), Notable quotes (verbatim, attributed, cited).
+A transcript summary or an AI recap is a claim: check surprising claims against the records and the attendees' pages before writing them; if unsure, mark them uncertain here and do not copy them to other pages.
+Link each attendee (attended link or [[person:ID|Name]]), the day page [[days/YYYY-MM-DD]] and the place page. Add a timeline line to each attendee's and the place's page."""
+
+[worker_config]
+kinds = ["events"]
+allow = ["write", "edit", "timeline", "link"]
+max_turns = 5
+max_new_pages = 3
+lookback_days = 7
+exclude_annotations = ["media_noise"]

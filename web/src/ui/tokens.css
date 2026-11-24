@@ -1,0 +1,314 @@
+/*
+ * Throughline design tokens. One system, two themes (Nocturne / Daybook).
+ * See docs/web/design.md "Identity". All colour, type, spacing, radii and
+ * motion flow from here; components are themable ONLY through these variables.
+ *
+ * Theme resolution:
+ *   - No [data-theme]: follow the operating system (prefers-color-scheme).
+ *     Nocturne is the default when the system prefers dark.
+ *   - [data-theme="nocturne" | "daybook"]: a manual override wins over the OS.
+ */
+
+/* ---- Nocturne (dark) — the default surface ------------------------------ */
+:root {
+  color-scheme: dark;
+
+  --bg-0: #0A0C0F; /* canvas */
+  --bg-1: #10131A; /* panel */
+  --bg-2: #171B24; /* raised */
+  --bg-3: #1F2430; /* hover */
+  --line: #2A3040;
+  --line-strong: #3A4254;
+  --ink: #ECE6D8;
+  --ink-2: #A6A392;
+  --ink-3: #7C7F85;
+  --brass: #D9A64A;
+  --brass-soft: #D9A64A33;
+  --patina: #58B9A6; /* links */
+  --ok: #6FBF8E;
+  --warn: #E0A93C;
+  --bad: #E0603C;
+
+  /* Film-grain contrast: how strongly the generated grain shows */
+  --grain-opacity: 0.035;
+  --grain-blend: soft-light;
+
+  /* Source-colour reference lightness (OKLCH L) for the two themes. Consumed
+     by sourceColor.ts so TS and CSS agree. */
+  --src-l: 0.74;
+  --src-c: 0.13;
+  /* A faint tint for selection / glyph wash derived from brass */
+  --selection: #D9A64A2E;
+}
+
+/* ---- Daybook (light) — ink on warm paper -------------------------------- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="nocturne"]) {
+    color-scheme: light;
+
+    --bg-0: #F5F1E7;
+    --bg-1: #FBF8F1;
+    --bg-2: #FFFFFF;
+    --bg-3: #ECE6D7;
+    --line: #E1D9C8;
+    --line-strong: #CFC5B0;
+    --ink: #1C1A16;
+    --ink-2: #57534A;
+    --ink-3: #726D61;
+    --brass: #A9772A;
+    --brass-soft: #A9772A2E;
+    --patina: #277567;
+    --ok: #2E7D5B;
+    --warn: #A86A00;
+    --bad: #B3261E;
+
+    --grain-opacity: 0.05;
+    --grain-blend: multiply;
+
+    --src-l: 0.52;
+    --src-c: 0.15;
+    --selection: #A9772A2E;
+  }
+}
+
+/* Manual overrides (win over the OS preference) */
+:root[data-theme="daybook"] {
+  color-scheme: light;
+
+  --bg-0: #F5F1E7;
+  --bg-1: #FBF8F1;
+  --bg-2: #FFFFFF;
+  --bg-3: #ECE6D7;
+  --line: #E1D9C8;
+  --line-strong: #CFC5B0;
+  --ink: #1C1A16;
+  --ink-2: #57534A;
+  --ink-3: #726D61;
+  --brass: #A9772A;
+  --brass-soft: #A9772A2E;
+  --patina: #277567;
+  --ok: #2E7D5B;
+  --warn: #A86A00;
+  --bad: #B3261E;
+
+  --grain-opacity: 0.05;
+  --grain-blend: multiply;
+
+  --src-l: 0.52;
+  --src-c: 0.15;
+  --selection: #A9772A2E;
+}
+
+:root[data-theme="nocturne"] {
+  color-scheme: dark;
+
+  --bg-0: #0A0C0F;
+  --bg-1: #10131A;
+  --bg-2: #171B24;
+  --bg-3: #1F2430;
+  --line: #2A3040;
+  --line-strong: #3A4254;
+  --ink: #ECE6D8;
+  --ink-2: #A6A392;
+  --ink-3: #7C7F85;
+  --brass: #D9A64A;
+  --brass-soft: #D9A64A33;
+  --patina: #58B9A6;
+  --ok: #6FBF8E;
+  --warn: #E0A93C;
+  --bad: #E0603C;
+
+  --grain-opacity: 0.035;
+  --grain-blend: soft-light;
+
+  --src-l: 0.74;
+  --src-c: 0.13;
+  --selection: #D9A64A2E;
+}
+
+/* ---- Type ---------------------------------------------------------------- */
+:root {
+  --font-ui: "Instrument Sans Variable", "Instrument Sans", system-ui, sans-serif;
+  --font-read: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+
+  /* Scale: 12 / 13 / 15 / 18 / 22 / 28 / 38 */
+  --t-xs: 12px;
+  --t-sm: 13px;
+  --t-base: 15px;
+  --t-md: 18px;
+  --t-lg: 22px;
+  --t-xl: 28px;
+  --t-2xl: 38px;
+
+  --lh-tight: 1.2;
+  --lh-snug: 1.35;
+  --lh-normal: 1.55;
+  --lh-read: 1.7;
+
+  --fw-normal: 440;
+  --fw-medium: 540;
+  --fw-semibold: 620;
+
+  /* Density: observatory 15px / workbench 13px. Drives interface sizing. */
+  --ui-base: 15px;
+  --ui-row: 34px;    /* list / menu row height */
+  --ui-control: 32px; /* control height */
+}
+
+:root[data-density="workbench"] {
+  --ui-base: 13px;
+  --ui-row: 28px;
+  --ui-control: 28px;
+}
+
+/* ---- Spacing (4px grid) -------------------------------------------------- */
+:root {
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+
+  /* ---- Radii ---- */
+  --r-panel: 10px;
+  --r-control: 6px;
+  --r-pill: 999px;
+
+  /* ---- Depth: one bg step + a hairline, never drop shadows ---- */
+  --rail-w: 56px;
+  --header-h: 52px;
+  --bottomnav-h: 54px;
+  --drawer-w: 460px;
+
+  /* ---- Motion ---- */
+  --m-fast: 160ms;
+  --m-base: 240ms;
+  --m-slow: 420ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+
+  /* ---- Focus ring in brass ---- */
+  --focus: 0 0 0 2px var(--bg-0), 0 0 0 4px var(--brass);
+  --focus-tight: 0 0 0 2px var(--brass);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --m-fast: 1ms;
+    --m-base: 1ms;
+    --m-slow: 1ms;
+  }
+}
+
+/* ---- Global reset & base ------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-0);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--ui-base);
+  line-height: var(--lh-normal);
+  font-weight: var(--fw-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  overflow: hidden; /* app owns scrolling per-region */
+}
+
+/* Film-grain canvas texture — generated inline (fractal noise), no asset. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23g)'/></svg>");
+  background-size: 160px 160px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { opacity: calc(var(--grain-opacity) * 0.6); }
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--patina);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: var(--r-control);
+}
+
+::selection {
+  background: var(--selection);
+  color: var(--ink);
+}
+
+/* ---- Scrollbars (thin, almost monochrome) ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--r-pill);
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+
+/* Keyboard focus for interactive SVG chart marks (box-shadow does not paint on
+   SVG, so use a brass outline). */
+.bar-interactive:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+/* Numbers everywhere are tabular mono */
+.tnum { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* Visually-hidden (for accessible labels) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

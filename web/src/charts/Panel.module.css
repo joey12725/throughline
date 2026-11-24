@@ -1,0 +1,72 @@
+.controls {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.why {
+  color: var(--ink-2);
+  font-size: var(--t-xs);
+}
+
+.body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  width: 100%;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.gate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--s-4);
+  text-align: center;
+  color: var(--warn);
+  font-size: var(--t-sm);
+}
+
+.pop {
+  width: min(520px, 80vw);
+  max-width: 520px;
+  padding: var(--s-2);
+}
+.popTitle {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  margin-bottom: var(--s-2);
+}
+.popActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.popBtn {
+  padding: 4px 10px;
+  font: inherit;
+  font-size: var(--t-xs);
+  color: var(--ink);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-control);
+  cursor: pointer;
+}
+.popBtn:hover { background: var(--bg-3); }

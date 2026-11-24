@@ -1,0 +1,92 @@
+Throughline
+Copyright (C) Throughline contributors
+
+The Throughline core is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version. See LICENSE.
+
+Parts of this repository carry their own, more permissive license:
+
+  sdk/                  throughline-sdk, Apache License 2.0 (sdk/LICENSE)
+  plugins/template*     plugin templates, Apache License 2.0
+  plugins/*             each connector declares its license in its
+                        pyproject.toml or package.json
+
+Plugins talk to the core only over HTTP (docs/plugin-http-contract.md), so a
+plugin written against the SDK or the HTTP contract may use any license.
+
+Why GPL-3.0-or-later: the core imports pglast (below), which is licensed
+GPL-3.0-or-later, to parse and validate read-only SQL.
+
+-------------------------------------------------------------------------------
+Third-party software used by the core (Python)
+-------------------------------------------------------------------------------
+
+Installed from PyPI as dependencies, not vendored. Versions are pinned in
+uv.lock. Each package's own license text ships with the package.
+
+  pglast            GPL-3.0-or-later   PostgreSQL parser bindings (embeds
+                                       libpg_query, BSD-3-Clause, built from
+                                       PostgreSQL sources, PostgreSQL License)
+  psycopg,          LGPL-3.0-only      PostgreSQL driver and connection pool
+  psycopg-pool
+  psycopg-binary    LGPL-3.0-only      binary wheel; bundles libpq
+                                       (PostgreSQL License) and OpenSSL
+                                       (Apache-2.0)
+  fastapi           MIT
+  starlette         BSD-3-Clause
+  uvicorn           BSD-3-Clause
+  pydantic,         MIT
+  pydantic-core
+  typer             MIT
+  click             BSD-3-Clause
+  rich              MIT
+  httpx             BSD-3-Clause
+  anyio             MIT
+
+Optional extra "images":
+
+  pillow            MIT-CMU (HPND)
+  pillow-heif       BSD-3-Clause; its binary wheels bundle libheif and
+                    libde265 (LGPL-3.0) and x265 (GPL-2.0-or-later)
+
+The Docker image additionally contains Debian packages (postgresql-client,
+gnupg, zstd, rsync, openssh-client, ffmpeg and their dependencies) under
+their own licenses, listed in /usr/share/doc/*/copyright inside the image.
+
+-------------------------------------------------------------------------------
+Third-party software bundled into the web interface (web/, built into
+src/throughline/web/static)
+-------------------------------------------------------------------------------
+
+JavaScript libraries (versions pinned in web/pnpm-lock.yaml):
+
+  react, react-dom, react-router-dom, react-markdown, remark-gfm   MIT
+  @codemirror/*, codemirror, @lezer/highlight                       MIT
+  @tanstack/react-query, @tanstack/react-virtual                    MIT
+  ajv, clsx, cmdk, papaparse, zustand                               MIT
+  @observablehq/plot, d3, topojson-client, lucide-react             ISC
+  idb-keyval                                                        Apache-2.0
+  world-atlas                                                       ISC; map
+      data derived from Natural Earth (public domain)
+
+Fonts (bundled as web fonts through Fontsource):
+
+  Instrument Sans   SIL Open Font License 1.1   @fontsource-variable/instrument-sans
+  JetBrains Mono    SIL Open Font License 1.1   @fontsource-variable/jetbrains-mono
+  Newsreader        SIL Open Font License 1.1   @fontsource-variable/newsreader
+
+The landing page in site/landing loads Inter, JetBrains Mono and Newsreader
+(all SIL Open Font License 1.1) from Google Fonts at view time; no font files
+are stored in this repository.
+
+-------------------------------------------------------------------------------
+Original assets
+-------------------------------------------------------------------------------
+
+assets/icon.svg, web/public/icon.svg and site/landing/favicon.svg are original
+works made for Throughline and are covered by the repository license.
+
+All names, people, messages and places in fixtures/, bench/, tests and the
+web interface's test fixtures are invented.

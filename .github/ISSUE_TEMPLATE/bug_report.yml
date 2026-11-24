@@ -1,0 +1,58 @@
+name: Bug report
+description: Something does not work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Use synthetic data only.** Do not paste real messages, names, e-mail
+        addresses, locations, tokens, `.env` files, logs with personal data or
+        database dumps. Reproduce with the public twin
+        (`python -m fixtures --seed 47`) or records you invent.
+        Security problems: do not file an issue, see SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Release tag or commit (`git rev-parse --short HEAD`).
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How do you run it?
+      options:
+        - Docker (scripts/install.sh)
+        - uv / local development
+        - Companion app
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Synthetic reproduction
+      description: |
+        Exact commands, requests and the invented records that trigger the
+        bug, starting from an empty install or the public twin.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected and what happened
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Docker / Compose / PostgreSQL versions, relevant non-secret settings.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: Everything in this issue is invented or public; it contains no personal data or secrets.
+          required: true

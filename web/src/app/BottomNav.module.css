@@ -1,0 +1,54 @@
+.bar {
+  grid-area: bottomnav;
+  display: none; /* shown only on phone, see Shell.module.css media query */
+  background: var(--bg-1);
+  border-top: 1px solid var(--line);
+  z-index: 20;
+  /* keep the bar clear of the iOS/Android home indicator */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  height: var(--bottomnav-h);
+}
+.item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+}
+.link {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  transition: color var(--m-fast) var(--ease);
+}
+.link:hover { color: var(--ink); }
+.link.active { color: var(--brass); }
+
+/* Brass throughline along the top edge of the active tab (mirrors the rail). */
+.thread {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 22px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--brass);
+  transition: transform var(--m-base) var(--ease);
+}
+.link.active .thread { transform: translateX(-50%) scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .thread { transition: none; }
+}
+
+@media (max-width: 720px) {
+  .bar { display: block; }
+}
