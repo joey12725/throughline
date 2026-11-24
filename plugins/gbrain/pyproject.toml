@@ -3,7 +3,7 @@ name = "throughline-gbrain"
 version = "0.1.0"
 requires-python = ">=3.12"
 license = "GPL-3.0-or-later"
-dependencies = ["throughline-sdk", "psycopg[binary]>=3"]
+dependencies = ["throughline-sdk", "psycopg[binary]>=3.3.9"]
 [project.scripts]
 throughline-gbrain = "throughline_gbrain:main"
 [build-system]
