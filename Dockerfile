@@ -7,7 +7,7 @@
 # media connectors.
 
 # Stage 1: the web interface. vite builds web/ into ../src/throughline/web/static.
-FROM node:24-slim AS web
+FROM node:25-slim AS web
 WORKDIR /app/web
 # The pnpm version that wrote web/pnpm-lock.yaml (CI pins the same one).
 RUN npm install -g pnpm@12.15.0
